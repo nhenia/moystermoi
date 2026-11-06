@@ -23,7 +23,7 @@ fs.writeFileSync(path.join(root,'index.html'), html);
 const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.webmanifest'),'utf8'));
 Object.assign(manifest,{name:c.name,short_name:c.shortName,description:c.description,theme_color:c.colors.accent,background_color:c.colors.background});
 fs.writeFileSync(path.join(root,'manifest.webmanifest'), JSON.stringify(manifest,null,2)+'\n');
-const files=['index.html','config.js','script.js','style.css','manifest.webmanifest','icon.svg','icon-192.png','icon-512.png'];
+const files=['index.html','config.js','script.js','style.css','manifest.webmanifest','icon.svg','icon-192.png','icon-512.png','image.png'];
 const digest=crypto.createHash('sha256');
 for(const file of files) digest.update(fs.readFileSync(path.join(root,file)));
 const version=digest.digest('hex').slice(0,12);
