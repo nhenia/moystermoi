@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5ff45"><meta name="description" content="Remember the person. Remember the drink.">
+<title>THE USUAL</title><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg"><link rel="apple-touch-icon" href="./icon-192.png"><link rel="stylesheet" href="./style.css">
+<script src="./config.js" defer></script><script src="./core.js" defer></script><script src="./script.js" defer></script>
+</head><body><main>
+<header><p class="eyebrow">REMEMBER THE PERSON. REMEMBER THE DRINK.</p><h1 id="app-name">THE USUAL</h1></header>
+<section aria-label="Find a customer" class="find"><label for="search">Name, look or drink</label><div class="row"><input id="search" type="search" placeholder="Silver glasses, tequila…" autocomplete="off"><button id="clear-search" type="button">Clear</button></div><p id="results" role="status"></p><button id="add" type="button">+ ADD CUSTOMER</button></section>
+<p id="status" role="status" aria-live="polite"></p><div id="undo-area" hidden><span>Customer deleted.</span> <button id="undo" type="button">Undo delete</button></div>
+<section aria-labelledby="archive-heading"><div class="archive-head"><h2 id="archive-heading">REGULARS</h2></div><p id="empty">Your first regular starts here.</p><ul id="entries"></ul></section>
+<details id="editor"><summary id="editor-heading">Add a customer</summary><form id="capture">
+<p class="hint">45 words total. Name required; other fields optional.</p>
+<label for="name">Name</label><input id="name" autocomplete="off" required>
+<fieldset><legend>Visual cues · up to 2</legend><label for="cue1">Cue 1</label><input id="cue1" placeholder="Silver glasses"><label for="cue2">Cue 2</label><input id="cue2" placeholder="Crescent tattoo"></fieldset>
+<label for="drink">The usual</label><input id="drink" placeholder="Tequila soda, tall, two limes">
+<fieldset><legend>Additional notes · up to 2</legend><label for="note1">Note 1</label><input id="note1"><label for="note2">Note 2</label><input id="note2"></fieldset>
+<div class="photo-controls"><label for="photo">Photo · optional</label><input id="photo" type="file" accept="image/*"><label for="camera">Or take a photo</label><input id="camera" type="file" accept="image/*" capture="environment"><img id="photo-preview" alt="Customer photo preview" hidden><button id="remove-photo" type="button" hidden>Remove photo</button></div>
+<label class="check"><input id="favorite" type="checkbox"> Favorite</label><p id="word-count" aria-live="polite">0/45 words</p><p id="duplicate" role="status" hidden></p>
+<div class="row"><button id="save" type="submit" disabled>SAVE CUSTOMER</button><button id="cancel" type="button">Cancel</button></div>
+</form></details>
+<footer><p>Saved in this browser. Back up before switching phones or clearing site data.</p><div class="row"><button id="export" type="button" disabled>Export backup</button><button id="import-button" type="button" disabled>Import backup</button><input id="import" type="file" accept=".json,application/json" hidden></div><p>Backups include photos. Undo expires on reload or the next deletion.</p></footer>
+<noscript>Enable JavaScript to use this app.</noscript>
+</main></body></html>

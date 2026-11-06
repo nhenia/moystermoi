@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const root=path.resolve(__dirname,'..'),ctx={};vm.runInNewContext(fs.readFileSync(path.join(root,'content.js'),'utf8'),ctx);const {entries,sources}=ctx.P7_CONTENT;const {filterEntries,readBookmarks}=require('../core.js');
+assert.equal(sources.length,7);assert.equal(entries.length,39);assert.equal(new Set(entries.map(e=>e.id)).size,entries.length);
+assert(filterEntries(entries,{query:'joan rain'}).some(e=>e.title==='Joan of Arc'));
+assert(filterEntries(entries,{query:'kami'}).length>0);
+assert(filterEntries(entries,{query:'nonexistent-garbage'}).length===0);
+assert(filterEntries(entries,{view:'materials'}).every(e=>e.source===2));
+assert(filterEntries(entries,{view:'research'}).every(e=>![1,2].includes(e.source)));
+assert.equal(filterEntries(entries,{view:'saved',saved:[entries[0].id]}).length,1);
+assert.throws(()=>readBookmarks({getItem:()=>'{broken'},'key',entries));assert.throws(()=>readBookmarks({getItem:()=>'[42]'},'key',entries));
+assert.deepEqual(readBookmarks({getItem:()=>JSON.stringify([entries[0].id,entries[0].id,'missing'])},'key',entries),[entries[0].id]);
+const sw={registration:{scope:'https://example.com/repo/perfume-7/'},addEventListener:()=>{}};const cacheCtx={self:sw};vm.runInNewContext(fs.readFileSync(path.join(root,'sw.js'),'utf8')+';globalThis.assets=ASSETS;',cacheCtx);for(const f of cacheCtx.assets.filter(x=>x!=='./'))assert(fs.existsSync(path.join(root,f)),f);
+assert(cacheCtx.assets.includes('./content.js'));assert(cacheCtx.assets.includes('./sources.json'));
+console.log('PASS: source count, unique entry IDs, combined search, view filters, bookmarks, corrupt data, offline asset coverage.');

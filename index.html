@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5ff45">
+  <meta name="description" content="A small place for things worth keeping.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./config.js" defer></script>
+  <script src="./script.js" defer></script>
+  <title>TINY NOTES</title>
+</head>
+<body>
+  <main>
+    <header><h1 id="app-name">TINY NOTES</h1></header>
+    <form id="capture">
+      <label for="sentence" id="input-label">Keep a little thought.</label>
+      <textarea id="sentence" rows="4" placeholder="“" required></textarea>
+      <div class="form-actions"><button id="save" type="submit">SAVE</button><button id="cancel" type="button" hidden>CANCEL</button></div>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+    <section aria-labelledby="archive-heading">
+      <div class="archive-head"><h2 id="archive-heading">ARCHIVE</h2><span id="count">00</span></div>
+      <p id="empty">Nothing here yet.</p>
+      <ol id="entries"></ol>
+    </section>
+    <footer>Saved on this device.</footer>
+    <noscript>This app needs JavaScript enabled to save sentences.</noscript>
+  </main>
+</body>
+</html>

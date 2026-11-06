@@ -1,0 +1,23 @@
+name: Check The Usual
+on:
+  pull_request:
+  push:
+    branches: ['feature/the-usual']
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test template and The Usual
+        run: |
+          node scripts/prepare.cjs
+          node tests/app.test.cjs
+          node apps/the-usual/scripts/prepare.cjs
+          node apps/the-usual/tests/app.test.cjs
+          npm install --prefix "$RUNNER_TEMP/usual-tests" --no-audit --no-fund jsdom@30.1.2 fake-indexeddb@6.2.5
+          USUAL_TEST_MODULES="$RUNNER_TEMP/usual-tests/node_modules" node apps/the-usual/tests/browser-simulation.cjs
