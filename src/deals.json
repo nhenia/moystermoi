@@ -515,7 +515,7 @@
   ],
   "scope": "New Orleans city, including French Quarter, CBD, Warehouse District, Uptown, Garden District, Marigny, Bywater, Mid-City, Riverbend, and Lakefront; exclude Kenner, Metairie and other surrounding suburbs.",
   "checks": {
-    "ranAt": "2026-11-06",
+    "ranAt": "2026-11-08",
     "brokenLinks": [
       "dragos"
     ]
