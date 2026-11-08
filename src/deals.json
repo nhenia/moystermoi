@@ -264,7 +264,10 @@
       ],
       "note": "Happy hour 2–5pm (days not posted): raw $9 half dozen, chargrilled $15.",
       "source": "https://felixs.com/locations/",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 30.02297,
+      "lng": -90.11353,
+      "geocoded": "census"
     },
     {
       "id": "mr-eds",
@@ -324,7 +327,10 @@
       ],
       "note": "Oyster hours shown. Bar open 11am–4am.",
       "source": "https://www.mrbnola.com/menu",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.95931,
+      "lng": -90.0608,
+      "geocoded": "census"
     },
     {
       "id": "fives",
@@ -395,7 +401,10 @@
       ],
       "note": "Raw $15 half dozen, $26 dozen.",
       "source": "https://www.redfishgrill.com/menus/happy-hour",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.95406,
+      "lng": -90.06978,
+      "geocoded": "census"
     },
     {
       "id": "creole-cookery",
@@ -431,7 +440,10 @@
       ],
       "note": "With a drink. Chargrilled $16 half dozen.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.95594,
+      "lng": -90.06364,
+      "geocoded": "census"
     },
     {
       "id": "apothecary",
@@ -466,7 +478,10 @@
       ],
       "note": "With a drink.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.95806,
+      "lng": -90.06476,
+      "geocoded": "census"
     },
     {
       "id": "royal-house",
@@ -486,7 +501,10 @@
       "hours": null,
       "note": "",
       "source": "https://www.explorelouisiana.com/restaurants/royal-house-oyster-bar",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.95601,
+      "lng": -90.06658,
+      "geocoded": "census"
     },
     {
       "id": "oceana",
@@ -514,7 +532,10 @@
       ],
       "note": "",
       "source": "https://neworleansrestaurants.com/oceana_grill",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.95594,
+      "lng": -90.06714,
+      "geocoded": "census"
     },
     {
       "id": "dragos",
@@ -611,7 +632,10 @@
       ],
       "note": "Chargrilled $13 half dozen.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.95016,
+      "lng": -90.07028,
+      "geocoded": "census"
     },
     {
       "id": "peche",
@@ -783,7 +807,10 @@
       ],
       "note": "Raw dozen $11.95.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.92321,
+      "lng": -90.08815,
+      "geocoded": "census"
     },
     {
       "id": "casamento",
@@ -803,7 +830,10 @@
       "hours": null,
       "note": "Open in oyster season only (closed in summer).",
       "source": "https://www.theinfatuation.com/new-orleans/reviews/casamentos",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.92081,
+      "lng": -90.10055,
+      "geocoded": "census"
     },
     {
       "id": "superior",
@@ -995,7 +1025,10 @@
       ],
       "note": "$1.25–$2 depending on oyster.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.9757,
+      "lng": -90.09911,
+      "geocoded": "census"
     },
     {
       "id": "monday",
@@ -1024,7 +1057,10 @@
       ],
       "note": "Tuesdays, all day.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.9782,
+      "lng": -90.10191,
+      "geocoded": "census"
     },
     {
       "id": "neyows",
@@ -1051,7 +1087,10 @@
       ],
       "note": "",
       "source": "https://www.eatokra.com/businesses/neyow-s-creole-cafe",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "lat": 29.97117,
+      "lng": -90.09173,
+      "geocoded": "census"
     },
     {
       "id": "blue-crab",
@@ -1088,7 +1127,9 @@
   "checks": {
     "ranAt": "2026-11-08",
     "brokenLinks": [
-      "dragos"
+      "seaworthy",
+      "royal-house",
+      "peche"
     ]
   }
 }
