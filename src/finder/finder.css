@@ -1,121 +1,53 @@
-/* MOYSTER — vintage engraving on cream paper.
-   Woodtype brand (Rye), slab-serif names and tags (Alfa Slab One), and Atkinson Hyperlegible for
-   everything you read (designed for low-vision readers). Brush-stroke highlights, ink-splatter edges.
+/* MOYSTER — shell & nacre.
+   From the reference film: an engraved oyster shell (ink crosshatching, print speckle) peels back
+   along a wavy edge to reveal liquid silver nacre, rippling light and prism flares.
+   Colour comes only from that light: pearl, silver, ink, and a prism foil for happy hour.
 
-   Built to be easy on older eyes: 18px base text, AAA contrast in every palette, nothing dimmed,
-   48px+ tap targets, upright text, plain words, and calm motion only when you tap something. */
-
-/* ---------- Palettes (all checked: scripts/check-palettes.mjs) ---------- */
-
-.mf {
-  /* Mardi Gras (default) */
-  --bg: #f5eedc;
-  --surface: #fffbf2;
-  --ink: #1e1a16;
-  --muted: #4a443b;
-  --primary: #4a2377;
-  --highlight: #f2c230;
-  --accent: #0b6b47;
-  --open: #0b6b47;
-  --line: #1e1a16;
-}
-
-.mf[data-palette='streetcar'] {
-  --bg: #f3ebda;
-  --surface: #fffcf4;
-  --ink: #1d1b17;
-  --muted: #4a453c;
-  --primary: #1f4d33;
-  --highlight: #e9b949;
-  --accent: #9e2e1e;
-  --open: #1f6b3d;
-  --line: #1d1b17;
-}
-
-.mf[data-palette='creole-cottage'] {
-  --bg: #f4ede1;
-  --surface: #fffdf8;
-  --ink: #1b1e20;
-  --muted: #454a4d;
-  --primary: #1b5862;
-  --highlight: #f0c24b;
-  --accent: #a93c26;
-  --open: #1f6b3d;
-  --line: #1b1e20;
-}
-
-.mf[data-palette='gaslight'] {
-  --bg: #f2ecdf;
-  --surface: #fffcf5;
-  --ink: #1c1a17;
-  --muted: #4a453d;
-  --primary: #6e1a2a;
-  --highlight: #e5a93a;
-  --accent: #3a5636;
-  --open: #2f6b3a;
-  --line: #1c1a17;
-}
-
-.mf[data-palette='sazerac'] {
-  --bg: #f4eee0;
-  --surface: #fffcf5;
-  --ink: #1c1a17;
-  --muted: #4a453d;
-  --primary: #7d1e2c;
-  --highlight: #d5dc74;
-  --accent: #2a5640;
-  --open: #2a6b44;
-  --line: #1c1a17;
-}
-
-/* ---------- Page ---------- */
+   Still built for older eyes: Atkinson Hyperlegible body at 18px, AAA contrast for all text,
+   nothing faded or tilted, 44px+ tap targets, and a Pause button for the moving film. */
 
 .mf {
-  --brush: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 40' preserveAspectRatio='none'%3E%3Cpath d='M5 9C28 3 55 7 84 4s58 3 82 0 28 2 30 3l-3 8 5 7-6 7 4 8c-20-1-44 2-70 0s-52 3-78 1-33 1-43 0l4-9-6-7 5-8-3-6z'/%3E%3C/svg%3E");
+  --bg: #e7e7e4;
+  --paper: #fafaf8;
+  --ink: #111113;
+  --muted: #45464b;
+  --silver: #c9cacd;
+  --open: #1b5e3e;
+  --lilac: #e4d4ff; /* solid stand-in for the foil (SVG fills) */
+  --px: 0.5;
+  --py: 0.3;
+  /* prism foil: pastel spectrum whose angle follows the pointer / phone tilt */
+  --foil: conic-gradient(
+    from calc(var(--px) * 360deg) at calc(var(--px) * 100%) calc(var(--py) * 100%),
+    #cfe7ff, #e4d4ff, #ffd6ec, #fff1b3, #d4ffe6, #cfe7ff
+  );
+  --lip: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 240 26%22 preserveAspectRatio=%22none%22%3E%3CclipPath id=%22c%22%3E%3Cpath d=%22M0 0 L0.0 14.9 L12.0 17.6 L24.0 18.9 L36.0 20.6 L48.0 16.8 L60.0 15.0 L72.0 13.0 L84.0 9.2 L96.0 10.4 L108.0 12.3 L120.0 13.9 L132.0 17.6 L144.0 20.2 L156.0 19.6 L168.0 18.5 L180.0 14.2 L192.0 11.4 L204.0 9.3 L216.0 10.3 L228.0 13.1 L240.0 15.2 L240 0 Z%22/%3E%3C/clipPath%3E%3Cg clip-path=%22url(%23c)%22%3E%3Crect width=%22240%22 height=%2226%22 fill=%22%23f7f7f5%22/%3E%3Cpath d=%22M-20 -4 l-18 32 M-16 -4 l-18 32 M-12 -4 l-18 32 M-8 -4 l-18 32 M-4 -4 l-18 32 M0 -4 l-18 32 M4 -4 l-18 32 M8 -4 l-18 32 M12 -4 l-18 32 M16 -4 l-18 32 M20 -4 l-18 32 M24 -4 l-18 32 M28 -4 l-18 32 M32 -4 l-18 32 M36 -4 l-18 32 M40 -4 l-18 32 M44 -4 l-18 32 M48 -4 l-18 32 M52 -4 l-18 32 M56 -4 l-18 32 M60 -4 l-18 32 M64 -4 l-18 32 M68 -4 l-18 32 M72 -4 l-18 32 M76 -4 l-18 32 M80 -4 l-18 32 M84 -4 l-18 32 M88 -4 l-18 32 M92 -4 l-18 32 M96 -4 l-18 32 M100 -4 l-18 32 M104 -4 l-18 32 M108 -4 l-18 32 M112 -4 l-18 32 M116 -4 l-18 32 M120 -4 l-18 32 M124 -4 l-18 32 M128 -4 l-18 32 M132 -4 l-18 32 M136 -4 l-18 32 M140 -4 l-18 32 M144 -4 l-18 32 M148 -4 l-18 32 M152 -4 l-18 32 M156 -4 l-18 32 M160 -4 l-18 32 M164 -4 l-18 32 M168 -4 l-18 32 M172 -4 l-18 32 M176 -4 l-18 32 M180 -4 l-18 32 M184 -4 l-18 32 M188 -4 l-18 32 M192 -4 l-18 32 M196 -4 l-18 32 M200 -4 l-18 32 M204 -4 l-18 32 M208 -4 l-18 32 M212 -4 l-18 32 M216 -4 l-18 32 M220 -4 l-18 32 M224 -4 l-18 32 M228 -4 l-18 32 M232 -4 l-18 32 M236 -4 l-18 32 M240 -4 l-18 32 M244 -4 l-18 32 M248 -4 l-18 32 M252 -4 l-18 32 M256 -4 l-18 32 M260 -4 l-18 32 M264 -4 l-18 32 M268 -4 l-18 32 M272 -4 l-18 32 M276 -4 l-18 32 M-25 -4 l14 32 M-20 -4 l14 32 M-15 -4 l14 32 M-10 -4 l14 32 M-5 -4 l14 32 M0 -4 l14 32 M5 -4 l14 32 M10 -4 l14 32 M15 -4 l14 32 M20 -4 l14 32 M25 -4 l14 32 M30 -4 l14 32 M35 -4 l14 32 M40 -4 l14 32 M45 -4 l14 32 M50 -4 l14 32 M55 -4 l14 32 M60 -4 l14 32 M65 -4 l14 32 M70 -4 l14 32 M75 -4 l14 32 M80 -4 l14 32 M85 -4 l14 32 M90 -4 l14 32 M95 -4 l14 32 M100 -4 l14 32 M105 -4 l14 32 M110 -4 l14 32 M115 -4 l14 32 M120 -4 l14 32 M125 -4 l14 32 M130 -4 l14 32 M135 -4 l14 32 M140 -4 l14 32 M145 -4 l14 32 M150 -4 l14 32 M155 -4 l14 32 M160 -4 l14 32 M165 -4 l14 32 M170 -4 l14 32 M175 -4 l14 32 M180 -4 l14 32 M185 -4 l14 32 M190 -4 l14 32 M195 -4 l14 32 M200 -4 l14 32 M205 -4 l14 32 M210 -4 l14 32 M215 -4 l14 32 M220 -4 l14 32 M225 -4 l14 32 M230 -4 l14 32 M235 -4 l14 32 M240 -4 l14 32 M245 -4 l14 32 M250 -4 l14 32 M255 -4 l14 32 M260 -4 l14 32 M265 -4 l14 32 M270 -4 l14 32 M275 -4 l14 32 M280 -4 l14 32 M285 -4 l14 32 M290 -4 l14 32 M295 -4 l14 32%22 stroke=%22%23111%22 stroke-width=%22.55%22 opacity=%22.85%22/%3E%3Cg fill=%22%23111%22%3E%3Ccircle cx=%22185.8%22 cy=%225.0%22 r=%220.9%22/%3E%3Ccircle cx=%2224.4%22 cy=%223.8%22 r=%220.8%22/%3E%3Ccircle cx=%22174.2%22 cy=%225.5%22 r=%220.4%22/%3E%3Ccircle cx=%2264.0%22 cy=%222.7%22 r=%220.5%22/%3E%3Ccircle cx=%22194.3%22 cy=%222.6%22 r=%221.0%22/%3E%3Ccircle cx=%22211.0%22 cy=%220.7%22 r=%220.6%22/%3E%3Ccircle cx=%22118.0%22 cy=%220.3%22 r=%220.6%22/%3E%3Ccircle cx=%22217.5%22 cy=%221.5%22 r=%220.8%22/%3E%3Ccircle cx=%2229.1%22 cy=%227.5%22 r=%221.0%22/%3E%3Ccircle cx=%2248.7%22 cy=%220.1%22 r=%220.4%22/%3E%3Ccircle cx=%22129.5%22 cy=%220.2%22 r=%220.4%22/%3E%3Ccircle cx=%22119.2%22 cy=%2212.0%22 r=%220.6%22/%3E%3Ccircle cx=%2295.6%22 cy=%228.3%22 r=%220.4%22/%3E%3Ccircle cx=%22139.2%22 cy=%222.2%22 r=%220.8%22/%3E%3Ccircle cx=%22230.0%22 cy=%220.7%22 r=%220.7%22/%3E%3Ccircle cx=%22145.5%22 cy=%221.9%22 r=%220.5%22/%3E%3Ccircle cx=%22238.8%22 cy=%2213.0%22 r=%220.4%22/%3E%3Ccircle cx=%22169.3%22 cy=%2212.4%22 r=%220.5%22/%3E%3Ccircle cx=%22146.7%22 cy=%220.6%22 r=%220.6%22/%3E%3Ccircle cx=%22161.8%22 cy=%227.7%22 r=%220.9%22/%3E%3Ccircle cx=%2220.8%22 cy=%224.5%22 r=%221.0%22/%3E%3Ccircle cx=%22140.2%22 cy=%225.9%22 r=%220.6%22/%3E%3Ccircle cx=%22236.7%22 cy=%227.5%22 r=%220.3%22/%3E%3Ccircle cx=%22191.8%22 cy=%224.3%22 r=%220.6%22/%3E%3Ccircle cx=%2251.2%22 cy=%225.8%22 r=%220.6%22/%3E%3Ccircle cx=%2221.3%22 cy=%228.2%22 r=%220.4%22/%3E%3C/g%3E%3C/g%3E%3Cpath d=%22M0.0 14.9 L12.0 17.6 L24.0 18.9 L36.0 20.6 L48.0 16.8 L60.0 15.0 L72.0 13.0 L84.0 9.2 L96.0 10.4 L108.0 12.3 L120.0 13.9 L132.0 17.6 L144.0 20.2 L156.0 19.6 L168.0 18.5 L180.0 14.2 L192.0 11.4 L204.0 9.3 L216.0 10.3 L228.0 13.1 L240.0 15.2%22 fill=%22none%22 stroke=%22%23111%22 stroke-width=%221.4%22/%3E%3C/svg%3E");
+  --edge: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 240%22 preserveAspectRatio=%22none%22%3E%3CclipPath id=%22c%22%3E%3Cpath d=%22M0 0 L14.4 0.0 L17.0 12.0 L19.5 24.0 L18.9 36.0 L16.9 48.0 L14.8 60.0 L13.1 72.0 L11.0 84.0 L10.9 96.0 L11.4 108.0 L15.1 120.0 L17.4 132.0 L19.0 144.0 L18.8 156.0 L17.3 168.0 L16.0 180.0 L12.9 192.0 L11.0 204.0 L11.0 216.0 L11.3 228.0 L14.5 240.0 L0 240 Z%22/%3E%3C/clipPath%3E%3Cg clip-path=%22url(%23c)%22%3E%3Crect width=%2224%22 height=%22240%22 fill=%22%23f7f7f5%22/%3E%3Cpath d=%22M-4 -40 l32 -18 M-4 -36 l32 -18 M-4 -32 l32 -18 M-4 -28 l32 -18 M-4 -24 l32 -18 M-4 -20 l32 -18 M-4 -16 l32 -18 M-4 -12 l32 -18 M-4 -8 l32 -18 M-4 -4 l32 -18 M-4 0 l32 -18 M-4 4 l32 -18 M-4 8 l32 -18 M-4 12 l32 -18 M-4 16 l32 -18 M-4 20 l32 -18 M-4 24 l32 -18 M-4 28 l32 -18 M-4 32 l32 -18 M-4 36 l32 -18 M-4 40 l32 -18 M-4 44 l32 -18 M-4 48 l32 -18 M-4 52 l32 -18 M-4 56 l32 -18 M-4 60 l32 -18 M-4 64 l32 -18 M-4 68 l32 -18 M-4 72 l32 -18 M-4 76 l32 -18 M-4 80 l32 -18 M-4 84 l32 -18 M-4 88 l32 -18 M-4 92 l32 -18 M-4 96 l32 -18 M-4 100 l32 -18 M-4 104 l32 -18 M-4 108 l32 -18 M-4 112 l32 -18 M-4 116 l32 -18 M-4 120 l32 -18 M-4 124 l32 -18 M-4 128 l32 -18 M-4 132 l32 -18 M-4 136 l32 -18 M-4 140 l32 -18 M-4 144 l32 -18 M-4 148 l32 -18 M-4 152 l32 -18 M-4 156 l32 -18 M-4 160 l32 -18 M-4 164 l32 -18 M-4 168 l32 -18 M-4 172 l32 -18 M-4 176 l32 -18 M-4 180 l32 -18 M-4 184 l32 -18 M-4 188 l32 -18 M-4 192 l32 -18 M-4 196 l32 -18 M-4 200 l32 -18 M-4 204 l32 -18 M-4 208 l32 -18 M-4 212 l32 -18 M-4 216 l32 -18 M-4 220 l32 -18 M-4 224 l32 -18 M-4 228 l32 -18 M-4 232 l32 -18 M-4 236 l32 -18 M-4 240 l32 -18 M-4 244 l32 -18 M-4 248 l32 -18 M-4 252 l32 -18 M-4 256 l32 -18 M-4 260 l32 -18 M-4 264 l32 -18 M-4 268 l32 -18 M-4 272 l32 -18 M-4 276 l32 -18 M-4 -50 l32 14 M-4 -45 l32 14 M-4 -40 l32 14 M-4 -35 l32 14 M-4 -30 l32 14 M-4 -25 l32 14 M-4 -20 l32 14 M-4 -15 l32 14 M-4 -10 l32 14 M-4 -5 l32 14 M-4 0 l32 14 M-4 5 l32 14 M-4 10 l32 14 M-4 15 l32 14 M-4 20 l32 14 M-4 25 l32 14 M-4 30 l32 14 M-4 35 l32 14 M-4 40 l32 14 M-4 45 l32 14 M-4 50 l32 14 M-4 55 l32 14 M-4 60 l32 14 M-4 65 l32 14 M-4 70 l32 14 M-4 75 l32 14 M-4 80 l32 14 M-4 85 l32 14 M-4 90 l32 14 M-4 95 l32 14 M-4 100 l32 14 M-4 105 l32 14 M-4 110 l32 14 M-4 115 l32 14 M-4 120 l32 14 M-4 125 l32 14 M-4 130 l32 14 M-4 135 l32 14 M-4 140 l32 14 M-4 145 l32 14 M-4 150 l32 14 M-4 155 l32 14 M-4 160 l32 14 M-4 165 l32 14 M-4 170 l32 14 M-4 175 l32 14 M-4 180 l32 14 M-4 185 l32 14 M-4 190 l32 14 M-4 195 l32 14 M-4 200 l32 14 M-4 205 l32 14 M-4 210 l32 14 M-4 215 l32 14 M-4 220 l32 14 M-4 225 l32 14 M-4 230 l32 14 M-4 235 l32 14 M-4 240 l32 14 M-4 245 l32 14 M-4 250 l32 14 M-4 255 l32 14 M-4 260 l32 14 M-4 265 l32 14 M-4 270 l32 14 M-4 275 l32 14 M-4 280 l32 14 M-4 285 l32 14 M-4 290 l32 14 M-4 295 l32 14 M-4 300 l32 14 M-4 305 l32 14 M-4 310 l32 14 M-4 315 l32 14 M-4 320 l32 14 M-4 325 l32 14 M-4 330 l32 14 M-4 335 l32 14 M-4 340 l32 14 M-4 345 l32 14%22 stroke=%22%23111%22 stroke-width=%22.55%22 opacity=%22.85%22/%3E%3Cg fill=%22%23111%22%3E%3Ccircle cx=%228.8%22 cy=%22175.7%22 r=%221.0%22/%3E%3Ccircle cx=%2212.3%22 cy=%2220.8%22 r=%220.8%22/%3E%3Ccircle cx=%229.4%22 cy=%22121.4%22 r=%220.4%22/%3E%3Ccircle cx=%226.6%22 cy=%2221.4%22 r=%221.0%22/%3E%3Ccircle cx=%2212.1%22 cy=%22131.4%22 r=%220.5%22/%3E%3Ccircle cx=%2212.7%22 cy=%22137.4%22 r=%221.0%22/%3E%3Ccircle cx=%2211.9%22 cy=%22122.0%22 r=%220.6%22/%3E%3Ccircle cx=%228.4%22 cy=%22103.5%22 r=%220.4%22/%3E%3Ccircle cx=%224.3%22 cy=%22195.0%22 r=%220.3%22/%3E%3Ccircle cx=%220.6%22 cy=%22150.3%22 r=%220.5%22/%3E%3Ccircle cx=%227.5%22 cy=%22113.1%22 r=%220.6%22/%3E%3Ccircle cx=%2214.0%22 cy=%2246.9%22 r=%220.6%22/%3E%3Ccircle cx=%222.8%22 cy=%22151.8%22 r=%220.5%22/%3E%3Ccircle cx=%225.0%22 cy=%22179.3%22 r=%220.6%22/%3E%3Ccircle cx=%227.8%22 cy=%22217.0%22 r=%220.4%22/%3E%3Ccircle cx=%220.9%22 cy=%2254.9%22 r=%220.9%22/%3E%3Ccircle cx=%228.6%22 cy=%2257.0%22 r=%220.6%22/%3E%3Ccircle cx=%222.5%22 cy=%22110.2%22 r=%220.3%22/%3E%3Ccircle cx=%229.8%22 cy=%22215.0%22 r=%221.1%22/%3E%3Ccircle cx=%2210.3%22 cy=%22230.4%22 r=%220.3%22/%3E%3Ccircle cx=%224.0%22 cy=%22231.8%22 r=%220.9%22/%3E%3Ccircle cx=%225.7%22 cy=%22226.4%22 r=%220.8%22/%3E%3Ccircle cx=%2211.5%22 cy=%2270.4%22 r=%220.5%22/%3E%3Ccircle cx=%226.2%22 cy=%2232.7%22 r=%220.6%22/%3E%3Ccircle cx=%2213.5%22 cy=%2279.5%22 r=%220.3%22/%3E%3Ccircle cx=%220.6%22 cy=%2240.7%22 r=%220.9%22/%3E%3C/g%3E%3C/g%3E%3Cpath d=%22M14.4 0.0 L17.0 12.0 L19.5 24.0 L18.9 36.0 L16.9 48.0 L14.8 60.0 L13.1 72.0 L11.0 84.0 L10.9 96.0 L11.4 108.0 L15.1 120.0 L17.4 132.0 L19.0 144.0 L18.8 156.0 L17.3 168.0 L16.0 180.0 L12.9 192.0 L11.0 204.0 L11.0 216.0 L11.3 228.0 L14.5 240.0%22 fill=%22none%22 stroke=%22%23111%22 stroke-width=%221.4%22/%3E%3C/svg%3E");
   position: relative;
   isolation: isolate;
   display: grid;
   gap: 20px;
   min-height: 100svh;
-  padding: 20px 16px 110px;
+  padding: 0 16px 110px;
   overflow: hidden;
   background:
-    radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--primary) 22%, transparent), transparent 42%),
-    radial-gradient(ellipse at 0% 38%, color-mix(in srgb, var(--highlight) 30%, transparent), transparent 30%),
-    radial-gradient(ellipse at 100% 75%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 32%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E"),
+    linear-gradient(rgb(240 240 238 / 0.82), rgb(240 240 238 / 0.9)),
+    url("./media/nacre.jpg") center top / 720px auto repeat,
     var(--bg);
   color: var(--ink);
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.125rem;
   line-height: 1.4;
 }
 
-/* ink splatters in the palette colours, tucked into the margins */
-.mf::before,
-.mf::after {
-  content: '';
+/* read by screen readers, not shown */
+.mf-sr {
   position: absolute;
-  z-index: -1;
-  width: 230px;
-  height: 230px;
-  pointer-events: none;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='%23000'%3E%3Cpath d='M100 62c14-4 30 6 31 21 9-3 18 6 13 15 10 4 9 19-2 21 4 12-9 22-20 15-5 11-22 11-26-1-12 6-26-3-22-16-12-3-13-20-1-23-5-11 6-23 17-18 0-7 4-12 10-14z'/%3E%3Ccircle cx='160' cy='48' r='6'/%3E%3Ccircle cx='176' cy='70' r='3.5'/%3E%3Ccircle cx='40' cy='150' r='5'/%3E%3Ccircle cx='28' cy='132' r='2.6'/%3E%3Ccircle cx='150' cy='162' r='4'/%3E%3Ccircle cx='62' cy='40' r='3'/%3E%3Cpath d='M131 83l30-16-24 22zM70 128l-26 20 30-14zM127 120l24 22-28-16z'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='%23000'%3E%3Cpath d='M100 62c14-4 30 6 31 21 9-3 18 6 13 15 10 4 9 19-2 21 4 12-9 22-20 15-5 11-22 11-26-1-12 6-26-3-22-16-12-3-13-20-1-23-5-11 6-23 17-18 0-7 4-12 10-14z'/%3E%3Ccircle cx='160' cy='48' r='6'/%3E%3Ccircle cx='176' cy='70' r='3.5'/%3E%3Ccircle cx='40' cy='150' r='5'/%3E%3Ccircle cx='28' cy='132' r='2.6'/%3E%3Ccircle cx='150' cy='162' r='4'/%3E%3Ccircle cx='62' cy='40' r='3'/%3E%3Cpath d='M131 83l30-16-24 22zM70 128l-26 20 30-14zM127 120l24 22-28-16z'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
-}
-
-.mf::before {
-  top: -50px;
-  right: -70px;
-  background: color-mix(in srgb, var(--primary) 20%, transparent);
-  transform: rotate(18deg);
-}
-
-.mf::after {
-  top: 520px;
-  left: -96px;
-  background: color-mix(in srgb, var(--highlight) 55%, transparent);
-  transform: rotate(-30deg) scale(0.8);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .mf-defs {
@@ -136,9 +68,9 @@
 }
 
 .mf :focus-visible {
-  outline: 4px solid var(--primary);
+  outline: 4px solid var(--ink);
   outline-offset: 3px;
-  border-radius: 6px;
+  box-shadow: 0 0 0 8px #fff;
 }
 
 .mf h1,
@@ -148,26 +80,7 @@
   margin: 0;
 }
 
-/* Brush-stroke highlight behind a word (the yellow swipe in the reference) */
-.mf-brush {
-  position: relative;
-  z-index: 0;
-  display: inline-block;
-  padding: 0.06em 0.35em 0.02em;
-}
-
-.mf-brush::before {
-  content: '';
-  position: absolute;
-  inset: -0.08em -0.1em;
-  z-index: -1;
-  background: var(--highlight);
-  -webkit-mask: var(--brush) center / 100% 100% no-repeat;
-  mask: var(--brush) center / 100% 100% no-repeat;
-  transform: rotate(-1.2deg);
-}
-
-/* ---------- Engraved art ---------- */
+/* ---------- Engraved art (mono) ---------- */
 
 .mf-art {
   display: block;
@@ -175,19 +88,19 @@
 }
 
 .mf-art .a-plate {
-  fill: color-mix(in srgb, var(--primary) 18%, transparent);
+  fill: var(--silver);
 }
 
 .mf-art .a-shell {
-  fill: #f6efdf;
+  fill: #fbfbfa;
 }
 
 .mf-art .a-cup {
-  fill: #fbf7ee;
+  fill: #eef0f3;
 }
 
 .mf-art .a-meat {
-  fill: #ddd2bb;
+  fill: #d9d9d6;
 }
 
 .mf-art .a-glint {
@@ -196,181 +109,159 @@
 
 .mf-art .a-ink * {
   fill: none;
-  stroke: var(--line);
+  stroke: var(--ink);
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.mf-art .a-line {
-  stroke-width: 1.4;
-}
+.mf-art .a-line { stroke-width: 1.4; }
+.mf-art .a-thin { stroke-width: 0.6; }
+.mf-art .a-hatch { stroke-width: 0.55; }
+.mf-art .a-frill { stroke-width: 0.9; }
+.mf-art .a-lip { stroke-width: 1.1; }
 
-.mf-art .a-thin {
-  stroke-width: 0.6;
-}
-
-.mf-art .a-hatch {
-  stroke-width: 0.5;
-}
-
-.mf-art .a-frill {
-  stroke-width: 0.9;
-}
-
-.mf-art .a-lip {
-  stroke-width: 1.1;
-}
-
-.mf-art .a-lash {
-  stroke-width: 0.8;
-}
-
-.mf-art .a-eye-white,
-.mf-art .a-pearl-ball {
-  fill: #fffdf8;
-}
-
-.mf-art .a-iris {
-  fill: var(--primary);
-}
-
-.mf-art .a-pupil {
-  fill: var(--line);
-}
-
-.mf-art .a-rays {
-  fill: none;
-  stroke: var(--highlight);
-  stroke-width: 3;
-  stroke-linecap: round;
-}
-
-/* happy hour now: the oyster sits on a highlight-coloured plate */
 .is-live .a-plate,
 .mf-art.is-live .a-plate {
-  fill: var(--highlight);
+  fill: var(--lilac);
 }
 
-.is-live .a-shell,
-.mf-art.is-live .a-shell {
-  fill: color-mix(in srgb, var(--highlight) 35%, #fff);
+.is-live .a-cup,
+.mf-art.is-live .a-cup {
+  fill: #fff1b3;
 }
 
-/* ---------- Head ---------- */
+/* ---------- Hero: the film ---------- */
 
 .mf-head {
   display: grid;
-  grid-template-columns: 1fr;
-  justify-items: center;
-  gap: 8px;
-  text-align: center;
+  gap: 12px;
+  margin: 0 -16px;
+}
+
+.mf-hero {
+  position: relative;
+}
+
+.mf-oracle {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: min(58vh, 520px);
+  padding: 0;
+  border: 0;
+  border-bottom: 2px solid var(--ink);
+  background: #d8d8d6 url("./media/shell-poster.jpg") center / cover;
+  overflow: hidden;
+  text-align: left;
+}
+
+.mf-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.05);
+}
+
+/* a soft prism flare drifting over the nacre, like the light leaks in the film */
+.mf-hero-flare {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at calc(var(--px) * 100%) calc(30% + var(--py) * 50%), rgb(255 241 179 / 0.55), transparent 32%),
+    radial-gradient(circle at calc(100% - var(--px) * 80%) 85%, rgb(207 231 255 / 0.5), transparent 28%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.mf-hero.is-shucking .mf-hero-flare {
+  animation: mf-flare 2.2s ease-out;
 }
 
 .mf-brand {
-  display: grid;
-  justify-items: center;
-  font-family: 'Rye', Georgia, serif;
-  font-size: 2.6rem;
-  line-height: 1;
-  letter-spacing: 0.01em;
-}
-
-.mf-brand small {
-  margin-top: 4px;
-  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-/* The experimental oyster: tap it and it picks for you */
-.mf-oracle {
-  display: grid;
-  justify-items: center;
-  gap: 2px;
-  width: min(300px, 82vw);
-  padding: 0;
-  border: 0;
-  background: none;
-}
-
-.mf-oracle-art {
-  display: block;
-  width: 100%;
-}
-
-.mf-oracle-art .mf-art {
-  width: 100%;
-  height: auto;
-}
-
-.mf-oracle-art .a-rays {
-  transform-box: view-box;
-  transform-origin: 60px 44px;
-  transition: transform 900ms ease-out;
-}
-
-.mf-oracle-art .a-iris,
-.mf-oracle-art .a-pupil {
-  transform-box: view-box;
-  transform-origin: 60px 42px;
-  transition: transform 300ms ease;
-}
-
-.mf-oracle:hover .a-iris,
-.mf-oracle:hover .a-pupil,
-.mf-oracle:focus-visible .a-iris,
-.mf-oracle:focus-visible .a-pupil {
-  transform: translateX(3px);
-}
-
-.mf-oracle.is-shucking .mf-oracle-art {
-  animation: mf-rattle 280ms linear 2;
-}
-
-.mf-oracle.is-shucking .a-rays {
-  transform: rotate(60deg) scale(1.08);
-}
-
-.mf-oracle.is-shucking .a-eye-white,
-.mf-oracle.is-shucking .a-iris,
-.mf-oracle.is-shucking .a-pupil {
-  animation: mf-blink 420ms ease 300ms;
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  padding: 0 10px 4px;
+  background: rgb(250 250 248 / 0.88);
+  font-family: 'UnifrakturMaguntia', 'Old English Text MT', serif;
+  font-size: clamp(2.6rem, 13vw, 4rem);
+  line-height: 1.05;
+  color: var(--ink);
 }
 
 .mf-oracle-label {
-  font-size: 1rem;
-  color: var(--muted);
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  display: inline-block;
+  padding: 10px 16px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 1.05rem;
+  color: var(--ink);
 }
 
 .mf-oracle-label b {
-  color: var(--primary);
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 }
 
+.mf-oracle:hover .mf-oracle-label,
+.mf-oracle:focus-visible .mf-oracle-label {
+  background: var(--foil);
+}
+
+.mf-pause {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
 .mf-title {
-  font-family: 'Alfa Slab One', Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(2rem, 9vw, 3rem);
-  line-height: 1.1;
-  letter-spacing: 0.005em;
+  display: grid;
+  gap: 10px;
+  padding: 4px 16px 0;
+  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: clamp(2.2rem, 10vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+
+.mf-title small {
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
+  color: var(--muted);
 }
 
 .mf-origin {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   align-items: center;
   gap: 4px 14px;
+  padding: 0 16px;
 }
 
 .mf-pin-icon {
-  color: var(--primary);
+  color: var(--ink);
 }
 
 .mf-origin strong {
@@ -382,7 +273,7 @@
   padding: 0 4px;
   border: 0;
   background: none;
-  color: var(--primary) !important;
+  color: var(--ink) !important;
   font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 2px;
@@ -395,26 +286,22 @@ a.mf-link {
 }
 
 .mf-alert {
-  justify-self: stretch;
+  margin: 0 16px;
   padding: 12px 14px;
   border: 2px solid var(--ink);
   border-left-width: 8px;
-  border-radius: 10px;
-  background: var(--surface);
-  text-align: left;
+  background: var(--paper);
 }
 
 /* ---------- Address search ---------- */
 
 .mf-search {
-  justify-self: stretch;
   display: grid;
   gap: 8px;
+  margin: 0 16px;
   padding: 14px;
   border: 2px solid var(--ink);
-  border-radius: 14px;
-  background: var(--surface);
-  text-align: left;
+  background: var(--paper);
 }
 
 .mf-search input {
@@ -422,7 +309,7 @@ a.mf-link {
   min-height: 56px;
   padding: 0 14px;
   border: 2px solid var(--ink);
-  border-radius: 10px;
+  border-radius: 0;
   background: #fff;
   color: var(--ink);
   font-size: 1.125rem;
@@ -441,14 +328,14 @@ a.mf-link {
   min-height: 56px;
   padding: 8px 6px;
   border: 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+  border-bottom: 1px solid var(--silver);
   background: none;
   text-align: left;
 }
 
 .mf-search-results button:hover,
 .mf-search-results button:focus-visible {
-  background: color-mix(in srgb, var(--highlight) 45%, transparent);
+  background: var(--foil);
 }
 
 .mf-search-results small {
@@ -456,32 +343,31 @@ a.mf-link {
   color: var(--muted);
 }
 
-/* ---------- Happy hour banner ---------- */
+/* ---------- Happy hour banner: prism foil ---------- */
 
 .mf-hh {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 2px 12px;
   align-items: center;
   width: 100%;
-  min-height: 72px;
+  min-height: 76px;
   padding: 14px 16px;
   border: 2px solid var(--ink);
-  border-radius: 16px;
-  background: var(--surface);
+  background: var(--paper);
   text-align: left;
-  box-shadow: 4px 4px 0 var(--ink);
 }
 
 .mf-hh.is-live {
-  border-width: 3px;
+  background: var(--foil);
 }
 
 .mf-hh-title {
-  font-family: 'Alfa Slab One', Georgia, serif;
-  font-size: 1.35rem;
-  line-height: 1.15;
-  text-transform: uppercase;
+  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1.1;
 }
 
 .mf-hh-text {
@@ -493,8 +379,10 @@ a.mf-link {
   grid-row: 1 / span 2;
   grid-column: 2;
   font-weight: 700;
-  color: var(--primary);
   white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
 }
 
 /* ---------- Sort tabs ---------- */
@@ -506,27 +394,37 @@ a.mf-link {
 }
 
 .mf-mode {
+  position: relative;
   min-height: 52px;
   padding: 6px 10px;
   border: 2px solid var(--ink);
-  border-radius: 12px;
-  background: var(--surface);
+  background: var(--paper);
   color: var(--ink);
   font-weight: 700;
   font-size: 1.1rem;
 }
 
 .mf-mode[aria-selected='true'] {
-  background: var(--primary);
-  border-color: var(--primary);
+  background: var(--ink);
   color: #fff;
+  box-shadow: inset 0 -6px 0 0 transparent;
+}
+
+.mf-mode[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 6px;
+  background: var(--foil);
 }
 
 .mf-mode[aria-selected='true']::before {
   content: '✓ ';
 }
 
-/* ---------- Cards ---------- */
+/* ---------- Cards: pearl inside, engraved shell edge outside ---------- */
 
 .mf-picks,
 .mf-list {
@@ -540,33 +438,51 @@ a.mf-link {
 .mf-card {
   position: relative;
   border: 2px solid var(--ink);
-  border-radius: 16px;
-  background: var(--surface);
-  box-shadow: 3px 3px 0 color-mix(in srgb, var(--ink) 80%, transparent);
+  background: var(--paper);
   overflow: hidden;
+}
+
+.mf-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 26px;
+  background: var(--edge) left top / 26px 240px repeat-y;
+  pointer-events: none;
 }
 
 .mf-pick {
   animation: mf-rise 360ms ease both var(--drop, 0ms);
 }
 
+/* happy hour: the card is rimmed in prism foil */
 .mf-card.is-hh {
-  box-shadow: 0 0 0 4px var(--highlight), 3px 3px 0 4px var(--ink);
+  border: 4px solid transparent;
+  background: linear-gradient(var(--paper), var(--paper)) padding-box, var(--foil) border-box;
+}
+
+.mf-card.is-hh::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--ink);
+  pointer-events: none;
 }
 
 .mf-card.is-selected {
-  outline: 4px solid var(--primary);
-  outline-offset: 2px;
+  outline: 4px solid var(--ink);
+  outline-offset: 3px;
 }
 
 .mf-card-main {
   display: grid;
-  grid-template-columns: 76px 1fr auto;
+  grid-template-columns: 72px 1fr auto;
   align-items: start;
   gap: 12px;
   width: 100%;
   min-height: 96px;
-  padding: 14px;
+  padding: 14px 14px 14px 38px;
   border: 0;
   background: none;
   text-align: left;
@@ -578,13 +494,13 @@ a.mf-link {
 }
 
 .mf-pick-1 .mf-thumb {
-  width: 132px;
+  width: 120px;
   justify-self: center;
 }
 
 .mf-thumb {
   display: block;
-  width: 76px;
+  width: 72px;
 }
 
 .mf-thumb .mf-art {
@@ -599,14 +515,14 @@ a.mf-link {
 }
 
 .mf-name {
-  font-family: 'Alfa Slab One', Georgia, serif;
-  font-size: 1.35rem;
-  line-height: 1.15;
-  letter-spacing: 0.005em;
+  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-weight: 800;
+  font-size: 1.45rem;
+  line-height: 1.12;
 }
 
 .mf-pick-1 .mf-name {
-  font-size: 1.75rem;
+  font-size: 1.9rem;
 }
 
 .mf-n {
@@ -615,49 +531,31 @@ a.mf-link {
 
 .mf-name i {
   font-style: normal;
-  color: var(--primary);
 }
 
-/* price: a brush tag in the accent colour */
+/* price: ink pill */
 .mf-price {
-  position: relative;
-  z-index: 0;
   display: inline-block;
-  padding: 3px 12px 1px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--ink);
   color: #fff;
-  font-family: 'Alfa Slab One', Georgia, serif;
+  font-weight: 700;
   font-size: 1.15rem;
   line-height: 1.3;
 }
 
-.mf-price::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--accent);
-  -webkit-mask: var(--brush) center / 100% 100% no-repeat;
-  mask: var(--brush) center / 100% 100% no-repeat;
-}
-
 .mf-price small {
-  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .mf-price-none,
 .mf-price-market {
   padding: 0;
+  background: none;
   color: var(--ink);
-  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
-  font-weight: 700;
   font-size: 1.05rem;
-}
-
-.mf-price-none::before,
-.mf-price-market::before {
-  display: none;
 }
 
 .mf-price-none::after {
@@ -665,32 +563,24 @@ a.mf-link {
 }
 
 .mf-pick-1 .mf-price {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
 }
 
-/* happy hour: ink on a highlight brush */
+/* happy hour: prism foil chip */
 .mf-chip {
-  position: relative;
-  z-index: 0;
   display: inline-block;
-  padding: 3px 12px 2px;
+  padding: 4px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--foil);
   font-weight: 700;
   font-size: 1rem;
   line-height: 1.3;
 }
 
-.mf-chip::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--highlight);
-  -webkit-mask: var(--brush) center / 100% 100% no-repeat;
-  mask: var(--brush) center / 100% 100% no-repeat;
-}
-
-.mf-chip-upcoming::before {
-  background: color-mix(in srgb, var(--highlight) 45%, #fff);
+.mf-chip-upcoming {
+  background: var(--paper);
+  border-style: dashed;
 }
 
 .mf-open {
@@ -721,24 +611,22 @@ a.mf-link {
   align-self: center;
   font-size: 2rem;
   line-height: 1;
-  color: var(--primary);
 }
 
 .mf-card-actions {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 10px;
-  padding: 0 14px 14px;
+  padding: 0 14px 14px 38px;
 }
 
-/* Buttons: big rounded pills */
 .mf-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 56px;
   padding: 0 22px;
-  border: 2px solid var(--primary);
+  border: 2px solid var(--ink);
   border-radius: 999px;
   font-weight: 700;
   font-size: 1.1rem;
@@ -746,17 +634,21 @@ a.mf-link {
 }
 
 .mf-btn-primary {
-  background: var(--primary);
+  background: var(--ink);
   color: #fff !important;
 }
 
 .mf-btn-primary:hover {
-  filter: brightness(1.15);
+  box-shadow: 0 0 0 4px #fff, 0 0 0 8px var(--ink);
 }
 
 .mf-btn-quiet {
-  background: var(--surface);
-  color: var(--primary) !important;
+  background: var(--paper);
+  color: var(--ink) !important;
+}
+
+.mf-btn-quiet:hover {
+  background: var(--foil);
 }
 
 .mf-btn-wide {
@@ -770,21 +662,25 @@ a.mf-link {
 }
 
 .mf-h2 {
-  font-family: 'Alfa Slab One', Georgia, serif;
-  font-weight: 400;
-  font-size: 1.5rem;
-  text-transform: uppercase;
+  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.75rem;
+  line-height: 1.1;
 }
 
 .mf-row .mf-name {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+}
+
+.mf-row.is-closed .mf-art {
+  opacity: 0.75;
 }
 
 .mf-fresh {
   padding: 12px;
   border: 2px solid var(--ink);
-  border-radius: 10px;
-  background: var(--surface);
+  background: var(--paper);
   font-weight: 700;
 }
 
@@ -799,10 +695,8 @@ a.mf-link {
   position: relative;
   height: 300px;
   border: 2px solid var(--ink);
-  border-radius: 16px;
   overflow: hidden;
-  background: #e8e1d0;
-  box-shadow: 4px 4px 0 var(--ink);
+  background: #e2e2e0;
   transition: height 300ms ease;
 }
 
@@ -814,13 +708,13 @@ a.mf-link {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: #e8e1d0;
+  background: #e2e2e0;
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
 }
 
-/* old-print map: sepia, slightly lifted contrast */
+/* silver-print map */
 .mf-map-canvas .leaflet-tile-pane {
-  filter: grayscale(0.85) sepia(0.35) contrast(1.05);
+  filter: grayscale(1) contrast(1.05) brightness(1.03);
 }
 
 .mf-map-riso {
@@ -846,8 +740,7 @@ a.mf-link {
   gap: 2px 8px;
   padding: 4px 10px 4px 6px;
   border: 2px solid var(--ink);
-  border-radius: 10px;
-  background: var(--surface);
+  background: var(--paper);
   font-size: 0.95rem;
   font-weight: 700;
 }
@@ -863,8 +756,7 @@ a.mf-link {
   left: 10px;
   padding: 4px 10px;
   border: 2px solid var(--ink);
-  border-radius: 10px;
-  background: var(--surface);
+  background: var(--paper);
   font-size: 0.95rem;
   font-weight: 700;
 }
@@ -885,11 +777,10 @@ a.mf-link {
 
 .mf .leaflet-bar {
   border: 2px solid var(--ink);
-  border-radius: 10px;
+  border-radius: 0;
   overflow: hidden;
 }
 
-/* engraved oyster markers */
 .mf-pin {
   position: relative;
   background: none;
@@ -913,12 +804,11 @@ a.mf-link {
 }
 
 .mf-pin.is-selected .a-plate {
-  fill: var(--primary);
+  fill: var(--ink);
 }
 
 .mf-pin.is-selected .mf-art {
   opacity: 1;
-  filter: drop-shadow(0 0 0 #fff) drop-shadow(2px 3px 0 rgb(0 0 0 / 0.6));
 }
 
 .mf-pin b {
@@ -936,11 +826,9 @@ a.mf-link {
 }
 
 .mf-pin.is-live b {
-  background: var(--accent);
-}
-
-.mf-pin.is-selected b {
-  background: var(--primary);
+  background: #fff;
+  color: var(--ink);
+  border-color: var(--ink);
 }
 
 .mf-cluster b {
@@ -954,17 +842,12 @@ a.mf-link {
   opacity: 0.55;
 }
 
-.mf-row.is-closed .mf-art {
-  filter: grayscale(0.6);
-  opacity: 0.8;
-}
-
 .mf-you i {
   position: absolute;
   inset: 3px;
   border: 3px solid #fff;
   border-radius: 50%;
-  background: var(--primary);
+  background: var(--ink);
   box-shadow: 0 0 0 2px var(--ink);
 }
 
@@ -973,7 +856,6 @@ a.mf-link {
   top: 26px;
   left: 50%;
   padding: 0 5px;
-  border-radius: 6px;
   background: var(--ink);
   color: #fff;
   font: 700 1rem/1.4 'Atkinson Hyperlegible', system-ui, sans-serif;
@@ -995,7 +877,7 @@ a.mf-link {
   padding: 6px 22px 6px 12px;
   border: 2px solid #fff;
   border-radius: 999px;
-  background: var(--primary);
+  background: var(--ink);
   color: #fff;
   font-weight: 700;
   font-size: 1.2rem;
@@ -1007,7 +889,7 @@ a.mf-link {
   width: 44px;
 }
 
-/* ---------- Restaurant card (bottom sheet) ---------- */
+/* ---------- Restaurant card ---------- */
 
 .mf-sheet {
   position: fixed;
@@ -1021,7 +903,7 @@ a.mf-link {
   position: absolute;
   inset: 0;
   border: 0;
-  background: rgb(20 16 12 / 0.6);
+  background: rgb(17 17 19 / 0.62);
   animation: mf-fade 200ms ease both;
 }
 
@@ -1031,10 +913,12 @@ a.mf-link {
   gap: 14px;
   max-height: 92vh;
   overflow: auto;
-  padding: 22px 18px calc(18px + env(safe-area-inset-bottom));
-  border-top: 3px solid var(--ink);
-  border-radius: 22px 22px 0 0;
-  background: var(--bg);
+  padding: 40px 18px calc(18px + env(safe-area-inset-bottom));
+  border-top: 2px solid var(--ink);
+  background:
+    linear-gradient(rgb(250 250 248 / 0.93), rgb(250 250 248 / 0.97)),
+    url("./media/nacre.jpg") center / cover,
+    var(--paper);
   color: var(--ink);
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
   font-size: 1.125rem;
@@ -1042,10 +926,21 @@ a.mf-link {
   animation: mf-up 320ms cubic-bezier(0.2, 1, 0.4, 1) both;
 }
 
-/* the lid sits on the card and lifts away as it opens */
+/* the engraved shell lip along the top of the card */
+.mf-sheet-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: var(--lip) left top / 240px 26px repeat-x;
+  pointer-events: none;
+}
+
 .mf-sheet-lid {
   position: absolute;
-  top: -6px;
+  top: 10px;
   left: 50%;
   z-index: 2;
   width: 120px;
@@ -1062,15 +957,15 @@ a.mf-link {
   padding: 0 16px;
   border: 2px solid var(--ink);
   border-radius: 999px;
-  background: var(--surface);
+  background: var(--paper);
   font-weight: 700;
 }
 
 .mf-sheet h2 {
-  font-family: 'Alfa Slab One', Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(1.7rem, 7.5vw, 2.4rem);
-  line-height: 1.1;
+  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-weight: 800;
+  font-size: clamp(1.9rem, 8vw, 2.6rem);
+  line-height: 1.05;
 }
 
 .mf-sheet-addr {
@@ -1089,20 +984,20 @@ a.mf-link {
   gap: 4px;
   padding: 14px;
   border: 2px solid var(--ink);
-  border-radius: 14px;
-  background: var(--surface);
+  background: var(--paper);
 }
 
 .mf-sheet-box h3 {
-  font-family: 'Alfa Slab One', Georgia, serif;
-  font-weight: 400;
-  font-size: 1.15rem;
-  text-transform: uppercase;
+  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.3rem;
 }
 
 .mf-sheet-hh.is-now {
-  border-width: 3px;
-  box-shadow: 0 0 0 4px var(--highlight);
+  border: 4px solid transparent;
+  background: linear-gradient(var(--paper), var(--paper)) padding-box, var(--foil) border-box;
+  box-shadow: 0 0 0 2px var(--ink);
 }
 
 .mf-hours {
@@ -1126,9 +1021,7 @@ a.mf-link {
 }
 
 .mf-sheet-actions .mf-btn[aria-pressed='true'] {
-  background: var(--highlight);
-  border-color: var(--ink);
-  color: var(--ink) !important;
+  background: var(--foil);
 }
 
 .mf-toast {
@@ -1140,7 +1033,7 @@ a.mf-link {
   padding: 12px 18px;
   border: 2px solid var(--ink);
   border-radius: 999px;
-  background: var(--surface);
+  background: var(--paper);
   color: var(--ink);
   font-weight: 700;
   transform: translate(-50%, calc(100% + 40px));
@@ -1168,10 +1061,35 @@ a.mf-link {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     column-gap: 48px;
     align-items: start;
-    padding: 40px clamp(24px, 4vw, 64px) 56px;
+    padding: 0 clamp(24px, 4vw, 64px) 56px;
   }
 
-  .mf-head,
+  .mf-head {
+    grid-column: 1 / -1;
+    margin: 0 calc(-1 * clamp(24px, 4vw, 64px));
+  }
+
+  .mf-oracle {
+    height: min(62vh, 560px);
+  }
+
+  .mf-oracle::before {
+    content: '';
+    position: absolute;
+    inset: -30px;
+    background: inherit;
+    filter: blur(22px) brightness(1.08);
+  }
+
+  .mf-hero-video {
+    object-fit: contain;
+  }
+
+  .mf-title,
+  .mf-origin {
+    padding-left: clamp(24px, 4vw, 64px);
+  }
+
   .mf-hh,
   .mf-modes,
   .mf-picks,
@@ -1182,7 +1100,7 @@ a.mf-link {
 
   .mf-map-anchor {
     grid-column: 2;
-    grid-row: 1 / span 6;
+    grid-row: 2 / span 6;
     position: sticky;
     top: 24px;
     align-self: start;
@@ -1203,12 +1121,11 @@ a.mf-link {
 
   .mf-sheet-card {
     width: min(560px, 92vw);
-    border: 3px solid var(--ink);
-    border-radius: 22px;
+    border: 2px solid var(--ink);
   }
 }
 
-/* ---------- Motion: short, and only when you do something ---------- */
+/* ---------- Motion: the film (pausable), and short moves when you tap ---------- */
 
 @keyframes mf-rise {
   from {
@@ -1230,18 +1147,19 @@ a.mf-link {
   }
 }
 
-@keyframes mf-rattle {
-  25% { transform: rotate(-3deg); }
-  75% { transform: rotate(3deg); }
-}
-
-@keyframes mf-blink {
-  50% { transform: scaleY(0.1); }
+@keyframes mf-flare {
+  0% { opacity: 1; filter: hue-rotate(0deg) brightness(1); }
+  60% { opacity: 1; filter: hue-rotate(160deg) brightness(1.6); }
+  100% { opacity: 1; filter: hue-rotate(360deg) brightness(1); }
 }
 
 @keyframes mf-lid {
   0% { transform: translateY(10px) rotate(0); opacity: 1; }
   100% { transform: translate(-30px, -50px) rotate(-100deg); opacity: 0; }
+}
+
+.mf.is-still .mf-hero-flare {
+  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

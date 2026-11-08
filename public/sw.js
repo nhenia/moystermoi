@@ -1,6 +1,6 @@
 // Moyster offline cache: network first, fall back to the last copy we saw.
 // Bump VERSION to force phones to drop old caches after a big change.
-const VERSION = "moyster-v2"
+const VERSION = "moyster-v3"
 const BASE = new URL(self.registration.scope).pathname
 const SHELL = ["", "manifest.webmanifest", "favicon.svg", "icon-192.png"].map((p) => BASE + p)
 
@@ -20,7 +20,8 @@ self.addEventListener("fetch", (event) => {
   // Same-origin files only (fonts are bundled with the app). Map tiles are left to the browser's own cache
   // (they arrive "opaque", which would eat storage quota if we stored them here).
   const cacheable = url.origin === self.location.origin
-  if (req.method !== "GET" || !cacheable) return
+  // Leave video to the browser: it streams in byte ranges, which don't belong in this cache.
+  if (req.method !== "GET" || !cacheable || req.headers.has("range") || /\.(mp4|webm)$/.test(url.pathname)) return
   event.respondWith(
     fetch(req)
       .then((res) => {

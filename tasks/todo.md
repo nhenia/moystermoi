@@ -47,3 +47,10 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - Leaflet requests only ~4 tiles in the small phone map, so "tiles failed" triggers at 3 errors.
 - Validation checks must not assume any venue is unmapped (the robot maps them all).
 - Don't cache map tiles in the service worker: they're opaque responses and eat storage quota.
+
+## Round 6 — shell & nacre (from the video reference)
+- [x] Retired the cream/engraving look and the five palettes
+- [x] Reference video as the hero film (mp4 + webm, poster, Pause remembered, still for reduce motion)
+- [x] "Tap the shell" picker: film speeds up, then opens a pick
+- [x] Prism foil that follows tilt/pointer; engraved crosshatch card edges; blackletter brand
+- [x] Contrast check, axe, large-text, keyboard and e2e suites re-run

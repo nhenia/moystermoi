@@ -2,7 +2,7 @@
 
 Find cheap oysters near you in New Orleans: under 60 seconds from opening the app to walking.
 
-Night-print risograph look: fluorescent pink, yellow and cyan on ink black, oyster-eye markers, misregistered type.
+Shell & nacre look: a looping film of an engraved oyster shell under rippling silver water, pearl-grey paper, prism-foil highlights that shift as you tilt your phone, blackletter brand, engraved crosshatch edges.
 
 ## What it does
 
@@ -12,31 +12,21 @@ Night-print risograph look: fluorescent pink, yellow and cyan on ink black, oyst
 - **Happy hour up front:** a banner when specials are live, highlighted cards and oysters, and every happy hour shows start *and* end.
 - **Sort by:** Closest · Happy hour · Cheapest (any price you can get today, happy hour or menu) · Map.
 - **Tap any restaurant** (name, card or oyster on the map) and its card opens: status, walk, happy hour, oyster prices, hours, **Walk there**, Share, Save.
-- **Can't decide? Tap the oyster.** The engraved oyster-eye at the top blinks and picks somewhere open within a 25-minute walk, favouring live happy hours.
-- **Look:** vintage engraving on cream paper, woodtype brand, brush-stroke highlights, ink splatters.
+- **Can't decide? Tap the shell.** The film at the top speeds up, then picks somewhere open within a 25-minute walk, favouring live happy hours.
+- **The film** loops quietly at the top (under 0.5 MB). **Pause** stops it and the phone remembers; "reduce motion" shows a still picture instead.
 
 ## Easy to use for everyone
 
 Built and tested for older eyes and hands:
 - Atkinson Hyperlegible type (designed for low-vision readers), 18px body text, nothing under 16px.
-- AAA contrast (7:1) for text and buttons in every palette; nothing faded or tilted.
+- AAA contrast (7:1) for text and buttons everywhere, including the prism foil; nothing faded or tilted.
 - Every button at least 44 × 44px (most are 52–60px); works fully by keyboard; respects "reduce motion".
 - Plain words: "Open now · until 10 pm", "starts in 1 hr 15 min", "8 am–1 am".
-- Checked automatically: `pnpm check-palettes` (contrast math) and `python3 tests/accessibility.py <url>` (axe-core audit on every palette, plus text size, tap size, fading, tilt, sideways scroll at 320px and 200% text, and keyboard use).
+- Checked automatically: `pnpm check-palettes` (contrast math) and `python3 tests/accessibility.py <url>` (axe-core audit on the page and the open card, plus text size, tap size, fading, tilt, sideways scroll at 320px and 200% text, and keyboard use).
 
-## Colour palettes
+## Colours
 
-Five New Orleans palettes, all passing the same checks. Mardi Gras is the default. Preview another by adding `?palette=` to the address (the choice is remembered on that phone):
-
-| Palette | Address | Colours |
-| --- | --- | --- |
-| Mardi Gras | `?palette=mardi-gras` | purple, green, gold |
-| Streetcar | `?palette=streetcar` | St. Charles green, brass, brick red |
-| Creole Cottage | `?palette=creole-cottage` | shutter teal, mustard, terracotta |
-| Gaslight | `?palette=gaslight` | oxblood, gas-lamp amber, moss |
-| Sazerac | `?palette=sazerac` | Peychaud's red, absinthe, bottle green |
-
-To change the default, edit the first `.mf { … }` colour block in `src/finder/finder.css` (or ask Claude).
+Pearl, ink and a five-colour prism foil (sky, lilac, pink, butter, mint). All in the first `.mf { … }` block of `src/finder/finder.css`. The film lives in `public/media/` (shell.mp4, shell.webm, shell-poster.jpg) — swap those files to change it.
 
 ## Updating restaurants (no coding needed)
 
@@ -78,7 +68,7 @@ python3 tests/e2e.py     # browser tests at phone + desktop sizes (needs Python 
 pnpm refresh-data        # run the data robot locally (needs internet)
 ```
 
-Code: `src/finder/` — `logic.ts` (all the rules, tested), `art.ts` (the engraved oysters), `palettes.ts`, `location.ts`, `OysterMap.tsx` (Leaflet + oyster markers), `OysterFinder.tsx` (screen), `finder.css` (all styling).
+Code: `src/finder/` — `logic.ts` (all the rules, tested), `art.ts` (the engraved oysters), `location.ts`, `OysterMap.tsx` (Leaflet + oyster markers), `OysterFinder.tsx` (screen), `finder.css` (all styling).
 Outside services, all free with no keys: CARTO map tiles, Photon address search (OpenStreetMap data), Google Maps directions. Fonts are bundled.
 
 ## Credits

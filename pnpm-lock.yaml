@@ -8,13 +8,13 @@ importers:
 
   .:
     dependencies:
-      '@fontsource/alfa-slab-one':
-        specifier: ^5.3.0
-        version: 5.3.0
       '@fontsource/atkinson-hyperlegible':
         specifier: ^5.3.0
         version: 5.3.0
-      '@fontsource/rye':
+      '@fontsource/bodoni-moda':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/unifrakturmaguntia':
         specifier: ^5.3.0
         version: 5.3.0
       leaflet:
@@ -54,14 +54,14 @@ importers:
 
 packages:
 
-  '@fontsource/alfa-slab-one@5.3.0':
-    resolution: {integrity: sha512-J/ANFZ7S9CbZClr/QhMjmBtpFmmKipVkEXHj20aurR5uqJPCBChVPJn1/kx6vtrwnfnDY0kQaYSTYasSt4GruA==}
-
   '@fontsource/atkinson-hyperlegible@5.3.0':
     resolution: {integrity: sha512-Sp8Ve8+rQmENY2Lv02VH7sLpntzTTvnncnJMTbRE7DX6TLxGraN4ykZfzaUWIoCFmaomwkvNiqmlPkrKBuDoSA==}
 
-  '@fontsource/rye@5.3.0':
-    resolution: {integrity: sha512-nKMwMa2/y8LMfhxs7Wm6FnbwXLKsBrJKs6dygYOPrmbpRIvBlf7Kt1mDNm0lzDIuuU+ghluQsisqpQ7peDm7gA==}
+  '@fontsource/bodoni-moda@5.3.0':
+    resolution: {integrity: sha512-Wt2XBCHivYxkTP3ydq/Ax+7VshwsOh/6ayA5om2t+yClCkGwLPj2Mi6OnyMANjyLcqDUWs4rlOHnc8SBLf6/pA==}
+
+  '@fontsource/unifrakturmaguntia@5.3.0':
+    resolution: {integrity: sha512-z8NGOUeAu0T534Z8tEyuNbuUZsUiRoQKzg3gRB5sb2o2DipxEqmYQqHdlwxsbN0gpwhgcClKrCuB/AhVeY2UOQ==}
 
   '@oxc-project/types@0.156.0':
     resolution: {integrity: sha512-1Duyg48TdJNdyhEB8Xn1L36bT9Pv6GUtlKjHxOys8xkaF/rQq3XJE+bAurSK/AgIz5mGFsb77cn9Pb20+WCScw==}
@@ -384,11 +384,11 @@ packages:
 
 snapshots:
 
-  '@fontsource/alfa-slab-one@5.3.0': {}
-
   '@fontsource/atkinson-hyperlegible@5.3.0': {}
 
-  '@fontsource/rye@5.3.0': {}
+  '@fontsource/bodoni-moda@5.3.0': {}
+
+  '@fontsource/unifrakturmaguntia@5.3.0': {}
 
   '@oxc-project/types@0.156.0': {}
 

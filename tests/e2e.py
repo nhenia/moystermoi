@@ -52,7 +52,8 @@ with sync_playwright() as p:
     total = page.locator(".mf-pick").count() + page.locator(".mf-row").count()
     check(total == 34, f"near mode lists every spot ({total})")
     check("OYSTERS" in page.locator("h1#mf-title").inner_text().upper(), "page heading says Oysters near me")
-    check(page.locator(".mf-oracle .mf-eye-oyster").is_visible(), "engraved oyster-eye is on screen")
+    check(page.locator(".mf-hero-video").is_visible(), "the shell film is on screen")
+    check(page.evaluate("document.querySelector('.mf-hero-video').readyState") >= 2, "the film loads")
     page.wait_for_timeout(900)
     page.screenshot(path=f"{OUT}/m1-near.png", full_page=False)
     page.screenshot(path=f"{OUT}/m1-near-full.png", full_page=True)
@@ -105,7 +106,7 @@ with sync_playwright() as p:
     page.evaluate("window.scrollTo(0, 0)")
     page.locator(".mf-oracle").click()
     page.wait_for_timeout(450)
-    check(page.locator(".mf-oracle.is-shucking").count() == 1, "the oyster cracks open")
+    check(page.locator(".mf-hero.is-shucking").count() == 1, "the shell opens")
     page.screenshot(path=f"{OUT}/m6-shuck.png")
     drawn = sheet_name()
     names = [n.upper() for n in page.locator(".mf-name").all_inner_texts()]

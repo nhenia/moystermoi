@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import deals from "../deals.json"
 import OysterMap from "./OysterMap"
-import { closedBottom, closedTop, eyeOyster, halfShell, hash01, roughFilterSvg } from "./art"
-import { choosePalette } from "./palettes"
+import { closedBottom, closedTop, halfShell, hash01, roughFilterSvg } from "./art"
 import {
   DAY_NAMES,
   type Mode,
@@ -56,6 +55,9 @@ function readSaved(): Set<string> {
   }
 }
 
+const MEDIA = `${import.meta.env.BASE_URL}media/`
+const MOTION_KEY = "moyster-motion"
+
 const reducedMotion = () => typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
 
 /** Re-render every minute so "open" and "happy hour now" flip without a reload. */
@@ -93,7 +95,61 @@ export default function OysterFinder() {
   const [saved, setSaved] = useState<Set<string>>(readSaved)
   const [toast, setToast] = useState("")
   const [shucking, setShucking] = useState(false)
-  const [palette] = useState(choosePalette)
+  // Motion: the hero video loops unless the visitor prefers less motion or pressed Pause (remembered).
+  const [motionOff, setMotionOff] = useState(() => {
+    try {
+      const saved = localStorage.getItem(MOTION_KEY)
+      if (saved) return saved === "off"
+    } catch {
+      /* storage blocked */
+    }
+    return reducedMotion()
+  })
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    if (motionOff) v.pause()
+    else void v.play().catch(() => {})
+  }, [motionOff])
+
+  const toggleMotion = () =>
+    setMotionOff((off) => {
+      try {
+        localStorage.setItem(MOTION_KEY, off ? "on" : "off")
+      } catch {
+        /* storage blocked */
+      }
+      return !off
+    })
+
+  // Prism foil: highlights catch the light as you move the pointer or tilt the phone.
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el || motionOff) return
+    let frame = 0
+    const set = (x: number, y: number) => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        el.style.setProperty("--px", x.toFixed(3))
+        el.style.setProperty("--py", y.toFixed(3))
+      })
+    }
+    const onMove = (e: PointerEvent) => set(e.clientX / window.innerWidth, e.clientY / window.innerHeight)
+    const onTilt = (e: DeviceOrientationEvent) => {
+      if (e.gamma == null || e.beta == null) return
+      set(Math.min(1, Math.max(0, (e.gamma + 45) / 90)), Math.min(1, Math.max(0, (e.beta - 10) / 70)))
+    }
+    window.addEventListener("pointermove", onMove, { passive: true })
+    window.addEventListener("deviceorientation", onTilt, { passive: true })
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener("pointermove", onMove)
+      window.removeEventListener("deviceorientation", onTilt)
+    }
+  }, [motionOff])
   const rowRefs = useRef(new Map<string, HTMLElement>())
   const mapRef = useRef<HTMLDivElement>(null)
 
@@ -166,18 +222,26 @@ export default function OysterFinder() {
     if (id) window.setTimeout(() => rowRefs.current.get(id)?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50)
   }
 
-  /** The experimental bit: shuck the oyster, it pulls a spot for you. */
+  /** The experimental bit: tap the shell, the film replays the shell opening, then a spot is pulled for you. */
   const shuck = () => {
     if (shucking) return
     const pick = drawOyster(enriched)
     if (!pick) return
     setShucking(true)
+    const v = videoRef.current
+    const quiet = motionOff || reducedMotion()
+    if (v && !quiet) {
+      v.currentTime = 0
+      v.playbackRate = 2.2
+      void v.play().catch(() => {})
+    }
     window.setTimeout(
       () => {
+        if (v) v.playbackRate = 1
         open(pick.venue.id)
         setShucking(false)
       },
-      reducedMotion() ? 0 : 950,
+      quiet ? 0 : 2200,
     )
   }
 
@@ -236,33 +300,44 @@ export default function OysterFinder() {
   )
 
   return (
-    <section className="mf" id="finder" data-palette={palette} aria-labelledby="mf-title">
+    <section ref={sectionRef} className={`mf${motionOff ? " is-still" : ""}`} id="finder" aria-labelledby="mf-title">
       <span className="mf-defs" dangerouslySetInnerHTML={{ __html: roughFilterSvg }} />
 
       <header className="mf-head">
-        <p className="mf-brand">
-          <span>MOYSTER.</span>
-          <small>New Orleans</small>
-        </p>
-
-        <button
-          type="button"
-          className={`mf-oracle${shucking ? " is-shucking" : ""}`}
-          onClick={shuck}
-          aria-label="Can't decide? Tap the oyster and it picks a place for you"
-        >
-          <span className="mf-oracle-art" aria-hidden="true" dangerouslySetInnerHTML={{ __html: eyeOyster() }} />
-          <span className="mf-oracle-label" aria-hidden="true">
-            Can't decide? <b>Tap the oyster</b>
-          </span>
-        </button>
+        <div className={`mf-hero${shucking ? " is-shucking" : ""}`}>
+          <button type="button" className="mf-oracle" onClick={shuck}>
+            <video
+              ref={videoRef}
+              className="mf-hero-video"
+              poster={`${MEDIA}shell-poster.jpg`}
+              muted
+              loop
+              playsInline
+              autoPlay={!motionOff}
+              preload="metadata"
+              aria-hidden="true"
+              tabIndex={-1}
+            >
+              <source src={`${MEDIA}shell.mp4`} type="video/mp4" />
+              <source src={`${MEDIA}shell.webm`} type="video/webm" />
+            </video>
+            <span className="mf-hero-flare" aria-hidden="true" />
+            <span className="mf-brand" aria-hidden="true">
+              Moyster
+            </span>
+            <span className="mf-oracle-label">
+              Can't decide? <b>Tap the shell</b>
+              <span className="mf-sr"> and it picks a place for you</span>
+            </span>
+          </button>
+          <button type="button" className="mf-pause" onClick={toggleMotion} aria-pressed={motionOff}>
+            {motionOff ? "▶ Play" : "❚❚ Pause"}
+          </button>
+        </div>
 
         <h1 id="mf-title" className="mf-title">
-          <span className="mf-brush">
-            Oysters
-            <br />
-            near me
-          </span>
+          Oysters near me
+          <small>New Orleans</small>
         </h1>
 
         <div className="mf-origin" aria-live="polite">
@@ -284,9 +359,7 @@ export default function OysterFinder() {
       </header>
 
       <button type="button" className={`mf-hh${live.length ? " is-live" : ""}`} onClick={() => choose("happy")}>
-        <span className="mf-hh-title">
-          <span className="mf-brush mf-brush-hl">{live.length ? "Happy hour now" : "Happy hour"}</span>
-        </span>
+        <span className="mf-hh-title">{live.length ? "Happy hour now" : "Happy hour"}</span>
         <span className="mf-hh-text">
           {live.length
             ? `${live.length} ${live.length === 1 ? "place" : "places"} with oyster deals right now`
@@ -497,6 +570,7 @@ function PickCard({ r, index, ...p }: CardProps & { index: number }) {
       className={`mf-card mf-pick mf-pick-${index + 1}${p.selected ? " is-selected" : ""}${r.hh.state === "now" ? " is-hh" : ""}`}
       style={{ "--drop": `${index * 80}ms` } as React.CSSProperties}
     >
+      <span className="mf-edge" aria-hidden="true" />
       <button type="button" className="mf-card-main" onClick={p.onOpen} aria-haspopup="dialog">
         <span className="mf-thumb" aria-hidden="true" dangerouslySetInnerHTML={{ __html: thumb(v.id, r.hh.state === "now") }} />
         <span className="mf-card-body">
@@ -526,6 +600,7 @@ function Row({ r, n, ...p }: CardProps & { n: number }) {
   const v = r.venue
   return (
     <li ref={p.registerRef} className={`mf-card mf-row${p.selected ? " is-selected" : ""}${isClosed(r) ? " is-closed" : ""}${r.hh.state === "now" ? " is-hh" : ""}`}>
+      <span className="mf-edge" aria-hidden="true" />
       <button type="button" className="mf-card-main" onClick={p.onOpen} aria-haspopup="dialog">
         <span className="mf-thumb" aria-hidden="true" dangerouslySetInnerHTML={{ __html: thumb(v.id, r.hh.state === "now") }} />
         <span className="mf-card-body">

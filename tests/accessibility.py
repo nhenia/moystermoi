@@ -67,6 +67,20 @@ with sync_playwright() as p:
         pg.screenshot(path=f"{S}/senior-{vw}-{scale}.png")
         c.close()
 
+    # the film can be paused (WCAG 2.2.2) and the choice sticks; reduced-motion visitors get a still
+    c=b.new_context(viewport={"width":390,"height":844},geolocation={"latitude":29.9547,"longitude":-90.0697},permissions=["geolocation"]); pg=c.new_page()
+    pg.goto(URL); pg.wait_for_selector(".mf-pick"); pg.wait_for_timeout(800)
+    check(not pg.evaluate("document.querySelector('.mf-hero-video').paused"), "film plays")
+    pg.get_by_role("button", name="❚❚ Pause").click(); pg.wait_for_timeout(200)
+    check(pg.evaluate("document.querySelector('.mf-hero-video').paused"), "Pause stops the film")
+    pg.reload(); pg.wait_for_selector(".mf-pick"); pg.wait_for_timeout(600)
+    check(pg.evaluate("document.querySelector('.mf-hero-video').paused"), "paused stays paused after reload")
+    c.close()
+    c=b.new_context(viewport={"width":390,"height":844},reduced_motion="reduce"); pg=c.new_page()
+    pg.goto(URL); pg.wait_for_selector(".mf-pick"); pg.wait_for_timeout(800)
+    check(pg.evaluate("document.querySelector('.mf-hero-video').paused"), "reduce-motion visitors see a still")
+    c.close()
+
     # keyboard only: reach a restaurant, open its card, close it
     c=b.new_context(viewport={"width":390,"height":844},geolocation={"latitude":29.9547,"longitude":-90.0697},permissions=["geolocation"]); pg=c.new_page(); pg.clock.install(time="2026-11-10T22:10:00Z")
     pg.goto(URL); pg.wait_for_function("document.querySelector('.mf-origin strong').textContent.includes('You are here')")
@@ -76,7 +90,8 @@ with sync_playwright() as p:
         pg.keyboard.press("Tab")
         seen.append(pg.evaluate("document.activeElement.className + '|' + (document.activeElement.innerText||'').slice(0,20)"))
         if "mf-card-main" in seen[-1]: break
-    check(any("mf-oracle" in s for s in seen), "keyboard reaches the oyster oracle")
+    check(any("mf-oracle" in s for s in seen), "keyboard reaches 'Tap the shell'")
+    check(any("mf-pause" in s for s in seen), "keyboard reaches Pause")
     check(any("mf-mode" in s for s in seen), "keyboard reaches the sort buttons")
     check("mf-card-main" in seen[-1], f"keyboard reaches the first restaurant ({len(seen)} tabs)")
     pg.keyboard.press("Enter"); pg.wait_for_selector(".mf-sheet h2")
@@ -86,7 +101,7 @@ with sync_playwright() as p:
     c.close()
 
     # axe-core audit (WCAG 2.1 A/AA/AAA + best practice) on every palette, page and open card
-    for pal in ["", "streetcar", "creole-cottage", "gaslight", "sazerac"]:
+    for pal in [""]:
         c=b.new_context(viewport={"width":390,"height":844},geolocation={"latitude":29.9547,"longitude":-90.0697},permissions=["geolocation"],reduced_motion="reduce")
         c.route("https://*.basemaps.cartocdn.com/**", lambda r: r.fulfill(status=200, content_type="image/png", body=TILE))
         pg=c.new_page(); pg.clock.install(time="2026-11-10T22:10:00Z")
@@ -96,7 +111,7 @@ with sync_playwright() as p:
             if state=="card":
                 pg.locator(".mf-pick .mf-name").first.click(); pg.wait_for_selector(".mf-sheet h2"); pg.wait_for_timeout(500)
             res=pg.evaluate("""async () => (await axe.run(document, {runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag2aaa','best-practice']}})).violations.map(v=>v.id+' ('+v.nodes.length+')')""")
-            check(not res, f"[axe {pal or 'mardi-gras'} / {state}] no accessibility violations {res}")
+            check(not res, f"[axe / {state}] no accessibility violations {res}")
         c.close()
     b.close()
 print("\nFAILURES:", len(fails))

@@ -13,9 +13,9 @@
     "check-palettes": "node scripts/check-palettes.mjs"
   },
   "dependencies": {
-    "@fontsource/alfa-slab-one": "^5.3.0",
     "@fontsource/atkinson-hyperlegible": "^5.3.0",
-    "@fontsource/rye": "^5.3.0",
+    "@fontsource/bodoni-moda": "^5.3.0",
+    "@fontsource/unifrakturmaguntia": "^5.3.0",
     "leaflet": "^1.9.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

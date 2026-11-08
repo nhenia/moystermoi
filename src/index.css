@@ -12,8 +12,8 @@ html {
 
 body {
   margin: 0;
-  background: #f5eedc;
-  color: #1e1a16;
+  background: #e7e7e4;
+  color: #111113;
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
 }
 
@@ -31,6 +31,6 @@ button {
 }
 
 ::selection {
-  background: #4a2377;
+  background: #111113;
   color: #fff;
 }
