@@ -12,12 +12,21 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [x] Data robot (weekly geocoding + link checks) and GitHub Pages deploy
 - [x] Verified: 9 logic checks, 23 browser tests (phone + desktop), screenshots reviewed
 
+## 2026-11-08 round
+- [x] Re-checked every spot against current sources; 34 spots (added MRB, Red Fish Grill, Creole Cookery, Vampire Apothecary, Royal House, Oceana, Trenasse, Boil, Casamento's, Porgy's, Monday, Neyow's, Felix's Lakefront; dropped Mosquito Supper Club, reservation-only)
+- [x] Oyster hours per spot; open-now status everywhere; every mode lists every spot, closed last
+- [x] Happy hour shows start and end everywhere; still highlighted (banner, yellow cards, yellow oysters)
+- [x] Cut filler copy (mode hints, taglines, "until we find you", "happy hour price", etc.)
+- [x] Engraved oyster map markers + legend + floating Map button; map re-frames when resized; OSM tile fallback
+
 ## Open
 - [ ] Drago's source link didn't load for the robot — check it by hand
-- [ ] Re-verify prices/happy hours (last human check: 2026-10-29)
+- [ ] Unconfirmed, worth a call: Bourbon House, Royal House, Casamento's and St. Roch Market hours; Superior, Blue Crab, Mr. Ed's and Felix's Lakefront happy-hour times; Chemin à la Mer oyster hour
 - [ ] Five radically distinct visual designs (current build is design #1: night-print risograph)
 
 ## Lessons
+- When copying a CSS block by text anchor, anchor on a newline + selector: `.mf-eye .shell {` also matched `.mf-head-art .mf-eye .shell {` and duplicated half the stylesheet.
+- Cheapest mode must rank by price before "open now", or a 75¢ deal starting in an hour hides under full-price spots.
 - Leaflet requests only ~4 tiles in the small phone map, so "tiles failed" triggers at 3 errors.
 - Validation checks must not assume any venue is unmapped (the robot maps them all).
 - Don't cache map tiles in the service worker: they're opaque responses and eat storage quota.

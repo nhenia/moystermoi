@@ -7,9 +7,11 @@ Night-print risograph look: fluorescent pink, yellow and cyan on ink black, oyst
 ## What it does
 
 - **Opens straight into results.** Asks for your location right away. Until you answer, it shows picks from the French Quarter (and says so). Location blocked? An address box appears (any address works).
-- **Four modes:** Near me · Happy hour (live now → later today → this week) · Cheapest (per oyster; deals still available today first) · Map.
-- **Three instant picks** with walking time, price, happy-hour status and a **Walk there** button (Google Maps walking directions). The rest are listed below.
-- **Linked map and list:** tap an oyster-eye marker to highlight its card, or a card to highlight its marker. Nearby markers merge into a numbered cluster.
+- **Every oyster spot is listed, open ones first.** Each says "Open til 10pm", "Opens 4pm" or "Hours not posted". Closed spots sit at the bottom, dimmed.
+- **Happy hour stays front and centre:** a pink banner when specials are live, yellow highlights on cards and map, and every happy hour shows its start *and* end ("Happy hour now · ends 6pm", "Happy hour 4–6pm · in 1h").
+- **Four modes:** Near me · Happy hour (live now → later today → everything else) · Cheapest (per oyster; deals you can get today first) · Map.
+- **Three instant picks** with walking time, open status, price, happy hour and a **Walk there** button (Google Maps walking directions).
+- **Illustrated map:** engraved oyster markers (yellow = happy hour now, cream = open, grey = closed), a legend, and a floating Map button on phones. Tap an oyster to highlight its card, or a card to highlight its oyster.
 - Share (phone share sheet), save (stays on your phone, no account), details sheet with the source link.
 - Happy-hour status refreshes every minute in New Orleans time, wherever the visitor's phone is set.
 - Works on a weak signal: the app and restaurant list are cached on the phone after the first visit.
@@ -18,7 +20,10 @@ Night-print risograph look: fluorescent pink, yellow and cyan on ink black, oyst
 
 Everything lives in **`src/deals.json`**. On GitHub, open the file, click the pencil, edit, commit.
 
-- **Prices/deals:** `price`, `unit` (`each`, `half-dozen`, `dozen`, or `variable` if not posted), `deal`, `days` (0 = Sunday … 6 = Saturday), `start`/`end` in 24-hour time (`"15:00"`).
+- **Prices/deals:** `price`, `unit` (`each`, `half-dozen`, `dozen`, or `variable` if not posted), `deal`, `days` (0 = Sunday … 6 = Saturday), `start`/`end` in 24-hour time (`"15:00"`). A deal that runs past midnight just ends earlier than it starts (`"15:00"` → `"01:00"`).
+- **Oyster hours:** `hours` lists the 7 days **starting with Sunday**: `"11:00-22:00"`, `"closed"`, or `null` if that day isn't published. Use the hours oysters are served (MRB's bar is open till 4am, but oysters stop at 10pm). Leave `hours` as `null` if you don't know them; the app says "Hours not posted" instead of guessing.
+- **`note`** shows on the details screen: use it for things like "Bar areas only" or a happy hour whose times aren't posted.
+- **`source`** is the page you checked; **`verified`** is the date you checked it.
 - **After re-checking prices,** set `"updated"` at the top to today's date. After 45 days the app warns visitors the info may be stale.
 - **New restaurant:** copy an entry, give it a unique `id`, leave out `lat`/`lng`. The robot maps it.
 - **Never guess.** No posted price? `"price": null, "unit": "variable"` and the app says "Market price".

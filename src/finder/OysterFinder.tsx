@@ -1,18 +1,23 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import deals from "../deals.json"
-import OysterMap, { oysterEyeSvg } from "./OysterMap"
+import OysterMap, { oysterEyeSvg, oysterSvg } from "./OysterMap"
 import {
+  DAY_NAMES,
   type Mode,
   type Ranked,
   type Venue,
   STALE_AFTER_DAYS,
   daysSince,
   enrich,
+  formatDays,
   formatHappyHour,
   formatMoney,
+  formatOpen,
   formatPrice,
+  formatRange,
   formatWalk,
   nolaClock,
+  pickThree,
   rank,
   walkingDirections,
 } from "./logic"
@@ -32,14 +37,14 @@ import "./finder.css"
 const venues = deals.venues as Venue[]
 const UPDATED = deals.updated
 
-const MODES: { value: Mode; label: string; hint: string }[] = [
-  { value: "near", label: "Near me", hint: "Closest first" },
-  { value: "happy", label: "Happy hour", hint: "Now & next" },
-  { value: "cheap", label: "Cheapest", hint: "Per oyster" },
-  { value: "map", label: "Map", hint: "Wander" },
+const MODES: { value: Mode; label: string }[] = [
+  { value: "near", label: "Near me" },
+  { value: "happy", label: "Happy hour" },
+  { value: "cheap", label: "Cheapest" },
+  { value: "map", label: "Map" },
 ]
 
-const SAVED_KEY = "moyster-saved" // same key as v1, so existing saves survive
+const SAVED_KEY = "moyster-saved"
 
 function readSaved(): Set<string> {
   try {
@@ -49,7 +54,7 @@ function readSaved(): Set<string> {
   }
 }
 
-/** Re-render every minute so "happy hour now" flips on and off without a reload. */
+/** Re-render every minute so "open" and "happy hour now" flip without a reload. */
 function useMinuteClock() {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
@@ -64,15 +69,15 @@ function useMinuteClock() {
   return now
 }
 
-const hhTone = (r: Ranked) => r.hh.state
-
+/** "$10 / 6" plus "≈ $1.67 each" when it isn't already per oyster. */
 function priceLine(r: Ranked) {
   const headline = formatPrice(r.venue)
-  if (!headline) return { headline: "Market price", sub: "Not posted — check the menu" }
-  const per = r.perOyster != null && r.venue.unit !== "each" ? `≈ ${formatMoney(r.perOyster)} each` : null
-  const when = r.venue.start ? "happy hour price" : null
-  return { headline, sub: [per, when].filter(Boolean).join(" · ") }
+  if (!headline) return null
+  const per = r.perOyster != null && r.venue.unit !== "each" ? `≈ ${formatMoney(r.perOyster)} each` : ""
+  return { headline, per }
 }
+
+const isClosed = (r: Ranked) => r.open.state === "opens" && r.hh.state !== "now"
 
 export default function OysterFinder() {
   const now = useMinuteClock()
@@ -86,6 +91,7 @@ export default function OysterFinder() {
   const [saved, setSaved] = useState<Set<string>>(readSaved)
   const [toast, setToast] = useState("")
   const rowRefs = useRef(new Map<string, HTMLElement>())
+  const mapRef = useRef<HTMLDivElement>(null)
 
   const askForLocation = useCallback(async () => {
     setLocating(true)
@@ -121,16 +127,25 @@ export default function OysterFinder() {
   const enriched = useMemo(() => enrich(venues, origin, clock), [origin, clock])
   const ranked = useMemo(() => rank(enriched, mode), [enriched, mode])
   const nearOrder = useMemo(() => rank(enriched, "near"), [enriched])
+  const happyOrder = useMemo(() => rank(enriched, "happy"), [enriched])
 
   const live = enriched.filter((r) => r.hh.state === "now")
-  const nextUp = rank(enriched, "happy").find((r) => r.hh.state === "later")
+  const nextUp = happyOrder.find((r) => r.hh.state === "later") ?? happyOrder.find((r) => r.hh.state === "upcoming")
 
-  const picks = mode === "map" ? [] : ranked.slice(0, 3)
-  const rest = mode === "map" ? ranked : ranked.slice(3)
+  const picks = mode === "map" ? [] : pickThree(ranked)
+  const pickIds = new Set(picks.map((r) => r.venue.id))
+  const rest = ranked.filter((r) => !pickIds.has(r.venue.id))
   const mapItems = mode === "near" || mode === "map" ? nearOrder : ranked
+  const openCount = enriched.filter((r) => r.open.state === "open").length
 
   const age = daysSince(UPDATED, now)
   const stale = age > STALE_AFTER_DAYS
+
+  const choose = (next: Mode) => {
+    setMode(next)
+    setSelectedId(null)
+    if (next === "map") window.setTimeout(() => mapRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60)
+  }
 
   const select = (id: string, from: "map" | "list") => {
     setSelectedId(id)
@@ -150,25 +165,25 @@ export default function OysterFinder() {
       return next
     })
 
+  const flash = (message: string) => {
+    setToast(message)
+    window.setTimeout(() => setToast(""), 2400)
+  }
+
   const share = async (r: Ranked) => {
     const v = r.venue
-    const bits = [v.name, v.address, r.venue.start ? `${v.deal} (${formatHappyHour(r.hh)})` : null].filter(Boolean)
-    const payload = { title: `${v.name} — Moyster`, text: bits.join("\n"), url: walkingDirections(v) }
+    const hh = v.start && v.end ? `${v.deal} · ${formatDays(v.days)} ${formatRange(v.start, v.end)}` : null
+    const payload = { title: v.name, text: [v.name, v.address, hh].filter(Boolean).join("\n"), url: walkingDirections(v) }
     try {
       if (navigator.share) {
         await navigator.share(payload)
         return
       }
       await navigator.clipboard.writeText(`${payload.text}\n${payload.url}`)
-      flash("Copied — paste it anywhere")
+      flash("Copied")
     } catch (error) {
       if ((error as DOMException)?.name !== "AbortError") flash("Couldn't share from this browser")
     }
-  }
-
-  const flash = (message: string) => {
-    setToast(message)
-    window.setTimeout(() => setToast(""), 2400)
   }
 
   useEffect(() => {
@@ -178,12 +193,14 @@ export default function OysterFinder() {
     return () => window.removeEventListener("keydown", close)
   }, [detail])
 
+  const checked = new Date(`${UPDATED}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+
   return (
     <section className="mf" id="finder" aria-labelledby="mf-title">
       <div className="mf-grain" aria-hidden="true" />
 
       <header className="mf-head">
-        <p className="mf-kicker">MOYSTER · New Orleans oyster index</p>
+        <p className="mf-kicker">MOYSTER · New Orleans</p>
         <h1 id="mf-title" className="mf-title">
           <span className="mf-title-a">OYSTERS</span>
           <span className="mf-title-b" aria-hidden="true">
@@ -195,16 +212,14 @@ export default function OysterFinder() {
 
         <div className="mf-origin" aria-live="polite">
           <span className="mf-origin-label">From</span>
-          <strong>
-            {locating ? "Finding you…" : origin.source === "default" ? `${origin.label} (until we find you)` : origin.label}
-          </strong>
+          <strong>{locating ? "Finding you…" : origin.label}</strong>
           {origin.source !== "device" && !locating && (
             <button type="button" onClick={askForLocation}>
               Use my location
             </button>
           )}
           <button type="button" onClick={() => setSearchOpen((o) => !o)} aria-expanded={searchOpen}>
-            {searchOpen ? "Close" : "Type an address"}
+            {searchOpen ? "Close" : "Address"}
           </button>
         </div>
         {locateError && <p className="mf-alert">{locateMessage[locateError]}</p>}
@@ -214,16 +229,16 @@ export default function OysterFinder() {
       <button
         type="button"
         className={`mf-hh${live.length ? " is-live" : ""}${mode === "happy" ? " is-active" : ""}`}
-        onClick={() => setMode("happy")}
+        onClick={() => choose("happy")}
       >
         {live.length ? (
           <>
             <b>HAPPY HOUR NOW</b>
             <span>
-              {live.length} {live.length === 1 ? "spot" : "spots"} pouring cheap oysters
+              {live.length} {live.length === 1 ? "spot" : "spots"}
             </span>
           </>
-        ) : nextUp && nextUp.hh.state === "later" ? (
+        ) : nextUp ? (
           <>
             <b>NEXT HAPPY HOUR</b>
             <span>
@@ -231,10 +246,7 @@ export default function OysterFinder() {
             </span>
           </>
         ) : (
-          <>
-            <b>HAPPY HOURS</b>
-            <span>None left today — see what's on next</span>
-          </>
+          <b>HAPPY HOUR</b>
         )}
         <i aria-hidden="true">→</i>
       </button>
@@ -247,13 +259,9 @@ export default function OysterFinder() {
             role="tab"
             aria-selected={mode === m.value}
             className={`mf-mode mf-mode-${m.value}`}
-            onClick={() => {
-              setMode(m.value)
-              setSelectedId(null)
-            }}
+            onClick={() => choose(m.value)}
           >
             <b>{m.label}</b>
-            <small>{m.hint}</small>
           </button>
         ))}
       </div>
@@ -277,22 +285,15 @@ export default function OysterFinder() {
         </ol>
       )}
 
-      {ranked.length === 0 && (
-        <div className="mf-empty">
-          <strong>Nothing posted for this right now.</strong>
-          <button type="button" onClick={() => setMode("near")}>
-            Show everything nearby →
-          </button>
-        </div>
-      )}
-
-      <OysterMap
-        items={mapItems}
-        origin={origin}
-        selectedId={selectedId}
-        onSelect={(id) => select(id, "map")}
-        expanded={mode === "map"}
-      />
+      <div ref={mapRef} className="mf-map-anchor">
+        <OysterMap
+          items={mapItems}
+          origin={origin}
+          selectedId={selectedId}
+          onSelect={(id) => select(id, "map")}
+          expanded={mode === "map"}
+        />
+      </div>
 
       {rest.length > 0 && (
         <ol className="mf-list" start={picks.length + 1} aria-label={picks.length ? "More spots" : "All spots"}>
@@ -312,11 +313,16 @@ export default function OysterFinder() {
       )}
 
       <p className={`mf-fresh${stale ? " is-stale" : ""}`}>
-        {stale
-          ? `Prices & happy hours were last checked ${age} days ago and may have changed. Confirm before you go.`
-          : `Prices & happy hours checked by a person on ${new Date(`${UPDATED}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" })}. Specials change — confirm before you go.`}
+        {venues.length} spots · {openCount} open now · {stale ? `last checked ${age} days ago, may be out of date` : `checked ${checked}`}
         {saved.size > 0 && ` · ${saved.size} saved`}
       </p>
+
+      {mode !== "map" && (
+        <button type="button" className="mf-fab" onClick={() => choose("map")} aria-label="Show map">
+          <span aria-hidden="true" dangerouslySetInnerHTML={{ __html: oysterSvg() }} />
+          Map
+        </button>
+      )}
 
       {detail && (
         <Detail
@@ -417,7 +423,12 @@ type CardProps = {
 }
 
 function HHChip({ r }: { r: Ranked }) {
-  return <span className={`mf-chip mf-chip-${hhTone(r)}`}>{formatHappyHour(r.hh)}</span>
+  const text = formatHappyHour(r.hh)
+  return text ? <span className={`mf-chip mf-chip-${r.hh.state}`}>{text}</span> : null
+}
+
+function OpenLine({ r }: { r: Ranked }) {
+  return <span className={`mf-open mf-open-${r.open.state}`}>{formatOpen(r.open)}</span>
 }
 
 function PickCard({ r, index, onShare, onSave, ...p }: CardProps & { index: number; onShare: () => void; onSave: () => void }) {
@@ -427,7 +438,7 @@ function PickCard({ r, index, onShare, onSave, ...p }: CardProps & { index: numb
   return (
     <li
       ref={p.registerRef}
-      className={`mf-pick mf-pick-${index + 1}${p.selected ? " is-selected" : ""}`}
+      className={`mf-pick mf-pick-${index + 1}${p.selected ? " is-selected" : ""}${r.hh.state === "now" ? " is-hh" : ""}`}
       style={{ "--tilt": `${[-1.6, 1.1, -0.6][index]}deg`, "--drop": `${index * 90}ms` } as React.CSSProperties}
     >
       <button type="button" className="mf-pick-main" onClick={p.onSelect} aria-pressed={p.selected}>
@@ -435,14 +446,17 @@ function PickCard({ r, index, onShare, onSave, ...p }: CardProps & { index: numb
         <span className="mf-pick-area">{v.area}</span>
         <span className="mf-pick-name">{v.name}</span>
         <span className="mf-pick-meta">
-          <span className="mf-walk">{walk ?? "Distance unknown"}</span>
-          <span className="mf-price">
-            <b>{price.headline}</b>
-            {price.sub && <small>{price.sub}</small>}
-          </span>
+          <span className="mf-walk">{walk ?? v.area}</span>
+          {price && (
+            <span className="mf-price">
+              <b>{price.headline}</b>
+              {price.per && <small>{price.per}</small>}
+            </span>
+          )}
         </span>
+        <OpenLine r={r} />
         <HHChip r={r} />
-        {v.start && <span className="mf-deal">{v.deal}</span>}
+        {v.start && v.deal && <span className="mf-deal">{v.deal}</span>}
       </button>
       <div className="mf-actions">
         <a className="mf-go" href={walkingDirections(v)} target="_blank" rel="noreferrer">
@@ -467,7 +481,7 @@ function Row({ r, n, ...p }: CardProps & { n: number }) {
   const price = formatPrice(v)
   const walk = formatWalk(r)
   return (
-    <li ref={p.registerRef} className={`mf-row${p.selected ? " is-selected" : ""}`}>
+    <li ref={p.registerRef} className={`mf-row${p.selected ? " is-selected" : ""}${isClosed(r) ? " is-closed" : ""}${r.hh.state === "now" ? " is-hh" : ""}`}>
       <button type="button" className="mf-row-main" onClick={p.onSelect} aria-pressed={p.selected}>
         <span className="mf-row-n">{String(n).padStart(2, "0")}</span>
         <span className="mf-row-name">
@@ -475,7 +489,7 @@ function Row({ r, n, ...p }: CardProps & { n: number }) {
           {p.saved && <i aria-label="saved"> ★</i>}
         </span>
         <span className="mf-row-meta">
-          {[walk ?? v.area, price ?? "Market price"].join(" · ")}
+          {[walk ?? v.area, formatOpen(r.open), price].filter(Boolean).join(" · ")}
         </span>
         <HHChip r={r} />
       </button>
@@ -487,6 +501,24 @@ function Row({ r, n, ...p }: CardProps & { n: number }) {
       </button>
     </li>
   )
+}
+
+/** Mon–Thu 11am–10pm / Fri–Sat 11am–11pm / Sun closed — consecutive days with the same hours merge. */
+function weekHours(hours: Venue["hours"]) {
+  if (!hours) return []
+  const order = [1, 2, 3, 4, 5, 6, 0]
+  const label = (h: string | null) => (h == null ? "not posted" : h === "closed" ? "closed" : formatRange(...(h.split("-") as [string, string])))
+  const rows: { days: number[]; text: string }[] = []
+  for (const d of order) {
+    const text = label(hours[d])
+    const last = rows[rows.length - 1]
+    if (last && last.text === text) last.days.push(d)
+    else rows.push({ days: [d], text })
+  }
+  return rows.map((row) => ({
+    days: row.days.length === 1 ? DAY_NAMES[row.days[0]] : `${DAY_NAMES[row.days[0]]}–${DAY_NAMES[row.days[row.days.length - 1]]}`,
+    text: row.text,
+  }))
 }
 
 function Detail({
@@ -506,6 +538,7 @@ function Detail({
 }) {
   const v = r.venue
   const price = priceLine(r)
+  const hours = weekHours(v.hours)
   const closeRef = useRef<HTMLButtonElement>(null)
   useEffect(() => closeRef.current?.focus(), [])
   return (
@@ -515,31 +548,51 @@ function Detail({
         <button ref={closeRef} type="button" className="mf-sheet-close" onClick={onClose}>
           Close ×
         </button>
-        <p className="mf-kicker">{v.area} · New Orleans</p>
+        <p className="mf-kicker">{v.area}</p>
         <h2>{v.name}</h2>
         <p className="mf-sheet-addr">{v.address}</p>
         <dl>
           <div>
-            <dt>Walk</dt>
-            <dd>{formatWalk(r) ?? "Not mapped yet — use directions"}</dd>
-          </div>
-          <div>
-            <dt>Price</dt>
+            <dt>Now</dt>
             <dd>
-              {price.headline}
-              {price.sub && <small> {price.sub}</small>}
+              <OpenLine r={r} />
+              {formatWalk(r) && <> · {formatWalk(r)}</>}
             </dd>
           </div>
-          <div>
-            <dt>Special</dt>
-            <dd>{v.start ? v.deal : "No posted happy-hour special"}</dd>
-          </div>
-          <div>
-            <dt>When</dt>
-            <dd>
-              <HHChip r={r} />
-            </dd>
-          </div>
+          {v.start && v.end && (
+            <div className={r.hh.state === "now" ? "is-hh" : ""}>
+              <dt>Happy hour</dt>
+              <dd>
+                <b>
+                  {formatDays(v.days)} {formatRange(v.start, v.end)}
+                </b>
+                {v.deal && <> · {v.deal}</>}
+                <br />
+                <HHChip r={r} />
+              </dd>
+            </div>
+          )}
+          {price && (
+            <div>
+              <dt>Price</dt>
+              <dd>
+                {price.headline}
+                {price.per && <small> {price.per}</small>}
+              </dd>
+            </div>
+          )}
+          {hours.length > 0 && (
+            <div>
+              <dt>Oysters</dt>
+              <dd className="mf-hours">
+                {hours.map((h) => (
+                  <span key={h.days}>
+                    <b>{h.days}</b> {h.text}
+                  </span>
+                ))}
+              </dd>
+            </div>
+          )}
           {v.note && (
             <div>
               <dt>Note</dt>
@@ -547,13 +600,13 @@ function Detail({
             </div>
           )}
         </dl>
-        {stale && <p className="mf-alert">This info is over {STALE_AFTER_DAYS} days old. Call ahead.</p>}
+        {stale && <p className="mf-alert">Over {STALE_AFTER_DAYS} days since this was checked. Call ahead.</p>}
         <div className="mf-actions">
           <a className="mf-go" href={walkingDirections(v)} target="_blank" rel="noreferrer">
             Walk there ↗
           </a>
           <a href={v.source} target="_blank" rel="noreferrer">
-            Menu / source ↗
+            Source ↗
           </a>
           <button type="button" onClick={onShare}>
             Share

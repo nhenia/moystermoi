@@ -41,6 +41,13 @@ with sync_playwright() as p:
     check(page.locator(".mf-pick .mf-go").first.get_attribute("href").startswith("https://www.google.com/maps/dir/"), "walk link is walking directions")
     check("travelmode=walking" in page.locator(".mf-pick .mf-go").first.get_attribute("href"), "directions are walking mode")
     check(page.locator(".mf-pin").count() >= 3, f"oyster markers on map ({page.locator('.mf-pin').count()})")
+    check(page.locator(".mf-pin .mf-oyster .o-meat").count() >= 3, "markers are illustrated oysters")
+    check(page.locator(".mf-pin.is-live").count() >= 1, "happy-hour oysters are highlighted on the map")
+    check(page.locator(".mf-map-legend").is_visible(), "map legend is shown")
+    check("Open til" in first or "Closes" in first, "pick says whether it's open and until when")
+    check("MRB BAR" in page.locator(".mf").inner_text().upper(), "MRB is listed")
+    total = page.locator(".mf-pick").count() + page.locator(".mf-row").count()
+    check(total == 34, f"near mode lists every spot ({total})")
     page.wait_for_timeout(800)
     page.screenshot(path=f"{OUT}/m1-near.png", full_page=False)
     page.screenshot(path=f"{OUT}/m1-near-full.png", full_page=True)
@@ -61,7 +68,13 @@ with sync_playwright() as p:
     # happy hour mode
     page.locator(".mf-mode-happy").click()
     chips = page.locator(".mf-pick .mf-chip").all_inner_texts()
-    check(all("NOW" in c.upper() for c in chips), f"happy mode leads with live specials {chips}")
+    check(all("NOW" in c.upper() and "ENDS" in c.upper() for c in chips), f"happy mode leads with live specials and their end time {chips}")
+    total = page.locator(".mf-pick").count() + page.locator(".mf-row").count()
+    check(total == 34, f"happy mode still lists every spot ({total})")
+    no_hh = page.locator(".mf-row:not(:has(.mf-chip))").count()
+    check(no_hh > 0, f"places without a happy hour are listed too ({no_hh})")
+    later = [c for c in page.locator(".mf-row .mf-chip").all_inner_texts() if "IN " in c.upper() or "TOMORROW" in c.upper()]
+    check(all("–" in c for c in later), f"upcoming happy hours show start and end {later[:2]}")
     page.screenshot(path=f"{OUT}/m2-happy.png")
 
     # cheapest mode
@@ -70,9 +83,14 @@ with sync_playwright() as p:
     check(all(x != "Market price" for x in prices), f"cheapest shows verified prices only {prices}")
     page.screenshot(path=f"{OUT}/m3-cheap.png")
 
-    # map mode
-    page.locator(".mf-mode-map").click()
-    page.wait_for_timeout(600)
+    # map button (floating, phones) opens the map
+    page.locator(".mf-mode-near").click()
+    page.evaluate("window.scrollTo(0, 0)")
+    check(page.locator(".mf-fab").is_visible(), "floating map button is visible")
+    page.locator(".mf-fab").click()
+    page.wait_for_timeout(900)
+    top = page.locator(".mf-map").bounding_box()["y"]
+    check(top < 200, f"map button scrolls the map into view (top at {int(top)}px)")
     h = page.locator(".mf-map").bounding_box()["height"]
     check(h > 400, f"map mode expands map ({int(h)}px)")
     page.screenshot(path=f"{OUT}/m4-map.png")
@@ -97,6 +115,17 @@ with sync_playwright() as p:
     page = ctx.new_page()
     page.clock.install(time="2026-11-10T15:00:00Z")  # Tue 9am: no happy hour yet
     page.goto(URL)
+    page.wait_for_selector(".mf-row")
+    closed = page.locator(".mf-row.is-closed").count()
+    check(closed > 0, f"places not open yet are dimmed at 9am ({closed})")
+    rows = page.locator(".mf-row").all()
+    seen_closed = False
+    ok = True
+    for row in rows:
+        c = "is-closed" in (row.get_attribute("class") or "")
+        if c: seen_closed = True
+        elif seen_closed and "Hours not posted" not in row.inner_text(): ok = False
+    check(ok, "open places come before closed ones")
     page.wait_for_selector(".mf-search input", timeout=15000)
     check(page.locator(".mf-alert").is_visible(), "denied location explains itself")
     check(page.locator(".mf-pick").count() == 3, "picks still shown from French Quarter while denied")

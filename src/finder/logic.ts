@@ -17,7 +17,13 @@ export type Venue = {
   end: string | null
   note: string
   source: string
-  /** Optional per-venue "last checked" date (YYYY-MM-DD). Falls back to the file's `updated`. */
+  /**
+   * When oysters are served, Sunday first (index 0) to Saturday (6).
+   * Each day is "HH:MM-HH:MM" (an end at or before the start runs past midnight),
+   * "closed", or null when the hours aren't published. Omit the field if no hours are known.
+   */
+  hours?: (string | null)[] | null
+  /** Date this venue was last checked against its source (YYYY-MM-DD). */
   verified?: string
 }
 
@@ -27,16 +33,22 @@ export type Mode = "near" | "happy" | "cheap" | "map"
 export type NolaClock = { day: number; minutes: number }
 
 export type HappyHour =
-  | { state: "now"; endsIn: number; end: string }
+  | { state: "now"; endsIn: number; start: string; end: string }
   | { state: "later"; startsIn: number; start: string; end: string }
   | { state: "upcoming"; dayOffset: number; day: number; start: string; end: string }
   | { state: "none" }
+
+export type OpenStatus =
+  | { state: "open"; until: string; closesIn: number }
+  | { state: "opens"; at: string; dayOffset: number; day: number }
+  | { state: "unknown" }
 
 export type Ranked = {
   venue: Venue
   miles: number | null
   walk: number | null
   hh: HappyHour
+  open: OpenStatus
   perOyster: number | null
 }
 
@@ -69,22 +81,60 @@ export const toMinutes = (time: string) => {
   return h * 60 + (m || 0)
 }
 
+/** A time window in minutes after midnight. Windows that end at/before they start run past midnight. */
+export function span(start: string, end: string): [number, number] {
+  const s = toMinutes(start)
+  let e = toMinutes(end)
+  if (e <= s) e += 1440
+  return [s, e]
+}
+
+const yesterday = (day: number) => (day + 6) % 7
+
 export function happyHour(venue: Venue, clock: NolaClock): HappyHour {
   if (!venue.start || !venue.end || venue.days.length === 0) return { state: "none" }
-  const start = toMinutes(venue.start)
-  const end = toMinutes(venue.end)
-  if (venue.days.includes(clock.day)) {
-    if (clock.minutes >= start && clock.minutes < end)
-      return { state: "now", endsIn: end - clock.minutes, end: venue.end }
-    if (clock.minutes < start)
-      return { state: "later", startsIn: start - clock.minutes, start: venue.start, end: venue.end }
-  }
+  const [start, end] = span(venue.start, venue.end)
+  const window = { start: venue.start, end: venue.end }
+  if (venue.days.includes(clock.day) && clock.minutes >= start && clock.minutes < end)
+    return { state: "now", endsIn: end - clock.minutes, ...window }
+  // Yesterday's happy hour still running after midnight
+  if (end > 1440 && venue.days.includes(yesterday(clock.day)) && clock.minutes < end - 1440)
+    return { state: "now", endsIn: end - 1440 - clock.minutes, ...window }
+  if (venue.days.includes(clock.day) && clock.minutes < start)
+    return { state: "later", startsIn: start - clock.minutes, ...window }
   for (let offset = 1; offset <= 7; offset++) {
     const day = (clock.day + offset) % 7
-    if (venue.days.includes(day))
-      return { state: "upcoming", dayOffset: offset, day, start: venue.start, end: venue.end }
+    if (venue.days.includes(day)) return { state: "upcoming", dayOffset: offset, day, ...window }
   }
   return { state: "none" }
+}
+
+/** Is the venue serving oysters right now, and if not, when next? Unknown hours stay unknown. */
+export function openStatus(venue: Venue, clock: NolaClock): OpenStatus {
+  const hours = venue.hours
+  if (!hours || hours.length !== 7) return { state: "unknown" }
+  const today = hours[clock.day]
+  if (today && today !== "closed") {
+    const [s, e] = span(...(today.split("-") as [string, string]))
+    if (clock.minutes >= s && clock.minutes < e)
+      return { state: "open", until: today.split("-")[1], closesIn: e - clock.minutes }
+  }
+  const prev = hours[yesterday(clock.day)]
+  if (prev && prev !== "closed") {
+    const [, e] = span(...(prev.split("-") as [string, string]))
+    if (e > 1440 && clock.minutes < e - 1440)
+      return { state: "open", until: prev.split("-")[1], closesIn: e - 1440 - clock.minutes }
+  }
+  for (let offset = 0; offset <= 7; offset++) {
+    const day = (clock.day + offset) % 7
+    const entry = hours[day]
+    if (entry == null) return { state: "unknown" }
+    if (entry === "closed") continue
+    const [s] = span(...(entry.split("-") as [string, string]))
+    if (offset === 0 && s <= clock.minutes) continue
+    return { state: "opens", at: entry.split("-")[0], dayOffset: offset, day }
+  }
+  return { state: "unknown" }
 }
 
 /** Normalise a posted price to dollars per oyster. Never guesses: unknown units return null. */
@@ -127,6 +177,7 @@ export function enrich(venues: Venue[], origin: Coordinates, clock: NolaClock): 
       miles,
       walk: miles == null ? null : walkMinutes(miles),
       hh: happyHour(venue, clock),
+      open: openStatus(venue, clock),
       perOyster: perOyster(venue),
     }
   })
@@ -135,48 +186,62 @@ export function enrich(venues: Venue[], origin: Coordinates, clock: NolaClock): 
 const byMiles = (a: Ranked, b: Ranked) =>
   (a.miles ?? Infinity) - (b.miles ?? Infinity) || a.venue.name.localeCompare(b.venue.name)
 
-const hhRank = (hh: HappyHour) => {
-  switch (hh.state) {
-    case "now":
-      return 0
-    case "later":
-      return 1_000 + hh.startsIn
-    case "upcoming":
-      return 10_000 + hh.dayOffset * 1_440 + toMinutes(hh.start)
-    default:
-      return Infinity
-  }
-}
+/** Open now first, then unknown hours, then closed. Every mode lists every venue. */
+const openRank = (r: Ranked) => (r.open.state === "open" || r.hh.state === "now" ? 0 : r.open.state === "unknown" ? 1 : 2)
 
 export const appliesToday = (hh: HappyHour) => hh.state === "now" || hh.state === "later"
+
+/** Happy hour mode: live specials, then ones starting later today, then everything else that's open. */
+const happyRank = (r: Ranked) => {
+  if (r.hh.state === "now") return 0
+  if (r.hh.state === "later") return 1
+  return 2 + openRank(r)
+}
+
+/** Cheapest mode: a posted price you can get now, then later today, then the rest. */
+const cheapRank = (r: Ranked) => (r.perOyster == null ? 2 : r.hh.state === "now" ? 0 : r.hh.state === "later" ? 1 : 2)
 
 export function rank(list: Ranked[], mode: Mode): Ranked[] {
   const items = [...list]
   switch (mode) {
     case "happy":
-      return items
-        .filter((r) => r.hh.state !== "none")
-        .sort((a, b) => hhRank(a.hh) - hhRank(b.hh) || byMiles(a, b))
+      return items.sort(
+        (a, b) =>
+          happyRank(a) - happyRank(b) ||
+          (a.hh.state === "later" && b.hh.state === "later" ? a.hh.startsIn - b.hh.startsIn : 0) ||
+          byMiles(a, b),
+      )
     case "cheap":
-      // "Lowest applicable price": deals you can still get today first, then the rest of the week.
-      return items
-        .filter((r) => r.perOyster != null)
-        .sort(
-          (a, b) =>
-            Number(appliesToday(b.hh)) - Number(appliesToday(a.hh)) ||
-            a.perOyster! - b.perOyster! ||
-            byMiles(a, b),
-        )
+      return items.sort(
+        (a, b) =>
+          cheapRank(a) - cheapRank(b) ||
+          (cheapRank(a) < 2 ? a.perOyster! - b.perOyster! : openRank(a) - openRank(b)) ||
+          byMiles(a, b),
+      )
     default:
-      return items.sort(byMiles)
+      return items.sort((a, b) => openRank(a) - openRank(b) || byMiles(a, b))
   }
+}
+
+/** The three picks: the top of the ranking, skipping places that are closed (unless their happy hour starts later today). */
+export function pickThree(ranked: Ranked[]): Ranked[] {
+  return ranked.filter((r) => r.open.state !== "opens" || r.hh.state === "later").slice(0, 3)
 }
 
 // ---------- Formatting ----------
 
 export function formatTime(time: string) {
-  const [h, m] = time.split(":").map(Number)
+  const [raw, m] = time.split(":").map(Number)
+  const h = raw % 24
   return `${h % 12 || 12}${m ? `:${String(m).padStart(2, "0")}` : ""}${h >= 12 ? "pm" : "am"}`
+}
+
+/** "3–6pm", "11:30am–9pm", "3pm–1am" */
+export function formatRange(start: string, end: string) {
+  const a = formatTime(start)
+  const b = formatTime(end)
+  const meridiem = (t: string) => t.slice(-2)
+  return meridiem(a) === meridiem(b) ? `${a.slice(0, -2)}–${b}` : `${a}–${b}`
 }
 
 export function formatDuration(minutes: number) {
@@ -210,13 +275,24 @@ export function formatPrice(venue: Venue): string | null {
 export function formatHappyHour(hh: HappyHour): string {
   switch (hh.state) {
     case "now":
-      return `Happy hour now · til ${formatTime(hh.end)}`
+      return `Happy hour now · ends ${formatTime(hh.end)}`
     case "later":
-      return `Happy hour ${formatTime(hh.start)} · in ${formatDuration(hh.startsIn)}`
+      return `Happy hour ${formatRange(hh.start, hh.end)} · in ${formatDuration(hh.startsIn)}`
     case "upcoming":
-      return `Happy hour ${hh.dayOffset === 1 ? "tomorrow" : DAY_NAMES[hh.day]} ${formatTime(hh.start)}`
+      return `Happy hour ${hh.dayOffset === 1 ? "tomorrow" : DAY_NAMES[hh.day]} ${formatRange(hh.start, hh.end)}`
     default:
-      return "No posted special"
+      return ""
+  }
+}
+
+export function formatOpen(open: OpenStatus): string {
+  switch (open.state) {
+    case "open":
+      return open.closesIn <= 45 ? `Closes ${formatTime(open.until)} · ${open.closesIn}m left` : `Open til ${formatTime(open.until)}`
+    case "opens":
+      return `Opens ${open.dayOffset === 0 ? "" : open.dayOffset === 1 ? "tomorrow " : `${DAY_NAMES[open.day]} `}${formatTime(open.at)}`
+    default:
+      return "Hours not posted"
   }
 }
 
@@ -239,4 +315,18 @@ export function walkingDirections(venue: Venue) {
   // Name + address lands on the actual business listing in Google Maps (better than raw coordinates).
   const destination = `${venue.name}, ${venue.address}`
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=walking`
+}
+
+/** "Daily", "Mon–Fri", "Tue", "Fri–Sun", "Mon, Wed" */
+export function formatDays(days: number[]) {
+  const set = [...new Set(days)].sort((a, b) => a - b)
+  if (set.length === 7) return "Daily"
+  if (set.length === 0) return ""
+  // Find a single consecutive run, allowing it to wrap past Saturday (e.g. Fri–Sun).
+  for (let start = 0; start < 7; start++) {
+    const run = Array.from({ length: set.length }, (_, i) => (start + i) % 7)
+    if (run.every((d) => set.includes(d)) && set.includes(start) && !set.includes((start + 6) % 7))
+      return run.length === 1 ? DAY_NAMES[start] : `${DAY_NAMES[start]}–${DAY_NAMES[run[run.length - 1]]}`
+  }
+  return set.map((d) => DAY_NAMES[d]).join(", ")
 }

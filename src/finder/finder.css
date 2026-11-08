@@ -14,7 +14,7 @@
   display: grid;
   gap: 14px;
   min-height: 100svh;
-  padding: 28px 16px 28px;
+  padding: 28px 16px 96px;
   overflow: hidden;
   background: var(--mf-ink);
   color: var(--mf-paper);
@@ -291,7 +291,8 @@
 .mf-mode {
   display: grid;
   gap: 1px;
-  min-height: 58px;
+  min-height: 48px;
+  place-items: center;
   padding: 6px 4px;
   border: 0;
   border-right: 2px solid var(--mf-paper);
@@ -312,11 +313,6 @@
   text-transform: uppercase;
 }
 
-.mf-mode small {
-  font-size: 0.64rem;
-  color: var(--mf-muted);
-}
-
 .mf-mode[aria-selected='true'] {
   background: var(--mf-paper);
   color: var(--mf-ink);
@@ -335,9 +331,6 @@
   background: var(--riso-cyan);
 }
 
-.mf-mode[aria-selected='true'] small {
-  color: inherit;
-}
 
 /* ---------- Three picks ---------- */
 
@@ -451,6 +444,26 @@
 .mf-pick .mf-chip {
   grid-column: 1 / -1;
   justify-self: start;
+}
+
+.mf-open {
+  grid-column: 1 / -1;
+  justify-self: start;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.mf-open-open::before {
+  content: '● ';
+  color: #19a463;
+}
+
+.mf-open-opens {
+  color: #8a1c4e;
+}
+
+.mf-open-unknown {
+  color: #6c655a;
 }
 
 .mf-deal {
@@ -590,9 +603,40 @@
 
 .mf-map-count {
   top: 8px;
-  left: 8px;
+  right: 8px;
   background: var(--mf-ink);
   color: var(--mf-paper);
+}
+
+/* Legend: which oyster means what */
+.mf-map-legend {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 402;
+  display: flex;
+  align-items: center;
+  gap: 2px 6px;
+  margin: 0;
+  padding: 3px 8px 3px 4px;
+  background: rgb(241 233 217 / 0.92);
+  box-shadow: 2px 2px 0 var(--mf-ink);
+  color: var(--mf-ink);
+  font-size: 0.66rem;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.mf-map-legend > span {
+  display: block;
+  width: 26px;
+  height: 19px;
+}
+
+.mf-map-legend svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .mf-map-note {
@@ -619,21 +663,7 @@
   border-radius: 0;
 }
 
-/* Oyster-eye markers */
-.mf-pin {
-  position: relative;
-  background: none;
-  border: 0;
-}
-
-.mf-pin svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  filter: drop-shadow(2px 2px 0 rgb(17 16 14 / 0.85));
-}
-
+/* Oyster-eye (logo/title glyph) */
 .mf-eye .shell {
   fill: var(--mf-paper);
   stroke: var(--mf-ink);
@@ -668,6 +698,113 @@
   fill: #fff;
 }
 
+/* Engraved oyster markers */
+.mf-pin {
+  position: relative;
+  background: none;
+  border: 0;
+}
+
+.mf-pin svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(2px 3px 0 rgb(17 16 14 / 0.8));
+}
+
+.mf-oyster .o-shell {
+  fill: #e8deca;
+  stroke: #11100e;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.mf-oyster .o-ring {
+  fill: none;
+  stroke: #11100e;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  opacity: 0.7;
+}
+
+.mf-oyster .o-hatch {
+  fill: none;
+  stroke: #11100e;
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+
+.mf-oyster .o-cup {
+  fill: #f1ecf7;
+  stroke: #11100e;
+  stroke-width: 1;
+}
+
+.mf-oyster .o-meat {
+  fill: #c9bc9b;
+  stroke: #5b554c;
+  stroke-width: 0.7;
+}
+
+.mf-oyster .o-gill {
+  fill: none;
+  stroke: #4a4238;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.mf-oyster .o-frill {
+  fill: none;
+  stroke: #2b2722;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+}
+
+.mf-oyster .o-belly {
+  fill: #e4dccb;
+}
+
+.mf-oyster .o-glint {
+  fill: #fff;
+}
+
+/* Happy hour now: fluorescent yellow shell, pink pearl lining, and a little wobble */
+.is-live .mf-oyster .o-shell {
+  fill: #ffe800;
+}
+
+.is-live .mf-oyster .o-cup {
+  fill: #ffd0e6;
+}
+
+.mf-pin.is-live svg {
+  animation: mf-wobble 2.8s ease-in-out infinite;
+}
+
+/* Closed: printed in grey, pushed back */
+.is-closed .mf-oyster {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+.mf-pin.is-closed svg {
+  filter: grayscale(1) drop-shadow(1px 2px 0 rgb(17 16 14 / 0.5));
+  opacity: 0.55;
+}
+
+.mf-pin.is-selected .mf-oyster .o-shell {
+  fill: var(--riso-pink);
+}
+
+.mf-pin.is-selected svg {
+  animation: mf-hop 700ms cubic-bezier(0.3, 1.8, 0.5, 1);
+  opacity: 1;
+  filter: drop-shadow(3px 4px 0 rgb(17 16 14 / 0.9));
+}
+
 .mf-pin b {
   position: absolute;
   top: -6px;
@@ -680,12 +817,9 @@
   text-align: center;
 }
 
-.mf-pin.is-live .shell {
-  fill: var(--riso-yellow);
-}
-
-.mf-pin.is-selected .shell {
-  fill: var(--riso-pink);
+.mf-pin.is-live b {
+  background: var(--riso-pink);
+  color: #fff;
 }
 
 .mf-pin.is-selected b {
@@ -693,12 +827,12 @@
   outline: 2px solid var(--mf-ink);
 }
 
-.mf-pin.is-selected svg {
-  animation: mf-hop 700ms cubic-bezier(0.3, 1.8, 0.5, 1);
+.mf-cluster .mf-oyster .o-shell {
+  fill: var(--riso-cyan);
 }
 
-.mf-cluster .shell {
-  fill: var(--riso-cyan);
+.mf-cluster.is-live .mf-oyster .o-shell {
+  fill: #ffe800;
 }
 
 .mf-cluster b {
@@ -707,9 +841,9 @@
   bottom: 2px;
 }
 
-/* stagger blinks so the map feels alive, not synchronised */
-.leaflet-marker-icon:nth-child(3n) .lid { animation-delay: -2.1s; animation-duration: 7.3s; }
-.leaflet-marker-icon:nth-child(3n + 1) .lid { animation-delay: -4.4s; animation-duration: 5.2s; }
+/* stagger the wobble so live oysters don't move in lockstep */
+.leaflet-marker-icon:nth-child(3n) svg { animation-delay: -1.1s; }
+.leaflet-marker-icon:nth-child(3n + 1) svg { animation-delay: -2.2s; }
 
 .mf-you i {
   position: absolute;
@@ -748,6 +882,14 @@
   grid-template-columns: 1fr 48px 40px;
   align-items: stretch;
   border-bottom: 1px dashed rgb(241 233 217 / 0.35);
+}
+
+.mf-row.is-closed {
+  opacity: 0.55;
+}
+
+.mf-row.is-hh {
+  box-shadow: inset 4px 0 0 #ffe800;
 }
 
 .mf-row.is-selected {
@@ -926,6 +1068,26 @@
   margin: 0;
 }
 
+.mf-sheet dl > div.is-hh {
+  margin: 0 -8px;
+  padding: 8px;
+  background: #ffe800;
+}
+
+.mf-sheet .mf-open-open::before {
+  color: #0f7a46;
+}
+
+.mf-hours {
+  display: grid;
+  gap: 2px;
+}
+
+.mf-hours b {
+  display: inline-block;
+  min-width: 64px;
+}
+
 .mf-sheet .mf-alert {
   background: #fff6a8;
 }
@@ -941,6 +1103,48 @@
 
 .mf-sheet .mf-actions > :nth-child(n + 3) {
   border-top: 2px solid var(--mf-ink);
+}
+
+/* Floating map button (phones): the map is always one tap away */
+.mf-fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 900;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 52px;
+  padding: 6px 16px 6px 8px;
+  border: 2px solid var(--mf-ink);
+  background: var(--riso-cyan);
+  color: var(--mf-ink);
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1rem;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 var(--mf-ink);
+  transform: rotate(-2deg);
+}
+
+.mf-fab > span {
+  display: block;
+  width: 44px;
+  height: 32px;
+}
+
+.mf-fab svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.mf-fab:active {
+  transform: rotate(0) translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--mf-ink);
+}
+
+.mf-map-anchor {
+  scroll-margin-top: 12px;
 }
 
 .mf-toast {
@@ -969,6 +1173,18 @@
 /* ---------- Desktop: picks left, map right ---------- */
 
 @media (min-width: 960px) {
+  .mf-fab {
+    display: none;
+  }
+
+  .mf-map-anchor {
+    grid-column: 2;
+    grid-row: 1 / span 5;
+    position: sticky;
+    top: 24px;
+    align-self: start;
+  }
+
   .mf {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
     column-gap: clamp(28px, 4vw, 64px);
@@ -985,10 +1201,6 @@
   }
 
   .mf-map {
-    grid-column: 2;
-    grid-row: 1 / span 5;
-    position: sticky;
-    top: 24px;
     height: min(78vh, 720px);
     margin: 0;
     border: 2px solid var(--mf-paper);
@@ -1048,6 +1260,13 @@
 @keyframes mf-blink {
   0%, 92%, 100% { transform: scaleY(1); }
   95% { transform: scaleY(0.08); }
+}
+
+@keyframes mf-wobble {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-7deg) translateY(-2px); }
+  40% { transform: rotate(5deg); }
+  60% { transform: rotate(-2deg); }
 }
 
 @keyframes mf-hop {
