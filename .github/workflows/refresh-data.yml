@@ -1,0 +1,51 @@
+name: Refresh oyster data
+# Fills in missing map coordinates and checks venue source links.
+# Never edits prices or happy-hour times — those stay human-verified.
+on:
+  schedule:
+    - cron: "17 13 * * 1" # Mondays, ~8am New Orleans time
+  workflow_dispatch:
+  push:
+    branches: [main, "feature/**"]
+    paths:
+      - "src/deals.json"
+      - "scripts/refresh-data.mjs"
+      - "src/finder/logic.test.ts"
+      - ".github/workflows/refresh-data.yml"
+permissions:
+  contents: write
+  actions: write # to redeploy the site after a data change
+concurrency:
+  group: refresh-data-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Geocode missing addresses and check source links
+        run: node scripts/refresh-data.mjs
+      - name: Validate data
+        run: node --test src/finder/logic.test.ts
+      - name: Commit updated data
+        run: |
+          if git diff --quiet src/deals.json; then
+            echo "No data changes."
+            exit 0
+          fi
+          git config user.name "moyster-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/deals.json
+          git commit -m "data: refresh coordinates and source checks"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+        id: commit
+      # Commits made by this bot don't trigger other workflows, so redeploy the live site explicitly.
+      - name: Redeploy site
+        if: steps.commit.outputs.changed == 'true' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref main

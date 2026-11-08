@@ -1,8 +1,4 @@
 node_modules/
-.env
-.env.*
-!.env.example
+dist/
+test-screenshots/
 .DS_Store
-Thumbs.db
-*.zip
-_site/

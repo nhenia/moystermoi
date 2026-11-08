@@ -1,0 +1,36 @@
+/* Global basics. All Moyster styling lives in src/finder/finder.css. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: #11100e;
+  color: #f1e9d9;
+  font-family: 'Courier Prime', ui-monospace, monospace;
+}
+
+h1,
+h2,
+p,
+ol,
+ul,
+dl {
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: #f20a73;
+  color: #fff;
+}
