@@ -54,3 +54,13 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [x] "Tap the shell" picker: film speeds up, then opens a pick
 - [x] Prism foil that follows tilt/pointer; engraved crosshatch card edges; blackletter brand
 - [x] Contrast check, axe, large-text, keyboard and e2e suites re-run
+
+## Round 7 — Plate I
+- [x] Phone + website for Bourbon House, St. Roch Market, Superior, Blue Crab, Mr. Ed's, Felix's Lakefront (also Felix's, Pêche, Maria's, Casamento's); shown wherever hours/happy-hour times are missing
+- [x] Filled in St. Roch Market hours (strochmarket.com) and Bourbon House Sun–Thu hours (OpenTable; Fri–Sat say "call to check")
+- [x] Video removed; no looping animation anywhere (tested)
+- [x] Plate I: invented topographic New Orleans on an oyster shell, venues as pearls
+- [x] Logotype with the etched oyster as the "o"; it is the hidden randomizer
+- [x] "Prices" / "Hours" headings; dark mode switch (remembered, follows phone)
+- [x] Contrast (light + dark), axe (light + dark), 320px header, keyboard, e2e
+

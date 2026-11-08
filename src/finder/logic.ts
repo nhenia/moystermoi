@@ -27,7 +27,15 @@ export type Venue = {
   verified?: string
   /** Regular (non-happy-hour) oyster prices, when the restaurant posts them. */
   menu?: Menu
+  /** Shown (tap to call) whenever hours or happy-hour times are missing. */
+  phone?: string
+  website?: string
+  /** A happy hour the restaurant has, but whose times aren't posted. */
+  hhUnposted?: string
 }
+
+/** "(504) 522-0111" → "tel:+15045220111" */
+export const telLink = (phone: string) => `tel:+1${phone.replace(/\D/g, "")}`
 
 export type Menu = {
   raw?: { each?: number; half?: number; dozen?: number }

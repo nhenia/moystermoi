@@ -2,7 +2,7 @@
 
 Find cheap oysters near you in New Orleans: under 60 seconds from opening the app to walking.
 
-Shell & nacre look: a looping film of an engraved oyster shell under rippling silver water, pearl-grey paper, prism-foil highlights that shift as you tilt your phone, blackletter brand, engraved crosshatch edges.
+Plate I look: New Orleans drawn as an oyster shell in a naturalist's engraving style. Growth rings double as contour lines, the Mississippi crescent cuts across the lip, Lake Pontchartrain is hatched water at the hinge, and every oyster bar sits on it as a pearl at its real position. Bodoni logotype whose "o" is that oyster. Light (ink on pearl paper) and dark (white-line scratchboard) modes. Nothing loops.
 
 ## What it does
 
@@ -12,8 +12,9 @@ Shell & nacre look: a looping film of an engraved oyster shell under rippling si
 - **Happy hour up front:** a banner when specials are live, highlighted cards and oysters, and every happy hour shows start *and* end.
 - **Sort by:** Closest · Happy hour · Cheapest (any price you can get today, happy hour or menu) · Map.
 - **Tap any restaurant** (name, card or oyster on the map) and its card opens: status, walk, happy hour, oyster prices, hours, **Walk there**, Share, Save.
-- **Can't decide? Tap the shell.** The film at the top speeds up, then picks somewhere open within a 25-minute walk, favouring live happy hours.
-- **The film** loops quietly at the top (under 0.5 MB). **Pause** stops it and the phone remembers; "reduce motion" shows a still picture instead.
+- **Easter egg:** tap the oyster "o" in the logo. It spins once and opens a place that's open within a 25-minute walk, favouring live happy hours. (No label on screen; screen readers hear "Surprise me".)
+- **Dark mode:** follows the phone's setting; the Dark switch (top right) overrides it and is remembered.
+- **Missing info?** Wherever hours or happy-hour times aren't posted, the card offers **Call (504) …** (tap to dial) and **Website**. Happy hours without posted times show "Happy hour · call for times".
 
 ## Easy to use for everyone
 
@@ -26,7 +27,7 @@ Built and tested for older eyes and hands:
 
 ## Colours
 
-Pearl, ink and a five-colour prism foil (sky, lilac, pink, butter, mint). All in the first `.mf { … }` block of `src/finder/finder.css`. The film lives in `public/media/` (shell.mp4, shell.webm, shell-poster.jpg) — swap those files to change it.
+Light: pearl, ink and a five-colour prism foil. Dark: near-black, bone-white ink and a jewel-tone foil. Both are token blocks at the top of `src/finder/finder.css` (`.mf { … }` and `.mf[data-theme='dark'] { … }`); `pnpm check-palettes` checks both. The shell map is drawn by code in `src/finder/topo.ts` (styles in `topo.css`).
 
 ## Updating restaurants (no coding needed)
 
@@ -68,7 +69,7 @@ python3 tests/e2e.py     # browser tests at phone + desktop sizes (needs Python 
 pnpm refresh-data        # run the data robot locally (needs internet)
 ```
 
-Code: `src/finder/` — `logic.ts` (all the rules, tested), `art.ts` (the engraved oysters), `location.ts`, `OysterMap.tsx` (Leaflet + oyster markers), `OysterFinder.tsx` (screen), `finder.css` (all styling).
+Code: `src/finder/` — `logic.ts` (all the rules, tested), `art.ts` (the engraved oysters), `topo.ts` (Plate I and the logo oyster), `location.ts`, `OysterMap.tsx` (Leaflet + oyster markers), `OysterFinder.tsx` (screen), `finder.css` (all styling).
 Outside services, all free with no keys: CARTO map tiles, Photon address search (OpenStreetMap data), Google Maps directions. Fonts are bundled.
 
 ## Credits

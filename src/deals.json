@@ -25,14 +25,24 @@
       ],
       "start": "14:00",
       "end": "17:00",
-      "hours": null,
+      "hours": [
+        "11:00-22:00",
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00",
+        null,
+        null
+      ],
       "note": "Happy hour in the bar areas only. Specialty oysters $2.",
       "source": "https://www.bourbonhouse.com/menu/happy-hour/",
       "verified": "2026-11-08",
       "menu": {
         "market": true,
         "url": "https://bourbonhouse.com/menu/dinner"
-      }
+      },
+      "phone": "(504) 522-0111",
+      "website": "https://www.bourbonhouse.com/"
     },
     {
       "id": "luke",
@@ -269,7 +279,9 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://felixs.com/"
-      }
+      },
+      "phone": "(504) 522-4440",
+      "website": "https://felixs.com/"
     },
     {
       "id": "felix-lakefront",
@@ -295,7 +307,7 @@
         "11:00-22:00",
         "11:00-22:00"
       ],
-      "note": "Happy hour 2–5pm (days not posted): raw $9 half dozen, chargrilled $15.",
+      "note": "",
       "source": "https://felixs.com/locations/",
       "verified": "2026-11-08",
       "lat": 30.02297,
@@ -303,7 +315,10 @@
       "geocoded": "census",
       "menu": {
         "url": "https://felixs.com/locations/"
-      }
+      },
+      "phone": "(504) 304-4125",
+      "website": "https://felixs.com/locations/",
+      "hhUnposted": "2–5 pm (days not posted) · raw $9 half dozen · chargrilled $15"
     },
     {
       "id": "mr-eds",
@@ -333,12 +348,15 @@
         "11:00-22:00",
         "11:00-22:00"
       ],
-      "note": "Has a happy hour with discounted oysters; times not posted.",
+      "note": "",
       "source": "https://frankiapp.com/business/mr-ed-s-oyster-bar-13064.md",
       "verified": "2026-11-08",
       "menu": {
         "url": "https://mredsrestaurants.com/"
-      }
+      },
+      "phone": "(504) 309-4848",
+      "website": "https://mredsrestaurants.com/",
+      "hhUnposted": "Discounted oysters"
     },
     {
       "id": "mrb",
@@ -750,7 +768,9 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://www.pecherestaurant.com/"
-      }
+      },
+      "phone": "(504) 522-1744",
+      "website": "https://www.pecherestaurant.com/"
     },
     {
       "id": "sidecar",
@@ -831,7 +851,9 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://www.mariasoysterbar.com/"
-      }
+      },
+      "phone": "(504) 350-4075",
+      "website": "https://www.mariasoysterbar.com/"
     },
     {
       "id": "basin",
@@ -944,7 +966,9 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.theinfatuation.com/new-orleans/reviews/casamentos"
-      }
+      },
+      "phone": "(504) 895-9761",
+      "website": "http://www.casamentosrestaurant.com/"
     },
     {
       "id": "superior",
@@ -973,12 +997,15 @@
         "11:00-22:00",
         "11:00-22:00"
       ],
-      "note": "Happy hour raw dozen $15 (times not posted).",
+      "note": "",
       "source": "https://opentable.com/superior-seafood",
       "verified": "2026-11-08",
       "menu": {
         "url": "https://superiorseafoodnola.com/"
-      }
+      },
+      "phone": "(504) 293-3474",
+      "website": "https://www.superiorseafoodnola.com/",
+      "hhUnposted": "Raw dozen $15"
     },
     {
       "id": "pascal",
@@ -1115,13 +1142,23 @@
       ],
       "start": "15:00",
       "end": "17:00",
-      "hours": null,
+      "hours": [
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-22:00",
+        "11:00-22:00"
+      ],
       "note": "",
       "source": "https://www.strochmarket.com/news/happy-hour-guide",
       "verified": "2026-11-08",
       "menu": {
         "url": "https://www.strochmarket.com/news/happy-hour-guide"
-      }
+      },
+      "phone": "(504) 267-0388",
+      "website": "https://www.strochmarket.com/"
     },
     {
       "id": "porgys",
@@ -1257,12 +1294,15 @@
         "11:00-21:00",
         "11:00-21:00"
       ],
-      "note": "Happy hour $1 raw, $1.50 chargrilled (times not posted).",
+      "note": "",
       "source": "https://autoreserve.com/en/restaurants/ZP93Rdqmh22fmqNVuLS3",
       "verified": "2026-11-08",
       "menu": {
-        "url": "https://autoreserve.com/en/restaurants/ZP93Rdqmh22fmqNVuLS3"
-      }
+        "url": "http://www.thebluecrabnola.com/"
+      },
+      "phone": "(504) 284-2898",
+      "website": "http://www.thebluecrabnola.com/",
+      "hhUnposted": "$1 raw · $1.50 chargrilled"
     }
   ],
   "checks": {

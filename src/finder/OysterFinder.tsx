@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import deals from "../deals.json"
 import OysterMap from "./OysterMap"
 import { closedBottom, closedTop, halfShell, hash01, roughFilterSvg } from "./art"
+import { logoShell, topoShell } from "./topo"
 import {
   DAY_NAMES,
   type Mode,
@@ -20,6 +21,7 @@ import {
   nolaClock,
   pickThree,
   rank,
+  telLink,
   walkingDirections,
 } from "./logic"
 import {
@@ -34,6 +36,7 @@ import {
   searchPlaces,
 } from "./location"
 import "./finder.css"
+import "./topo.css"
 
 const venues = deals.venues as Venue[]
 const UPDATED = deals.updated
@@ -55,8 +58,20 @@ function readSaved(): Set<string> {
   }
 }
 
-const MEDIA = `${import.meta.env.BASE_URL}media/`
-const MOTION_KEY = "moyster-motion"
+const THEME_KEY = "moyster-theme"
+type Theme = "light" | "dark"
+
+function readTheme(): Theme {
+  try {
+    const saved = localStorage.getItem(THEME_KEY)
+    if (saved === "light" || saved === "dark") return saved
+  } catch {
+    /* storage blocked */
+  }
+  return typeof window !== "undefined" && window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+}
+
+const LOGO_O = logoShell()
 
 const reducedMotion = () => typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
 
@@ -95,61 +110,23 @@ export default function OysterFinder() {
   const [saved, setSaved] = useState<Set<string>>(readSaved)
   const [toast, setToast] = useState("")
   const [shucking, setShucking] = useState(false)
-  // Motion: the hero video loops unless the visitor prefers less motion or pressed Pause (remembered).
-  const [motionOff, setMotionOff] = useState(() => {
-    try {
-      const saved = localStorage.getItem(MOTION_KEY)
-      if (saved) return saved === "off"
-    } catch {
-      /* storage blocked */
-    }
-    return reducedMotion()
-  })
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const sectionRef = useRef<HTMLElement>(null)
+  const [theme, setTheme] = useState<Theme>(readTheme)
 
   useEffect(() => {
-    const v = videoRef.current
-    if (!v) return
-    if (motionOff) v.pause()
-    else void v.play().catch(() => {})
-  }, [motionOff])
+    document.documentElement.dataset.theme = theme
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#0e0f11" : "#ecebe6")
+  }, [theme])
 
-  const toggleMotion = () =>
-    setMotionOff((off) => {
+  const toggleTheme = () =>
+    setTheme((t) => {
+      const next = t === "dark" ? "light" : "dark"
       try {
-        localStorage.setItem(MOTION_KEY, off ? "on" : "off")
+        localStorage.setItem(THEME_KEY, next)
       } catch {
         /* storage blocked */
       }
-      return !off
+      return next
     })
-
-  // Prism foil: highlights catch the light as you move the pointer or tilt the phone.
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el || motionOff) return
-    let frame = 0
-    const set = (x: number, y: number) => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => {
-        el.style.setProperty("--px", x.toFixed(3))
-        el.style.setProperty("--py", y.toFixed(3))
-      })
-    }
-    const onMove = (e: PointerEvent) => set(e.clientX / window.innerWidth, e.clientY / window.innerHeight)
-    const onTilt = (e: DeviceOrientationEvent) => {
-      if (e.gamma == null || e.beta == null) return
-      set(Math.min(1, Math.max(0, (e.gamma + 45) / 90)), Math.min(1, Math.max(0, (e.beta - 10) / 70)))
-    }
-    window.addEventListener("pointermove", onMove, { passive: true })
-    window.addEventListener("deviceorientation", onTilt, { passive: true })
-    return () => {
-      cancelAnimationFrame(frame)
-      window.removeEventListener("pointermove", onMove)
-      window.removeEventListener("deviceorientation", onTilt)
-    }
-  }, [motionOff])
   const rowRefs = useRef(new Map<string, HTMLElement>())
   const mapRef = useRef<HTMLDivElement>(null)
 
@@ -222,28 +199,28 @@ export default function OysterFinder() {
     if (id) window.setTimeout(() => rowRefs.current.get(id)?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50)
   }
 
-  /** The experimental bit: tap the shell, the film replays the shell opening, then a spot is pulled for you. */
+  /** Easter egg: the "o" in the logotype is an oyster. Tap it and it spins once, then picks a place for you. */
   const shuck = () => {
     if (shucking) return
     const pick = drawOyster(enriched)
     if (!pick) return
     setShucking(true)
-    const v = videoRef.current
-    const quiet = motionOff || reducedMotion()
-    if (v && !quiet) {
-      v.currentTime = 0
-      v.playbackRate = 2.2
-      void v.play().catch(() => {})
-    }
     window.setTimeout(
       () => {
-        if (v) v.playbackRate = 1
         open(pick.venue.id)
         setShucking(false)
       },
-      quiet ? 0 : 2200,
+      reducedMotion() ? 0 : 700,
     )
   }
+
+  const plate = useMemo(
+    () =>
+      topoShell(
+        enriched.filter((r) => r.venue.lat != null && r.venue.lng != null).map((r) => ({ lat: r.venue.lat!, lng: r.venue.lng!, live: r.hh.state === "now" })),
+      ),
+    [enriched],
+  )
 
   const toggleSaved = (id: string) =>
     setSaved((current) => {
@@ -300,45 +277,34 @@ export default function OysterFinder() {
   )
 
   return (
-    <section ref={sectionRef} className={`mf${motionOff ? " is-still" : ""}`} id="finder" aria-labelledby="mf-title">
+    <section className="mf" data-theme={theme} id="finder" aria-labelledby="mf-title">
       <span className="mf-defs" dangerouslySetInnerHTML={{ __html: roughFilterSvg }} />
 
       <header className="mf-head">
-        <div className={`mf-hero${shucking ? " is-shucking" : ""}`}>
-          <button type="button" className="mf-oracle" onClick={shuck}>
-            <video
-              ref={videoRef}
-              className="mf-hero-video"
-              poster={`${MEDIA}shell-poster.jpg`}
-              muted
-              loop
-              playsInline
-              autoPlay={!motionOff}
-              preload="metadata"
-              aria-hidden="true"
-              tabIndex={-1}
-            >
-              <source src={`${MEDIA}shell.mp4`} type="video/mp4" />
-              <source src={`${MEDIA}shell.webm`} type="video/webm" />
-            </video>
-            <span className="mf-hero-flare" aria-hidden="true" />
-            <span className="mf-brand" aria-hidden="true">
-              Moyster
-            </span>
-            <span className="mf-oracle-label">
-              Can't decide? <b>Tap the shell</b>
-              <span className="mf-sr"> and it picks a place for you</span>
-            </span>
-          </button>
-          <button type="button" className="mf-pause" onClick={toggleMotion} aria-pressed={motionOff}>
-            {motionOff ? "▶ Play" : "❚❚ Pause"}
-          </button>
-        </div>
+        <p className="mf-logo">
+          <span className="mf-sr">Moyster</span>
+          <span aria-hidden="true">M</span>
+          <button
+            type="button"
+            className={`mf-logo-o${shucking ? " is-shucking" : ""}`}
+            onClick={shuck}
+            aria-label="Surprise me"
+            dangerouslySetInnerHTML={{ __html: LOGO_O }}
+          />
+          <span aria-hidden="true">yster</span>
+        </p>
+        <button type="button" className="mf-theme" onClick={toggleTheme} aria-pressed={theme === "dark"}>
+          <span aria-hidden="true">{theme === "dark" ? "☾" : "☀"}</span>
+          <span className="mf-theme-word">Dark</span>
+        </button>
 
-        <h1 id="mf-title" className="mf-title">
-          Oysters near me
-          <small>New Orleans</small>
-        </h1>
+        <div className="mf-plate-wrap">
+          <div className="mf-plate" dangerouslySetInnerHTML={{ __html: plate }} />
+          <h1 id="mf-title" className="mf-title">
+            <span>Oysters near me</span>
+            <small>New Orleans</small>
+          </h1>
+        </div>
 
         <div className="mf-origin" aria-live="polite">
           <span className="mf-pin-icon" aria-hidden="true">
@@ -535,7 +501,27 @@ type CardProps = {
 
 function HHChip({ r }: { r: Ranked }) {
   const text = formatHappyHour(r.hh)
-  return text ? <span className={`mf-chip mf-chip-${r.hh.state}`}>{text}</span> : null
+  if (text) return <span className={`mf-chip mf-chip-${r.hh.state}`}>{text}</span>
+  return r.venue.hhUnposted ? <span className="mf-chip mf-chip-ask">Happy hour · call for times</span> : null
+}
+
+/** Tap-to-call and website, offered wherever hours or happy-hour times are missing. */
+function Contact({ v }: { v: Venue }) {
+  if (!v.phone && !v.website) return null
+  return (
+    <span className="mf-contact">
+      {v.phone && (
+        <a className="mf-link" href={telLink(v.phone)}>
+          Call {v.phone}
+        </a>
+      )}
+      {v.website && (
+        <a className="mf-link" href={v.website} target="_blank" rel="noreferrer">
+          Website ↗
+        </a>
+      )}
+    </span>
+  )
 }
 
 function PriceTag({ r }: { r: Ranked }) {
@@ -549,7 +535,8 @@ function PriceTag({ r }: { r: Ranked }) {
 }
 
 function Status({ r }: { r: Ranked }) {
-  return <span className={`mf-open mf-open-${r.open.state}`}>{formatOpen(r.open)}</span>
+  const text = r.open.state === "unknown" && r.venue.phone ? "Hours: call ahead" : formatOpen(r.open)
+  return <span className={`mf-open mf-open-${r.open.state}`}>{text}</span>
 }
 
 function Walk({ r }: { r: Ranked }) {
@@ -628,7 +615,7 @@ function Row({ r, n, ...p }: CardProps & { n: number }) {
 function weekHours(hours: Venue["hours"]) {
   if (!hours) return []
   const order = [1, 2, 3, 4, 5, 6, 0]
-  const label = (h: string | null) => (h == null ? "not listed" : h === "closed" ? "closed" : formatRange(...(h.split("-") as [string, string])))
+  const label = (h: string | null) => (h == null ? "call to check" : h === "closed" ? "closed" : formatRange(...(h.split("-") as [string, string])))
   const rows: { days: number[]; text: string }[] = []
   for (const d of order) {
     const text = label(hours[d])
@@ -677,9 +664,19 @@ function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: bool
             <HHChip r={r} />
           </div>
         )}
+        {!(v.start && v.end) && v.hhUnposted && (
+          <div className="mf-sheet-box mf-sheet-hh">
+            <h3>Happy hour</h3>
+            <p>
+              <b>Times not posted</b>
+            </p>
+            <p>{v.hhUnposted}</p>
+            <Contact v={v} />
+          </div>
+        )}
 
         <div className="mf-sheet-box">
-          <h3>Oyster prices</h3>
+          <h3>Prices</h3>
           {v.price != null && v.start && <p>Happy hour: {v.deal}</p>}
           {v.menu?.raw?.half != null || v.menu?.raw?.dozen != null ? (
             <p>
@@ -700,9 +697,9 @@ function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: bool
           )}
         </div>
 
-        {hours.length > 0 && (
-          <div className="mf-sheet-box">
-            <h3>Oyster hours</h3>
+        <div className="mf-sheet-box">
+          <h3>Hours</h3>
+          {hours.length > 0 ? (
             <p className="mf-hours">
               {hours.map((h) => (
                 <span key={h.days}>
@@ -710,8 +707,11 @@ function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: bool
                 </span>
               ))}
             </p>
-          </div>
-        )}
+          ) : (
+            <p>Not posted online.</p>
+          )}
+          {(hours.length === 0 || v.hours?.some((h) => h == null)) && <Contact v={v} />}
+        </div>
         {v.note && <p className="mf-sheet-note">{v.note}</p>}
 
         <a className="mf-btn mf-btn-primary mf-btn-wide" href={walkingDirections(v)} target="_blank" rel="noreferrer">

@@ -12,9 +12,14 @@ html {
 
 body {
   margin: 0;
-  background: #e7e7e4;
-  color: #111113;
+  background: #ecebe6;
+  color: #121214;
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+}
+
+html[data-theme='dark'] body {
+  background: #0e0f11;
+  color: #eeece4;
 }
 
 h1,
@@ -31,6 +36,6 @@ button {
 }
 
 ::selection {
-  background: #111113;
+  background: #121214;
   color: #fff;
 }

@@ -1,0 +1,179 @@
+/* Plate I (the shell map) and the logotype's oyster "o". Colours come from the .mf tokens,
+   so both follow light and dark mode. Nothing here moves. */
+
+.mf-topo,
+.mf-logo-shell {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.mf-topo path,
+.mf-logo-shell path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mf .t-shell {
+  fill: var(--shell);
+  stroke: none;
+}
+
+.mf .t-lake {
+  fill: var(--water);
+  stroke: none;
+}
+
+.t-hatch path {
+  stroke-width: 0.5;
+  opacity: 0.6;
+}
+
+.t-ribs path {
+  stroke-width: 0.45;
+  opacity: 0.4;
+}
+
+.t-contour {
+  stroke-width: 0.6;
+}
+
+.t-index {
+  stroke-width: 1.25;
+}
+
+.mf .t-levee {
+  stroke-width: 17;
+}
+
+.mf .t-river {
+  stroke: var(--water);
+  stroke-width: 13.5;
+}
+
+.t-current {
+  stroke-width: 0.6;
+  stroke-dasharray: 7 4 2 4;
+}
+
+.t-bayou {
+  stroke-width: 1.3;
+}
+
+.t-grid path {
+  stroke-width: 0.5;
+}
+
+.t-stipple {
+  fill: var(--ink);
+}
+
+.t-label {
+  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 10px;
+  fill: var(--ink);
+  stroke: var(--shell);
+  stroke-width: 3.5px;
+  paint-order: stroke;
+  stroke-linejoin: round;
+}
+
+.t-caps {
+  font-style: normal;
+  font-size: 8.5px;
+  letter-spacing: 0.22em;
+  text-anchor: middle;
+  stroke: var(--water);
+}
+
+.t-lake-label {
+  font-size: 9px;
+  text-anchor: middle;
+  stroke: var(--water);
+}
+
+.t-small {
+  font-size: 8px;
+}
+
+.t-river-label {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  stroke: var(--water);
+  dominant-baseline: central;
+}
+
+.mf .t-pearl {
+  fill: var(--pearl);
+  stroke: var(--ink);
+  stroke-width: 1.3;
+}
+
+.mf .t-pearl.is-live {
+  fill: var(--lilac);
+  stroke-width: 1.8;
+}
+
+.mf .t-lip {
+  stroke-width: 2.2;
+}
+
+.mf .t-hinge {
+  fill: var(--ink);
+  stroke: none;
+}
+
+.t-compass circle {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 0.8;
+}
+
+.t-compass path {
+  stroke-width: 0.9;
+}
+
+.mf .t-compass .t-compass-n {
+  fill: var(--ink);
+}
+
+.t-compass text,
+.t-scale text,
+.t-plate {
+  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-weight: 800;
+  font-size: 10px;
+  fill: var(--ink);
+}
+
+.t-plate {
+  font-style: italic;
+  font-size: 12px;
+}
+
+.t-scale path {
+  stroke-width: 1.1;
+}
+
+/* the little shell in the logotype: heavier lines so they survive at 40px */
+.mf-logo-shell .t-contour {
+  stroke-width: 2.2;
+}
+
+.mf-logo-shell .t-index {
+  stroke-width: 3.6;
+}
+
+.mf .mf-logo-shell .l-river {
+  stroke: var(--ink);
+  stroke-width: 7;
+}
+
+.mf .mf-logo-shell .l-lip {
+  stroke-width: 5.5;
+}

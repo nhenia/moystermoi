@@ -67,18 +67,36 @@ with sync_playwright() as p:
         pg.screenshot(path=f"{S}/senior-{vw}-{scale}.png")
         c.close()
 
-    # the film can be paused (WCAG 2.2.2) and the choice sticks; reduced-motion visitors get a still
-    c=b.new_context(viewport={"width":390,"height":844},geolocation={"latitude":29.9547,"longitude":-90.0697},permissions=["geolocation"]); pg=c.new_page()
-    pg.goto(URL); pg.wait_for_selector(".mf-pick"); pg.wait_for_timeout(800)
-    check(not pg.evaluate("document.querySelector('.mf-hero-video').paused"), "film plays")
-    pg.get_by_role("button", name="❚❚ Pause").click(); pg.wait_for_timeout(200)
-    check(pg.evaluate("document.querySelector('.mf-hero-video').paused"), "Pause stops the film")
-    pg.reload(); pg.wait_for_selector(".mf-pick"); pg.wait_for_timeout(600)
-    check(pg.evaluate("document.querySelector('.mf-hero-video').paused"), "paused stays paused after reload")
+    # dark mode: follows the phone's setting, has a switch, and remembers the choice
+    c=b.new_context(viewport={"width":390,"height":844},color_scheme="dark"); pg=c.new_page()
+    pg.goto(URL); pg.wait_for_selector(".mf-pick")
+    check(pg.get_attribute(".mf","data-theme")=="dark", "dark phones open in dark mode")
+    sw=pg.get_by_role("button", name="Dark")
+    check(sw.get_attribute("aria-pressed")=="true", "the Dark switch shows it is on")
+    sw.click(); pg.wait_for_timeout(100)
+    check(pg.get_attribute(".mf","data-theme")=="light", "the switch turns dark mode off")
+    pg.reload(); pg.wait_for_selector(".mf-pick")
+    check(pg.get_attribute(".mf","data-theme")=="light", "the choice is remembered")
     c.close()
-    c=b.new_context(viewport={"width":390,"height":844},reduced_motion="reduce"); pg=c.new_page()
-    pg.goto(URL); pg.wait_for_selector(".mf-pick"); pg.wait_for_timeout(800)
-    check(pg.evaluate("document.querySelector('.mf-hero-video').paused"), "reduce-motion visitors see a still")
+
+    # nothing in the header hangs off a small phone (the page clips overflow, so check directly)
+    c=b.new_context(viewport={"width":320,"height":640}); pg=c.new_page(); pg.goto(URL); pg.wait_for_selector(".mf-pick")
+    off=pg.evaluate("[...document.querySelectorAll('.mf-head *')].filter(e=>{const r=e.getBoundingClientRect();return r.width&&(r.right>innerWidth+1||r.left<-1)}).length")
+    check(off==0, f"header fits a 320px phone ({off} pieces off-screen)")
+    c.close()
+
+    # missing hours or happy-hour times: a phone number and website instead
+    c=b.new_context(viewport={"width":390,"height":844},geolocation={"latitude":29.9547,"longitude":-90.0697},permissions=["geolocation"]); pg=c.new_page()
+    pg.goto(URL); pg.wait_for_selector(".mf-pick")
+    for name, phone in [("Bourbon House","522-0111"),("Superior","293-3474"),("Blue Crab","284-2898"),("Mr. Ed","309-4848"),("Felix's Lakefront","304-4125")]:
+        pg.locator(".mf-card-main", has_text=name).first.click(); pg.wait_for_selector(".mf-sheet h2")
+        call=pg.locator(".mf-sheet a[href^='tel:']").first
+        ok=call.count()==1 and phone in call.inner_text() and pg.locator(".mf-sheet a", has_text="Website").count()>=1
+        check(ok, f"{name}: tap-to-call {phone} and website offered")
+        pg.keyboard.press("Escape"); pg.wait_for_timeout(150)
+    pg.locator(".mf-card-main", has_text="Salted Pearl").first.click(); pg.wait_for_selector(".mf-sheet h2")
+    check(pg.locator(".mf-sheet .mf-hours b").count()>=2, "St. Roch Market (Salted Pearl) now shows its hours")
+    pg.keyboard.press("Escape")
     c.close()
 
     # keyboard only: reach a restaurant, open its card, close it
@@ -90,8 +108,8 @@ with sync_playwright() as p:
         pg.keyboard.press("Tab")
         seen.append(pg.evaluate("document.activeElement.className + '|' + (document.activeElement.innerText||'').slice(0,20)"))
         if "mf-card-main" in seen[-1]: break
-    check(any("mf-oracle" in s for s in seen), "keyboard reaches 'Tap the shell'")
-    check(any("mf-pause" in s for s in seen), "keyboard reaches Pause")
+    check(any("mf-logo-o" in s for s in seen), "keyboard reaches the logo oyster (Surprise me)")
+    check(any("mf-theme" in s for s in seen), "keyboard reaches the Dark switch")
     check(any("mf-mode" in s for s in seen), "keyboard reaches the sort buttons")
     check("mf-card-main" in seen[-1], f"keyboard reaches the first restaurant ({len(seen)} tabs)")
     pg.keyboard.press("Enter"); pg.wait_for_selector(".mf-sheet h2")
@@ -100,18 +118,18 @@ with sync_playwright() as p:
     check(pg.locator(".mf-sheet").count()==0, "Escape closes the card")
     c.close()
 
-    # axe-core audit (WCAG 2.1 A/AA/AAA + best practice) on every palette, page and open card
-    for pal in [""]:
-        c=b.new_context(viewport={"width":390,"height":844},geolocation={"latitude":29.9547,"longitude":-90.0697},permissions=["geolocation"],reduced_motion="reduce")
+    # axe-core audit (WCAG 2.1 A/AA/AAA + best practice) in light and dark, page and open card
+    for pal in ["light","dark"]:
+        c=b.new_context(viewport={"width":390,"height":844},geolocation={"latitude":29.9547,"longitude":-90.0697},permissions=["geolocation"],reduced_motion="reduce",color_scheme=pal)
         c.route("https://*.basemaps.cartocdn.com/**", lambda r: r.fulfill(status=200, content_type="image/png", body=TILE))
         pg=c.new_page(); pg.clock.install(time="2026-11-10T22:10:00Z")
-        pg.goto(URL+(f"?palette={pal}" if pal else "")); pg.wait_for_selector(".mf-pick"); pg.wait_for_timeout(600)
+        pg.goto(URL); pg.wait_for_selector(".mf-pick"); pg.wait_for_timeout(600)
         pg.add_script_tag(path=AXE)
         for state in ["page","card"]:
             if state=="card":
                 pg.locator(".mf-pick .mf-name").first.click(); pg.wait_for_selector(".mf-sheet h2"); pg.wait_for_timeout(500)
             res=pg.evaluate("""async () => (await axe.run(document, {runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag2aaa','best-practice']}})).violations.map(v=>v.id+' ('+v.nodes.length+')')""")
-            check(not res, f"[axe / {state}] no accessibility violations {res}")
+            check(not res, f"[axe / {pal} / {state}] no accessibility violations {res}")
         c.close()
     b.close()
 print("\nFAILURES:", len(fails))

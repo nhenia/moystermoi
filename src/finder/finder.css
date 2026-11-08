@@ -1,26 +1,27 @@
-/* MOYSTER — shell & nacre.
-   From the reference film: an engraved oyster shell (ink crosshatching, print speckle) peels back
-   along a wavy edge to reveal liquid silver nacre, rippling light and prism flares.
-   Colour comes only from that light: pearl, silver, ink, and a prism foil for happy hour.
+/* MOYSTER — Plate I.
+   A naturalist's engraving: New Orleans drawn as an oyster shell, growth rings as contour lines,
+   the river crescent across the lip, every oyster bar a seed pearl. Ink on pearl paper by day,
+   white-line scratchboard by night (dark mode). Prism foil marks happy hour. Nothing loops.
 
-   Still built for older eyes: Atkinson Hyperlegible body at 18px, AAA contrast for all text,
-   nothing faded or tilted, 44px+ tap targets, and a Pause button for the moving film. */
+   Still built for older eyes: Atkinson Hyperlegible body at 18px, AAA contrast for all text in
+   both modes, nothing faded or tilted, 44px+ tap targets. */
 
 .mf {
-  --bg: #e7e7e4;
-  --paper: #fafaf8;
-  --ink: #111113;
-  --muted: #45464b;
-  --silver: #c9cacd;
+  --bg: #ecebe6;
+  --paper: #fbfaf6;
+  --ink: #121214;
+  --muted: #44454a;
+  --on-ink: #ffffff;
+  --silver: #c9c8c2;
   --open: #1b5e3e;
-  --lilac: #e4d4ff; /* solid stand-in for the foil (SVG fills) */
-  --px: 0.5;
-  --py: 0.3;
-  /* prism foil: pastel spectrum whose angle follows the pointer / phone tilt */
-  --foil: conic-gradient(
-    from calc(var(--px) * 360deg) at calc(var(--px) * 100%) calc(var(--py) * 100%),
-    #cfe7ff, #e4d4ff, #ffd6ec, #fff1b3, #d4ffe6, #cfe7ff
-  );
+  --shell: #f7f5ee;
+  --water: #dde3e8;
+  --pearl: #ffffff;
+  --cup: #ecebe4;
+  --meat: #d9d8d2;
+  --lilac: #e4d4ff;
+  --butter: #fff1b3;
+  --foil: linear-gradient(105deg, #cfe7ff, #e4d4ff 25%, #ffd6ec 50%, #fff1b3 75%, #d4ffe6);
   --lip: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 240 26%22 preserveAspectRatio=%22none%22%3E%3CclipPath id=%22c%22%3E%3Cpath d=%22M0 0 L0.0 14.9 L12.0 17.6 L24.0 18.9 L36.0 20.6 L48.0 16.8 L60.0 15.0 L72.0 13.0 L84.0 9.2 L96.0 10.4 L108.0 12.3 L120.0 13.9 L132.0 17.6 L144.0 20.2 L156.0 19.6 L168.0 18.5 L180.0 14.2 L192.0 11.4 L204.0 9.3 L216.0 10.3 L228.0 13.1 L240.0 15.2 L240 0 Z%22/%3E%3C/clipPath%3E%3Cg clip-path=%22url(%23c)%22%3E%3Crect width=%22240%22 height=%2226%22 fill=%22%23f7f7f5%22/%3E%3Cpath d=%22M-20 -4 l-18 32 M-16 -4 l-18 32 M-12 -4 l-18 32 M-8 -4 l-18 32 M-4 -4 l-18 32 M0 -4 l-18 32 M4 -4 l-18 32 M8 -4 l-18 32 M12 -4 l-18 32 M16 -4 l-18 32 M20 -4 l-18 32 M24 -4 l-18 32 M28 -4 l-18 32 M32 -4 l-18 32 M36 -4 l-18 32 M40 -4 l-18 32 M44 -4 l-18 32 M48 -4 l-18 32 M52 -4 l-18 32 M56 -4 l-18 32 M60 -4 l-18 32 M64 -4 l-18 32 M68 -4 l-18 32 M72 -4 l-18 32 M76 -4 l-18 32 M80 -4 l-18 32 M84 -4 l-18 32 M88 -4 l-18 32 M92 -4 l-18 32 M96 -4 l-18 32 M100 -4 l-18 32 M104 -4 l-18 32 M108 -4 l-18 32 M112 -4 l-18 32 M116 -4 l-18 32 M120 -4 l-18 32 M124 -4 l-18 32 M128 -4 l-18 32 M132 -4 l-18 32 M136 -4 l-18 32 M140 -4 l-18 32 M144 -4 l-18 32 M148 -4 l-18 32 M152 -4 l-18 32 M156 -4 l-18 32 M160 -4 l-18 32 M164 -4 l-18 32 M168 -4 l-18 32 M172 -4 l-18 32 M176 -4 l-18 32 M180 -4 l-18 32 M184 -4 l-18 32 M188 -4 l-18 32 M192 -4 l-18 32 M196 -4 l-18 32 M200 -4 l-18 32 M204 -4 l-18 32 M208 -4 l-18 32 M212 -4 l-18 32 M216 -4 l-18 32 M220 -4 l-18 32 M224 -4 l-18 32 M228 -4 l-18 32 M232 -4 l-18 32 M236 -4 l-18 32 M240 -4 l-18 32 M244 -4 l-18 32 M248 -4 l-18 32 M252 -4 l-18 32 M256 -4 l-18 32 M260 -4 l-18 32 M264 -4 l-18 32 M268 -4 l-18 32 M272 -4 l-18 32 M276 -4 l-18 32 M-25 -4 l14 32 M-20 -4 l14 32 M-15 -4 l14 32 M-10 -4 l14 32 M-5 -4 l14 32 M0 -4 l14 32 M5 -4 l14 32 M10 -4 l14 32 M15 -4 l14 32 M20 -4 l14 32 M25 -4 l14 32 M30 -4 l14 32 M35 -4 l14 32 M40 -4 l14 32 M45 -4 l14 32 M50 -4 l14 32 M55 -4 l14 32 M60 -4 l14 32 M65 -4 l14 32 M70 -4 l14 32 M75 -4 l14 32 M80 -4 l14 32 M85 -4 l14 32 M90 -4 l14 32 M95 -4 l14 32 M100 -4 l14 32 M105 -4 l14 32 M110 -4 l14 32 M115 -4 l14 32 M120 -4 l14 32 M125 -4 l14 32 M130 -4 l14 32 M135 -4 l14 32 M140 -4 l14 32 M145 -4 l14 32 M150 -4 l14 32 M155 -4 l14 32 M160 -4 l14 32 M165 -4 l14 32 M170 -4 l14 32 M175 -4 l14 32 M180 -4 l14 32 M185 -4 l14 32 M190 -4 l14 32 M195 -4 l14 32 M200 -4 l14 32 M205 -4 l14 32 M210 -4 l14 32 M215 -4 l14 32 M220 -4 l14 32 M225 -4 l14 32 M230 -4 l14 32 M235 -4 l14 32 M240 -4 l14 32 M245 -4 l14 32 M250 -4 l14 32 M255 -4 l14 32 M260 -4 l14 32 M265 -4 l14 32 M270 -4 l14 32 M275 -4 l14 32 M280 -4 l14 32 M285 -4 l14 32 M290 -4 l14 32 M295 -4 l14 32%22 stroke=%22%23111%22 stroke-width=%22.55%22 opacity=%22.85%22/%3E%3Cg fill=%22%23111%22%3E%3Ccircle cx=%22185.8%22 cy=%225.0%22 r=%220.9%22/%3E%3Ccircle cx=%2224.4%22 cy=%223.8%22 r=%220.8%22/%3E%3Ccircle cx=%22174.2%22 cy=%225.5%22 r=%220.4%22/%3E%3Ccircle cx=%2264.0%22 cy=%222.7%22 r=%220.5%22/%3E%3Ccircle cx=%22194.3%22 cy=%222.6%22 r=%221.0%22/%3E%3Ccircle cx=%22211.0%22 cy=%220.7%22 r=%220.6%22/%3E%3Ccircle cx=%22118.0%22 cy=%220.3%22 r=%220.6%22/%3E%3Ccircle cx=%22217.5%22 cy=%221.5%22 r=%220.8%22/%3E%3Ccircle cx=%2229.1%22 cy=%227.5%22 r=%221.0%22/%3E%3Ccircle cx=%2248.7%22 cy=%220.1%22 r=%220.4%22/%3E%3Ccircle cx=%22129.5%22 cy=%220.2%22 r=%220.4%22/%3E%3Ccircle cx=%22119.2%22 cy=%2212.0%22 r=%220.6%22/%3E%3Ccircle cx=%2295.6%22 cy=%228.3%22 r=%220.4%22/%3E%3Ccircle cx=%22139.2%22 cy=%222.2%22 r=%220.8%22/%3E%3Ccircle cx=%22230.0%22 cy=%220.7%22 r=%220.7%22/%3E%3Ccircle cx=%22145.5%22 cy=%221.9%22 r=%220.5%22/%3E%3Ccircle cx=%22238.8%22 cy=%2213.0%22 r=%220.4%22/%3E%3Ccircle cx=%22169.3%22 cy=%2212.4%22 r=%220.5%22/%3E%3Ccircle cx=%22146.7%22 cy=%220.6%22 r=%220.6%22/%3E%3Ccircle cx=%22161.8%22 cy=%227.7%22 r=%220.9%22/%3E%3Ccircle cx=%2220.8%22 cy=%224.5%22 r=%221.0%22/%3E%3Ccircle cx=%22140.2%22 cy=%225.9%22 r=%220.6%22/%3E%3Ccircle cx=%22236.7%22 cy=%227.5%22 r=%220.3%22/%3E%3Ccircle cx=%22191.8%22 cy=%224.3%22 r=%220.6%22/%3E%3Ccircle cx=%2251.2%22 cy=%225.8%22 r=%220.6%22/%3E%3Ccircle cx=%2221.3%22 cy=%228.2%22 r=%220.4%22/%3E%3C/g%3E%3C/g%3E%3Cpath d=%22M0.0 14.9 L12.0 17.6 L24.0 18.9 L36.0 20.6 L48.0 16.8 L60.0 15.0 L72.0 13.0 L84.0 9.2 L96.0 10.4 L108.0 12.3 L120.0 13.9 L132.0 17.6 L144.0 20.2 L156.0 19.6 L168.0 18.5 L180.0 14.2 L192.0 11.4 L204.0 9.3 L216.0 10.3 L228.0 13.1 L240.0 15.2%22 fill=%22none%22 stroke=%22%23111%22 stroke-width=%221.4%22/%3E%3C/svg%3E");
   --edge: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 240%22 preserveAspectRatio=%22none%22%3E%3CclipPath id=%22c%22%3E%3Cpath d=%22M0 0 L14.4 0.0 L17.0 12.0 L19.5 24.0 L18.9 36.0 L16.9 48.0 L14.8 60.0 L13.1 72.0 L11.0 84.0 L10.9 96.0 L11.4 108.0 L15.1 120.0 L17.4 132.0 L19.0 144.0 L18.8 156.0 L17.3 168.0 L16.0 180.0 L12.9 192.0 L11.0 204.0 L11.0 216.0 L11.3 228.0 L14.5 240.0 L0 240 Z%22/%3E%3C/clipPath%3E%3Cg clip-path=%22url(%23c)%22%3E%3Crect width=%2224%22 height=%22240%22 fill=%22%23f7f7f5%22/%3E%3Cpath d=%22M-4 -40 l32 -18 M-4 -36 l32 -18 M-4 -32 l32 -18 M-4 -28 l32 -18 M-4 -24 l32 -18 M-4 -20 l32 -18 M-4 -16 l32 -18 M-4 -12 l32 -18 M-4 -8 l32 -18 M-4 -4 l32 -18 M-4 0 l32 -18 M-4 4 l32 -18 M-4 8 l32 -18 M-4 12 l32 -18 M-4 16 l32 -18 M-4 20 l32 -18 M-4 24 l32 -18 M-4 28 l32 -18 M-4 32 l32 -18 M-4 36 l32 -18 M-4 40 l32 -18 M-4 44 l32 -18 M-4 48 l32 -18 M-4 52 l32 -18 M-4 56 l32 -18 M-4 60 l32 -18 M-4 64 l32 -18 M-4 68 l32 -18 M-4 72 l32 -18 M-4 76 l32 -18 M-4 80 l32 -18 M-4 84 l32 -18 M-4 88 l32 -18 M-4 92 l32 -18 M-4 96 l32 -18 M-4 100 l32 -18 M-4 104 l32 -18 M-4 108 l32 -18 M-4 112 l32 -18 M-4 116 l32 -18 M-4 120 l32 -18 M-4 124 l32 -18 M-4 128 l32 -18 M-4 132 l32 -18 M-4 136 l32 -18 M-4 140 l32 -18 M-4 144 l32 -18 M-4 148 l32 -18 M-4 152 l32 -18 M-4 156 l32 -18 M-4 160 l32 -18 M-4 164 l32 -18 M-4 168 l32 -18 M-4 172 l32 -18 M-4 176 l32 -18 M-4 180 l32 -18 M-4 184 l32 -18 M-4 188 l32 -18 M-4 192 l32 -18 M-4 196 l32 -18 M-4 200 l32 -18 M-4 204 l32 -18 M-4 208 l32 -18 M-4 212 l32 -18 M-4 216 l32 -18 M-4 220 l32 -18 M-4 224 l32 -18 M-4 228 l32 -18 M-4 232 l32 -18 M-4 236 l32 -18 M-4 240 l32 -18 M-4 244 l32 -18 M-4 248 l32 -18 M-4 252 l32 -18 M-4 256 l32 -18 M-4 260 l32 -18 M-4 264 l32 -18 M-4 268 l32 -18 M-4 272 l32 -18 M-4 276 l32 -18 M-4 -50 l32 14 M-4 -45 l32 14 M-4 -40 l32 14 M-4 -35 l32 14 M-4 -30 l32 14 M-4 -25 l32 14 M-4 -20 l32 14 M-4 -15 l32 14 M-4 -10 l32 14 M-4 -5 l32 14 M-4 0 l32 14 M-4 5 l32 14 M-4 10 l32 14 M-4 15 l32 14 M-4 20 l32 14 M-4 25 l32 14 M-4 30 l32 14 M-4 35 l32 14 M-4 40 l32 14 M-4 45 l32 14 M-4 50 l32 14 M-4 55 l32 14 M-4 60 l32 14 M-4 65 l32 14 M-4 70 l32 14 M-4 75 l32 14 M-4 80 l32 14 M-4 85 l32 14 M-4 90 l32 14 M-4 95 l32 14 M-4 100 l32 14 M-4 105 l32 14 M-4 110 l32 14 M-4 115 l32 14 M-4 120 l32 14 M-4 125 l32 14 M-4 130 l32 14 M-4 135 l32 14 M-4 140 l32 14 M-4 145 l32 14 M-4 150 l32 14 M-4 155 l32 14 M-4 160 l32 14 M-4 165 l32 14 M-4 170 l32 14 M-4 175 l32 14 M-4 180 l32 14 M-4 185 l32 14 M-4 190 l32 14 M-4 195 l32 14 M-4 200 l32 14 M-4 205 l32 14 M-4 210 l32 14 M-4 215 l32 14 M-4 220 l32 14 M-4 225 l32 14 M-4 230 l32 14 M-4 235 l32 14 M-4 240 l32 14 M-4 245 l32 14 M-4 250 l32 14 M-4 255 l32 14 M-4 260 l32 14 M-4 265 l32 14 M-4 270 l32 14 M-4 275 l32 14 M-4 280 l32 14 M-4 285 l32 14 M-4 290 l32 14 M-4 295 l32 14 M-4 300 l32 14 M-4 305 l32 14 M-4 310 l32 14 M-4 315 l32 14 M-4 320 l32 14 M-4 325 l32 14 M-4 330 l32 14 M-4 335 l32 14 M-4 340 l32 14 M-4 345 l32 14%22 stroke=%22%23111%22 stroke-width=%22.55%22 opacity=%22.85%22/%3E%3Cg fill=%22%23111%22%3E%3Ccircle cx=%228.8%22 cy=%22175.7%22 r=%221.0%22/%3E%3Ccircle cx=%2212.3%22 cy=%2220.8%22 r=%220.8%22/%3E%3Ccircle cx=%229.4%22 cy=%22121.4%22 r=%220.4%22/%3E%3Ccircle cx=%226.6%22 cy=%2221.4%22 r=%221.0%22/%3E%3Ccircle cx=%2212.1%22 cy=%22131.4%22 r=%220.5%22/%3E%3Ccircle cx=%2212.7%22 cy=%22137.4%22 r=%221.0%22/%3E%3Ccircle cx=%2211.9%22 cy=%22122.0%22 r=%220.6%22/%3E%3Ccircle cx=%228.4%22 cy=%22103.5%22 r=%220.4%22/%3E%3Ccircle cx=%224.3%22 cy=%22195.0%22 r=%220.3%22/%3E%3Ccircle cx=%220.6%22 cy=%22150.3%22 r=%220.5%22/%3E%3Ccircle cx=%227.5%22 cy=%22113.1%22 r=%220.6%22/%3E%3Ccircle cx=%2214.0%22 cy=%2246.9%22 r=%220.6%22/%3E%3Ccircle cx=%222.8%22 cy=%22151.8%22 r=%220.5%22/%3E%3Ccircle cx=%225.0%22 cy=%22179.3%22 r=%220.6%22/%3E%3Ccircle cx=%227.8%22 cy=%22217.0%22 r=%220.4%22/%3E%3Ccircle cx=%220.9%22 cy=%2254.9%22 r=%220.9%22/%3E%3Ccircle cx=%228.6%22 cy=%2257.0%22 r=%220.6%22/%3E%3Ccircle cx=%222.5%22 cy=%22110.2%22 r=%220.3%22/%3E%3Ccircle cx=%229.8%22 cy=%22215.0%22 r=%221.1%22/%3E%3Ccircle cx=%2210.3%22 cy=%22230.4%22 r=%220.3%22/%3E%3Ccircle cx=%224.0%22 cy=%22231.8%22 r=%220.9%22/%3E%3Ccircle cx=%225.7%22 cy=%22226.4%22 r=%220.8%22/%3E%3Ccircle cx=%2211.5%22 cy=%2270.4%22 r=%220.5%22/%3E%3Ccircle cx=%226.2%22 cy=%2232.7%22 r=%220.6%22/%3E%3Ccircle cx=%2213.5%22 cy=%2279.5%22 r=%220.3%22/%3E%3Ccircle cx=%220.6%22 cy=%2240.7%22 r=%220.9%22/%3E%3C/g%3E%3C/g%3E%3Cpath d=%22M14.4 0.0 L17.0 12.0 L19.5 24.0 L18.9 36.0 L16.9 48.0 L14.8 60.0 L13.1 72.0 L11.0 84.0 L10.9 96.0 L11.4 108.0 L15.1 120.0 L17.4 132.0 L19.0 144.0 L18.8 156.0 L17.3 168.0 L16.0 180.0 L12.9 192.0 L11.0 204.0 L11.0 216.0 L11.3 228.0 L14.5 240.0%22 fill=%22none%22 stroke=%22%23111%22 stroke-width=%221.4%22/%3E%3C/svg%3E");
   position: relative;
@@ -30,14 +31,46 @@
   min-height: 100svh;
   padding: 0 16px 110px;
   overflow: hidden;
-  background:
-    linear-gradient(rgb(240 240 238 / 0.82), rgb(240 240 238 / 0.9)),
-    url("./media/nacre.jpg") center top / 720px auto repeat,
-    var(--bg);
+  background: var(--bg);
   color: var(--ink);
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
   font-size: 1.125rem;
   line-height: 1.4;
+}
+
+/* ---------- Dark mode: white-line scratchboard ---------- */
+
+.mf[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0e0f11;
+  --paper: #17181b;
+  --ink: #eeece4;
+  --muted: #bab9b1;
+  --on-ink: #0e0f11;
+  --silver: #3a3b40;
+  --open: #86dcaa;
+  --shell: #131418;
+  --water: #18222b;
+  --pearl: #eeece4;
+  --cup: #202126;
+  --meat: #2c2d32;
+  --lilac: #4a3a78;
+  --butter: #5a4d1c;
+  --foil: linear-gradient(105deg, #14304a, #2e2152 25%, #4a1f3a 50%, #433a12 75%, #134232);
+}
+
+.mf[data-theme='dark'] .mf-edge,
+.mf[data-theme='dark'] .mf-sheet-card::before {
+  filter: invert(1);
+}
+
+.mf[data-theme='dark'] .mf-map-canvas .leaflet-tile-pane {
+  filter: grayscale(1) invert(1) brightness(0.8) contrast(1.15);
+}
+
+.mf .leaflet-bar a {
+  background: var(--paper);
+  color: var(--ink);
 }
 
 /* read by screen readers, not shown */
@@ -70,7 +103,7 @@
 .mf :focus-visible {
   outline: 4px solid var(--ink);
   outline-offset: 3px;
-  box-shadow: 0 0 0 8px #fff;
+  box-shadow: 0 0 0 8px var(--paper);
 }
 
 .mf h1,
@@ -92,19 +125,19 @@
 }
 
 .mf-art .a-shell {
-  fill: #fbfbfa;
+  fill: var(--shell);
 }
 
 .mf-art .a-cup {
-  fill: #eef0f3;
+  fill: var(--cup);
 }
 
 .mf-art .a-meat {
-  fill: #d9d9d6;
+  fill: var(--meat);
 }
 
 .mf-art .a-glint {
-  fill: #fff;
+  fill: var(--pearl);
 }
 
 .mf-art .a-ink * {
@@ -127,113 +160,129 @@
 
 .is-live .a-cup,
 .mf-art.is-live .a-cup {
-  fill: #fff1b3;
+  fill: var(--butter);
 }
 
-/* ---------- Hero: the film ---------- */
+/* ---------- Header: logotype, theme switch, Plate I ---------- */
 
 .mf-head {
   display: grid;
-  gap: 12px;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px 12px;
   margin: 0 -16px;
+  padding: 12px 16px 0;
 }
 
-.mf-hero {
-  position: relative;
+.mf-logo {
+  display: flex;
+  align-items: flex-end;
+  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-weight: 800;
+  font-size: clamp(3rem, 13vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
-.mf-oracle {
-  position: relative;
+.mf-logo-o {
   display: block;
-  width: 100%;
-  height: min(58vh, 520px);
+  width: 0.92em;
+  min-width: 44px;
+  min-height: 44px;
+  margin: 0 0.02em 0.04em;
   padding: 0;
   border: 0;
-  border-bottom: 2px solid var(--ink);
-  background: #d8d8d6 url("./media/shell-poster.jpg") center / cover;
-  overflow: hidden;
-  text-align: left;
+  border-radius: 50%;
+  background: none;
 }
 
-.mf-hero-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: contrast(1.05);
+.mf-logo-o.is-shucking .mf-logo-shell {
+  animation: mf-shuck 700ms cubic-bezier(0.3, 1.4, 0.5, 1) both;
 }
 
-/* a soft prism flare drifting over the nacre, like the light leaks in the film */
-.mf-hero-flare {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at calc(var(--px) * 100%) calc(30% + var(--py) * 50%), rgb(255 241 179 / 0.55), transparent 32%),
-    radial-gradient(circle at calc(100% - var(--px) * 80%) 85%, rgb(207 231 255 / 0.5), transparent 28%);
-  mix-blend-mode: screen;
-  pointer-events: none;
-}
-
-.mf-hero.is-shucking .mf-hero-flare {
-  animation: mf-flare 2.2s ease-out;
-}
-
-.mf-brand {
-  position: absolute;
-  top: 14px;
-  left: 16px;
-  padding: 0 10px 4px;
-  background: rgb(250 250 248 / 0.88);
-  font-family: 'UnifrakturMaguntia', 'Old English Text MT', serif;
-  font-size: clamp(2.6rem, 13vw, 4rem);
-  line-height: 1.05;
-  color: var(--ink);
-}
-
-.mf-oracle-label {
-  position: absolute;
-  left: 16px;
-  bottom: 16px;
-  display: inline-block;
-  padding: 10px 16px;
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-  background: var(--paper);
-  font-size: 1.05rem;
-  color: var(--ink);
-}
-
-.mf-oracle-label b {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
-}
-
-.mf-oracle:hover .mf-oracle-label,
-.mf-oracle:focus-visible .mf-oracle-label {
-  background: var(--foil);
-}
-
-.mf-pause {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  min-width: 48px;
+.mf-theme {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   min-height: 48px;
-  padding: 0 14px;
+  padding: 0 16px;
   border: 2px solid var(--ink);
   border-radius: 999px;
   background: var(--paper);
   color: var(--ink);
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.05rem;
+}
+
+.mf-theme[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+/* small phones: the switch keeps its name for screen readers but shows only the sun / moon */
+@media (max-width: 379px) {
+  .mf-theme {
+    justify-content: center;
+    min-width: 48px;
+    padding: 0;
+    font-size: 1.3rem;
+  }
+
+  .mf-theme-word {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* Plate I sits right; the title is set into its lower-left corner, on solid paper. */
+.mf-plate-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  margin-top: -6px;
+}
+
+.mf-plate {
+  grid-area: 1 / 1;
+  justify-self: end;
+  width: min(78%, 400px);
+  margin: 26px 0 0;
+}
+
+/* the title sits in the empty corner beside the narrow hinge */
+.mf-plate-wrap .mf-title {
+  grid-area: 1 / 1;
+  align-self: start;
+  justify-self: start;
+  z-index: 1;
+  max-width: 50%;
+  margin-top: 4px;
+  font-size: clamp(1.9rem, 8.6vw, 3.6rem);
+}
+
+/* paper only behind the letters, so the plate shows around them */
+.mf-plate-wrap .mf-title > * {
+  justify-self: start;
+}
+
+.mf-plate-wrap .mf-title span,
+.mf-plate-wrap .mf-title small {
+  padding-right: 8px;
+  background: var(--bg);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.mf-head > :not(.mf-logo, .mf-theme, .mf-plate-wrap) {
+  grid-column: 1 / -1;
 }
 
 .mf-title {
   display: grid;
   gap: 10px;
-  padding: 4px 16px 0;
   font-family: 'Bodoni Moda', Didot, Georgia, serif;
   font-style: italic;
   font-weight: 800;
@@ -257,7 +306,6 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 14px;
-  padding: 0 16px;
 }
 
 .mf-pin-icon {
@@ -286,7 +334,7 @@ a.mf-link {
 }
 
 .mf-alert {
-  margin: 0 16px;
+  margin: 0;
   padding: 12px 14px;
   border: 2px solid var(--ink);
   border-left-width: 8px;
@@ -298,7 +346,7 @@ a.mf-link {
 .mf-search {
   display: grid;
   gap: 8px;
-  margin: 0 16px;
+  margin: 0;
   padding: 14px;
   border: 2px solid var(--ink);
   background: var(--paper);
@@ -310,7 +358,7 @@ a.mf-link {
   padding: 0 14px;
   border: 2px solid var(--ink);
   border-radius: 0;
-  background: #fff;
+  background: var(--paper);
   color: var(--ink);
   font-size: 1.125rem;
 }
@@ -406,7 +454,7 @@ a.mf-link {
 
 .mf-mode[aria-selected='true'] {
   background: var(--ink);
-  color: #fff;
+  color: var(--on-ink);
   box-shadow: inset 0 -6px 0 0 transparent;
 }
 
@@ -539,7 +587,7 @@ a.mf-link {
   padding: 4px 12px;
   border-radius: 999px;
   background: var(--ink);
-  color: #fff;
+  color: var(--on-ink);
   font-weight: 700;
   font-size: 1.15rem;
   line-height: 1.3;
@@ -635,11 +683,11 @@ a.mf-link {
 
 .mf-btn-primary {
   background: var(--ink);
-  color: #fff !important;
+  color: var(--on-ink) !important;
 }
 
 .mf-btn-primary:hover {
-  box-shadow: 0 0 0 4px #fff, 0 0 0 8px var(--ink);
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--ink);
 }
 
 .mf-btn-quiet {
@@ -696,7 +744,7 @@ a.mf-link {
   height: 300px;
   border: 2px solid var(--ink);
   overflow: hidden;
-  background: #e2e2e0;
+  background: var(--silver);
   transition: height 300ms ease;
 }
 
@@ -708,7 +756,7 @@ a.mf-link {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: #e2e2e0;
+  background: var(--silver);
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
 }
 
@@ -763,7 +811,8 @@ a.mf-link {
 
 .mf .leaflet-control-attribution {
   font-size: 11px;
-  background: rgb(255 255 255 / 0.85);
+  background: var(--paper);
+  color: var(--ink);
 }
 
 .mf .leaflet-control-zoom a {
@@ -817,16 +866,16 @@ a.mf-link {
   right: -10px;
   min-width: 24px;
   padding: 1px 4px;
-  border: 2px solid #fff;
+  border: 2px solid var(--paper);
   border-radius: 999px;
   background: var(--ink);
-  color: #fff;
+  color: var(--on-ink);
   font: 700 1rem/1.2 'Atkinson Hyperlegible', system-ui, sans-serif;
   text-align: center;
 }
 
 .mf-pin.is-live b {
-  background: #fff;
+  background: var(--paper);
   color: var(--ink);
   border-color: var(--ink);
 }
@@ -845,7 +894,7 @@ a.mf-link {
 .mf-you i {
   position: absolute;
   inset: 3px;
-  border: 3px solid #fff;
+  border: 3px solid var(--paper);
   border-radius: 50%;
   background: var(--ink);
   box-shadow: 0 0 0 2px var(--ink);
@@ -857,7 +906,7 @@ a.mf-link {
   left: 50%;
   padding: 0 5px;
   background: var(--ink);
-  color: #fff;
+  color: var(--on-ink);
   font: 700 1rem/1.4 'Atkinson Hyperlegible', system-ui, sans-serif;
   transform: translateX(-50%);
   white-space: nowrap;
@@ -875,10 +924,10 @@ a.mf-link {
   gap: 8px;
   min-height: 60px;
   padding: 6px 22px 6px 12px;
-  border: 2px solid #fff;
+  border: 2px solid var(--paper);
   border-radius: 999px;
   background: var(--ink);
-  color: #fff;
+  color: var(--on-ink);
   font-weight: 700;
   font-size: 1.2rem;
   box-shadow: 0 4px 14px rgb(0 0 0 / 0.3);
@@ -915,10 +964,7 @@ a.mf-link {
   overflow: auto;
   padding: 40px 18px calc(18px + env(safe-area-inset-bottom));
   border-top: 2px solid var(--ink);
-  background:
-    linear-gradient(rgb(250 250 248 / 0.93), rgb(250 250 248 / 0.97)),
-    url("./media/nacre.jpg") center / cover,
-    var(--paper);
+  background: var(--paper);
   color: var(--ink);
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
   font-size: 1.125rem;
@@ -1069,25 +1115,19 @@ a.mf-link {
     margin: 0 calc(-1 * clamp(24px, 4vw, 64px));
   }
 
-  .mf-oracle {
-    height: min(62vh, 560px);
+  .mf-head {
+    padding: 20px clamp(24px, 4vw, 64px) 0;
   }
 
-  .mf-oracle::before {
-    content: '';
-    position: absolute;
-    inset: -30px;
-    background: inherit;
-    filter: blur(22px) brightness(1.08);
+  .mf-plate {
+    width: min(52%, 480px);
+    margin-right: 4%;
   }
 
-  .mf-hero-video {
-    object-fit: contain;
-  }
-
-  .mf-title,
-  .mf-origin {
-    padding-left: clamp(24px, 4vw, 64px);
+  .mf-plate-wrap .mf-title {
+    align-self: center;
+    max-width: 50%;
+    font-size: clamp(3.4rem, 5.4vw, 5.2rem);
   }
 
   .mf-hh,
@@ -1125,7 +1165,7 @@ a.mf-link {
   }
 }
 
-/* ---------- Motion: the film (pausable), and short moves when you tap ---------- */
+/* ---------- Motion: only short, one-time moves when you tap. Nothing loops. ---------- */
 
 @keyframes mf-rise {
   from {
@@ -1147,19 +1187,15 @@ a.mf-link {
   }
 }
 
-@keyframes mf-flare {
-  0% { opacity: 1; filter: hue-rotate(0deg) brightness(1); }
-  60% { opacity: 1; filter: hue-rotate(160deg) brightness(1.6); }
-  100% { opacity: 1; filter: hue-rotate(360deg) brightness(1); }
+@keyframes mf-shuck {
+  0% { transform: none; }
+  40% { transform: scale(1.25) rotate(-20deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes mf-lid {
   0% { transform: translateY(10px) rotate(0); opacity: 1; }
   100% { transform: translate(-30px, -50px) rotate(-100deg); opacity: 0; }
-}
-
-.mf.is-still .mf-hero-flare {
-  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1172,4 +1208,17 @@ a.mf-link {
   .mf-sheet-lid {
     display: none;
   }
+}
+
+/* ---------- Missing info: call or check the website ---------- */
+
+.mf-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 18px;
+}
+
+.mf-chip-ask {
+  background: var(--paper);
+  border-style: dashed;
 }

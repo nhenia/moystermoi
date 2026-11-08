@@ -52,8 +52,13 @@ with sync_playwright() as p:
     total = page.locator(".mf-pick").count() + page.locator(".mf-row").count()
     check(total == 34, f"near mode lists every spot ({total})")
     check("OYSTERS" in page.locator("h1#mf-title").inner_text().upper(), "page heading says Oysters near me")
-    check(page.locator(".mf-hero-video").is_visible(), "the shell film is on screen")
-    check(page.evaluate("document.querySelector('.mf-hero-video').readyState") >= 2, "the film loads")
+    check(page.locator(".mf-plate .mf-topo").is_visible(), "Plate I (the shell map) is on screen")
+    check(page.locator(".mf-topo .t-pearl").count() == 34, "every spot is a pearl on the shell map")
+    check(page.locator("video").count() == 0, "no video on the page")
+    looping = page.evaluate("""() => [...document.querySelectorAll('.mf *')].filter(e => getComputedStyle(e).animationIterationCount === 'infinite').length""")
+    check(looping == 0, f"no looping animation ({looping})")
+    check(page.locator(".mf-logo-o").is_visible(), "the logotype's o is an oyster")
+    check(page.locator(".mf").inner_text().find("Can't decide") < 0, "no 'Can't decide' copy")
     page.wait_for_timeout(900)
     page.screenshot(path=f"{OUT}/m1-near.png", full_page=False)
     page.screenshot(path=f"{OUT}/m1-near-full.png", full_page=True)
@@ -102,18 +107,19 @@ with sync_playwright() as p:
     page.wait_for_timeout(200)
     check(page.locator(".mf-sheet").count() == 0, "tapping outside closes the card")
 
-    # experimental: shuck me
+    # easter egg: the oyster "o" in the logo picks a place
     page.evaluate("window.scrollTo(0, 0)")
-    page.locator(".mf-oracle").click()
-    page.wait_for_timeout(450)
-    check(page.locator(".mf-hero.is-shucking").count() == 1, "the shell opens")
+    page.locator(".mf-logo-o").click()
+    page.wait_for_timeout(250)
+    check(page.locator(".mf-logo-o.is-shucking").count() == 1, "the logo oyster spins once")
     page.screenshot(path=f"{OUT}/m6-shuck.png")
     drawn = sheet_name()
     names = [n.upper() for n in page.locator(".mf-name").all_inner_texts()]
     check(any(drawn in n for n in names), f"shucking pulls a real spot ({drawn})")
     open_line = page.locator(".mf-sheet .mf-open").inner_text()
     check("Open now" in open_line, f"the pull is open now ({open_line})")
-    check(page.locator(".mf-sheet-box h3", has_text="Oyster prices").count() == 1, "card has an oyster prices section")
+    heads = page.locator(".mf-sheet-box h3").all_inner_texts()
+    check("Prices" in heads and "Hours" in heads and not any("Oyster" in h for h in heads), f"card sections are 'Prices' and 'Hours' {heads}")
     page.keyboard.press("Escape")
 
     # happy hour mode
