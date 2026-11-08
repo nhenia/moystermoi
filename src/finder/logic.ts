@@ -330,3 +330,19 @@ export function formatDays(days: number[]) {
   }
   return set.map((d) => DAY_NAMES[d]).join(", ")
 }
+
+/**
+ * The oracle's draw ("shuck me"): somewhere serving now and within a 25-minute walk,
+ * weighted toward live happy hours. Falls back to the nearest open spot.
+ */
+export function drawOyster(list: Ranked[], rnd: () => number = Math.random): Ranked | null {
+  const pool = list.filter((r) => (r.open.state === "open" || r.hh.state === "now") && r.walk != null && r.walk <= 25)
+  if (pool.length === 0) return rank(list, "near").find((r) => r.open.state === "open") ?? null
+  const weight = (r: Ranked) => (r.hh.state === "now" ? 4 : r.hh.state === "later" ? 1.5 : 1)
+  let roll = rnd() * pool.reduce((sum, r) => sum + weight(r), 0)
+  for (const r of pool) {
+    roll -= weight(r)
+    if (roll <= 0) return r
+  }
+  return pool[pool.length - 1]
+}

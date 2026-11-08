@@ -41,29 +41,74 @@ with sync_playwright() as p:
     check(page.locator(".mf-pick .mf-go").first.get_attribute("href").startswith("https://www.google.com/maps/dir/"), "walk link is walking directions")
     check("travelmode=walking" in page.locator(".mf-pick .mf-go").first.get_attribute("href"), "directions are walking mode")
     check(page.locator(".mf-pin").count() >= 3, f"oyster markers on map ({page.locator('.mf-pin').count()})")
-    check(page.locator(".mf-pin .mf-oyster .o-meat").count() >= 3, "markers are illustrated oysters")
+    check(page.locator(".mf-pin .mf-art .a-meat").count() >= 3, "markers are hand-drawn oysters")
     check(page.locator(".mf-pin.is-live").count() >= 1, "happy-hour oysters are highlighted on the map")
     check(page.locator(".mf-map-legend").is_visible(), "map legend is shown")
     check("Open til" in first or "Closes" in first, "pick says whether it's open and until when")
     check("MRB BAR" in page.locator(".mf").inner_text().upper(), "MRB is listed")
     total = page.locator(".mf-pick").count() + page.locator(".mf-row").count()
     check(total == 34, f"near mode lists every spot ({total})")
-    page.wait_for_timeout(800)
+    check(page.locator(".mf-cut").count() == 13, "ransom-note title letters")
+    check(page.locator(".mf-oracle").is_visible(), "shuck-me oyster is on screen")
+    page.wait_for_timeout(900)
     page.screenshot(path=f"{OUT}/m1-near.png", full_page=False)
     page.screenshot(path=f"{OUT}/m1-near-full.png", full_page=True)
 
-    # map -> list sync
-    pin = page.locator(".mf-pin:not(.mf-cluster)").nth(1)
-    title = pin.get_attribute("title")
+    def sheet_name():
+        page.wait_for_selector(".mf-sheet h2", timeout=4000)
+        return page.locator(".mf-sheet h2").inner_text().strip().upper()
+
+    # tapping a restaurant name opens its card
+    name1 = page.locator(".mf-pick-name").first.inner_text().replace("★", "").strip().upper()
+    page.locator(".mf-pick-name").first.click()
+    check(sheet_name() == name1, f"tapping a pick's name opens its card ({name1})")
+    check(page.locator(".mf-pin.is-selected").get_attribute("title").upper() == name1, "…and highlights its oyster on the map")
+    check(page.locator(".mf-fab").count() == 0, "map button steps aside while a card is open")
+    page.wait_for_timeout(900)
+    page.screenshot(path=f"{OUT}/m5-detail.png")
+    page.locator(".mf-sheet-close").click()
+    page.wait_for_timeout(200)
+    check(page.locator(".mf-sheet").count() == 0, "× closes the card")
+
+    # tapping a list row opens its card
+    row = page.locator(".mf-row").nth(4)
+    row_name = row.locator(".mf-row-name").inner_text().replace("★", "").strip().upper()
+    row.locator(".mf-row-name").click()
+    check(sheet_name() == row_name, f"tapping a list name opens its card ({row_name})")
+    page.keyboard.press("Escape")
+    page.wait_for_timeout(200)
+    check(page.locator(".mf-sheet").count() == 0, "Escape closes the card")
+
+    # tapping an oyster on the map opens its card
+    page.evaluate("document.querySelector('.mf-map').scrollIntoView()")
+    page.wait_for_timeout(400)
+    visible = page.evaluate("""() => {
+      const box = document.querySelector('.mf-map').getBoundingClientRect()
+      const pins = [...document.querySelectorAll('.mf-pin:not(.mf-cluster)')]
+      return pins.findIndex(p => { const r = p.getBoundingClientRect(); const x = r.x + r.width / 2, y = r.y + r.height / 2
+        return x > box.left + 20 && x < box.right - 20 && y > box.top + 20 && y < box.bottom - 50 && y > 0 && y < innerHeight - 20 })
+    }""")
+    check(visible >= 0, "an oyster is visible on the map")
+    pin = page.locator(".mf-pin:not(.mf-cluster)").nth(max(visible, 0))
+    title = pin.get_attribute("title").upper()
     pin.click(force=True)
-    page.wait_for_timeout(400)
-    sel = page.locator(".is-selected .mf-pick-name, .mf-row.is-selected .mf-row-name")
-    check(sel.count() == 1 and title.upper() in sel.first.inner_text().upper(), f"marker click selects '{title}' in list")
-    # list -> map sync
-    page.locator(".mf-pick-main").nth(2).click()
-    page.wait_for_timeout(400)
-    name3 = page.locator(".mf-pick-name").nth(2).inner_text()
-    check(page.locator(".mf-pin.is-selected").get_attribute("title").upper() == name3.upper(), "card click highlights its marker")
+    check(sheet_name() == title, f"tapping an oyster on the map opens its card ({title})")
+    page.locator(".mf-sheet-backdrop").click(position={"x": 20, "y": 20}, force=True)
+    page.wait_for_timeout(200)
+    check(page.locator(".mf-sheet").count() == 0, "tapping outside closes the card")
+
+    # experimental: shuck me
+    page.evaluate("window.scrollTo(0, 0)")
+    page.locator(".mf-oracle").click()
+    page.wait_for_timeout(450)
+    check(page.locator(".mf-oracle.is-shucking").count() == 1, "the oyster cracks open")
+    page.screenshot(path=f"{OUT}/m6-shuck.png")
+    drawn = sheet_name()
+    names = [n.upper() for n in page.locator(".mf-pick-name, .mf-row-name").all_inner_texts()]
+    check(any(drawn in n for n in names), f"shucking pulls a real spot ({drawn})")
+    open_line = page.locator(".mf-sheet .mf-open").inner_text()
+    check("Open til" in open_line or "Closes" in open_line, f"the pull is open now ({open_line})")
+    page.keyboard.press("Escape")
 
     # happy hour mode
     page.locator(".mf-mode-happy").click()
@@ -79,7 +124,7 @@ with sync_playwright() as p:
 
     # cheapest mode
     page.locator(".mf-mode-cheap").click()
-    prices = page.locator(".mf-pick .mf-price b").all_inner_texts()
+    prices = page.locator(".mf-pick .mf-price").all_inner_texts()
     check(all(x != "Market price" for x in prices), f"cheapest shows verified prices only {prices}")
     page.screenshot(path=f"{OUT}/m3-cheap.png")
 
@@ -95,16 +140,15 @@ with sync_playwright() as p:
     check(h > 400, f"map mode expands map ({int(h)}px)")
     page.screenshot(path=f"{OUT}/m4-map.png")
 
-    # detail sheet + save persists
+    # save from the card persists
     page.locator(".mf-mode-near").click()
-    page.locator(".mf-pick").first.get_by_role("button", name="Details").click()
-    check(page.locator(".mf-sheet h2").is_visible(), "detail sheet opens")
-    page.screenshot(path=f"{OUT}/m5-detail.png")
+    page.locator(".mf-pick-name").first.click()
+    page.wait_for_selector(".mf-sheet")
+    page.get_by_role("button", name="Save").click()
     page.keyboard.press("Escape")
-    page.locator(".mf-pick").first.get_by_role("button", name="Save").click()
     page.reload()
     page.wait_for_selector(".mf-pick")
-    check("★" in page.locator(".mf-pick .mf-actions").first.inner_text(), "saved spot survives reload")
+    check("★" in page.locator(".mf-pick-name").first.inner_text(), "saved spot survives reload")
     check(page.locator("h1#mf-title").count() == 1, "finder is the page's main heading")
     check(not errors, f"no console errors {errors[:3]}")
     ctx.close()

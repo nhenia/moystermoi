@@ -173,3 +173,20 @@ test("day ranges read naturally", async () => {
   assert.equal(formatDays([5, 6, 0]), "Fri–Sun")
   assert.equal(formatDays([1, 3]), "Mon, Wed")
 })
+
+test("shuck me: draws an open, walkable spot and favours live happy hours", async () => {
+  const { drawOyster } = await import("./logic.ts")
+  const all = enrich(venues, DEFAULT_ORIGIN, at(2, 16, 10)) // Tuesday 4:10pm
+  let hh = 0
+  for (let i = 0; i < 400; i++) {
+    const r = drawOyster(all, () => (i + 0.5) / 400)!
+    assert.ok(r.open.state === "open" || r.hh.state === "now", `${r.venue.id} isn't serving`)
+    assert.ok(r.walk != null && r.walk <= 25, `${r.venue.id} is too far`)
+    if (r.hh.state === "now") hh++
+  }
+  assert.ok(hh / 400 > 0.6, `happy hours should dominate the draw (${hh}/400)`)
+  // 4am Wednesday: nothing is serving, so nothing is drawn rather than sending you to a closed door
+  const late = enrich(venues, DEFAULT_ORIGIN, at(3, 4))
+  const pick = drawOyster(late)
+  assert.ok(pick == null || pick.open.state === "open")
+})

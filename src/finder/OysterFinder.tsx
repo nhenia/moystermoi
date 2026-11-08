@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import deals from "../deals.json"
-import OysterMap, { oysterEyeSvg, oysterSvg } from "./OysterMap"
+import OysterMap from "./OysterMap"
+import { closedBottom, closedTop, halfShell, hash01, openBottom, roughFilterSvg, tape, tornClip } from "./art"
 import {
   DAY_NAMES,
   type Mode,
@@ -8,6 +9,7 @@ import {
   type Venue,
   STALE_AFTER_DAYS,
   daysSince,
+  drawOyster,
   enrich,
   formatDays,
   formatHappyHour,
@@ -54,6 +56,8 @@ function readSaved(): Set<string> {
   }
 }
 
+const reducedMotion = () => typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+
 /** Re-render every minute so "open" and "happy hour now" flip without a reload. */
 function useMinuteClock() {
   const [now, setNow] = useState(() => new Date())
@@ -87,9 +91,10 @@ export default function OysterFinder() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [mode, setMode] = useState<Mode>("near")
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [detail, setDetail] = useState<Ranked | null>(null)
+  const [detailId, setDetailId] = useState<string | null>(null)
   const [saved, setSaved] = useState<Set<string>>(readSaved)
   const [toast, setToast] = useState("")
+  const [shucking, setShucking] = useState(false)
   const rowRefs = useRef(new Map<string, HTMLElement>())
   const mapRef = useRef<HTMLDivElement>(null)
 
@@ -136,7 +141,7 @@ export default function OysterFinder() {
   const pickIds = new Set(picks.map((r) => r.venue.id))
   const rest = ranked.filter((r) => !pickIds.has(r.venue.id))
   const mapItems = mode === "near" || mode === "map" ? nearOrder : ranked
-  const openCount = enriched.filter((r) => r.open.state === "open").length
+  const detail = detailId ? (enriched.find((r) => r.venue.id === detailId) ?? null) : null
 
   const age = daysSince(UPDATED, now)
   const stale = age > STALE_AFTER_DAYS
@@ -147,9 +152,32 @@ export default function OysterFinder() {
     if (next === "map") window.setTimeout(() => mapRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60)
   }
 
-  const select = (id: string, from: "map" | "list") => {
+  /** Tapping a restaurant anywhere (map oyster, card, list row) highlights it and opens its card. */
+  const open = (id: string) => {
     setSelectedId(id)
-    if (from === "map") rowRefs.current.get(id)?.scrollIntoView({ behavior: "smooth", block: "nearest" })
+    setDetailId(id)
+  }
+
+  const closeDetail = () => {
+    const id = detailId
+    setDetailId(null)
+    // Leave the list where the visitor can see the spot they just looked at.
+    if (id) window.setTimeout(() => rowRefs.current.get(id)?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50)
+  }
+
+  /** The experimental bit: shuck the oyster, it pulls a spot for you. */
+  const shuck = () => {
+    if (shucking) return
+    const pick = drawOyster(enriched)
+    if (!pick) return
+    setShucking(true)
+    window.setTimeout(
+      () => {
+        open(pick.venue.id)
+        setShucking(false)
+      },
+      reducedMotion() ? 0 : 950,
+    )
   }
 
   const toggleSaved = (id: string) =>
@@ -187,31 +215,39 @@ export default function OysterFinder() {
   }
 
   useEffect(() => {
-    if (!detail) return
-    const close = (e: KeyboardEvent) => e.key === "Escape" && setDetail(null)
+    if (!detailId) return
+    const close = (e: KeyboardEvent) => e.key === "Escape" && closeDetail()
     window.addEventListener("keydown", close)
     return () => window.removeEventListener("keydown", close)
-  }, [detail])
-
-  const checked = new Date(`${UPDATED}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [detailId])
 
   return (
     <section className="mf" id="finder" aria-labelledby="mf-title">
-      <div className="mf-grain" aria-hidden="true" />
+      <span className="mf-defs" dangerouslySetInnerHTML={{ __html: roughFilterSvg }} />
+      <div className="mf-scraps" aria-hidden="true">
+        <i className="mf-scrap mf-scrap-news" />
+        <i className="mf-scrap mf-scrap-kraft" />
+        <i className="mf-scrap mf-scrap-dots" />
+      </div>
 
       <header className="mf-head">
-        <p className="mf-kicker">MOYSTER · New Orleans</p>
-        <h1 id="mf-title" className="mf-title">
-          <span className="mf-title-a">OYSTERS</span>
-          <span className="mf-title-b" aria-hidden="true">
-            <span dangerouslySetInnerHTML={{ __html: oysterEyeSvg() }} />
-          </span>
-          <span className="mf-title-c">NEAR ME</span>
-        </h1>
-        <span className="mf-head-art" aria-hidden="true" dangerouslySetInnerHTML={{ __html: oysterEyeSvg() }} />
+        <RansomTitle />
+        <button
+          type="button"
+          className={`mf-oracle${shucking ? " is-shucking" : ""}`}
+          onClick={shuck}
+          aria-label="Shuck me: pick a spot for me"
+        >
+          <svg className="mf-art mf-oracle-art" viewBox="-2 0 64 46" aria-hidden="true">
+            <g className="a-open" dangerouslySetInnerHTML={{ __html: openBottom() }} />
+            <g className="a-closed" dangerouslySetInnerHTML={{ __html: closedBottom() }} />
+            <g className="a-top" dangerouslySetInnerHTML={{ __html: closedTop() }} />
+          </svg>
+          <span className="mf-oracle-label">shuck me</span>
+        </button>
 
         <div className="mf-origin" aria-live="polite">
-          <span className="mf-origin-label">From</span>
           <strong>{locating ? "Finding you…" : origin.label}</strong>
           {origin.source !== "device" && !locating && (
             <button type="button" onClick={askForLocation}>
@@ -233,20 +269,18 @@ export default function OysterFinder() {
       >
         {live.length ? (
           <>
-            <b>HAPPY HOUR NOW</b>
-            <span>
-              {live.length} {live.length === 1 ? "spot" : "spots"}
-            </span>
+            <b>Happy hour now</b>
+            <span>{live.length}</span>
           </>
         ) : nextUp ? (
           <>
-            <b>NEXT HAPPY HOUR</b>
+            <b>Next happy hour</b>
             <span>
               {nextUp.venue.name} · {formatHappyHour(nextUp.hh).replace("Happy hour ", "")}
             </span>
           </>
         ) : (
-          <b>HAPPY HOUR</b>
+          <b>Happy hour</b>
         )}
         <i aria-hidden="true">→</i>
       </button>
@@ -261,7 +295,7 @@ export default function OysterFinder() {
             className={`mf-mode mf-mode-${m.value}`}
             onClick={() => choose(m.value)}
           >
-            <b>{m.label}</b>
+            {m.label}
           </button>
         ))}
       </div>
@@ -276,23 +310,14 @@ export default function OysterFinder() {
               selected={selectedId === r.venue.id}
               saved={saved.has(r.venue.id)}
               registerRef={(node) => (node ? rowRefs.current.set(r.venue.id, node) : rowRefs.current.delete(r.venue.id))}
-              onSelect={() => select(r.venue.id, "list")}
-              onMore={() => setDetail(r)}
-              onShare={() => share(r)}
-              onSave={() => toggleSaved(r.venue.id)}
+              onOpen={() => open(r.venue.id)}
             />
           ))}
         </ol>
       )}
 
       <div ref={mapRef} className="mf-map-anchor">
-        <OysterMap
-          items={mapItems}
-          origin={origin}
-          selectedId={selectedId}
-          onSelect={(id) => select(id, "map")}
-          expanded={mode === "map"}
-        />
+        <OysterMap items={mapItems} origin={origin} selectedId={selectedId} onSelect={open} expanded={mode === "map"} />
       </div>
 
       {rest.length > 0 && (
@@ -305,31 +330,27 @@ export default function OysterFinder() {
               selected={selectedId === r.venue.id}
               saved={saved.has(r.venue.id)}
               registerRef={(node) => (node ? rowRefs.current.set(r.venue.id, node) : rowRefs.current.delete(r.venue.id))}
-              onSelect={() => select(r.venue.id, "list")}
-              onMore={() => setDetail(r)}
+              onOpen={() => open(r.venue.id)}
             />
           ))}
         </ol>
       )}
 
-      <p className={`mf-fresh${stale ? " is-stale" : ""}`}>
-        {venues.length} spots · {openCount} open now · {stale ? `last checked ${age} days ago, may be out of date` : `checked ${checked}`}
-        {saved.size > 0 && ` · ${saved.size} saved`}
-      </p>
+      {stale && <p className="mf-fresh">Last checked {age} days ago. Call ahead.</p>}
 
-      {mode !== "map" && (
+      {mode !== "map" && !detail && (
         <button type="button" className="mf-fab" onClick={() => choose("map")} aria-label="Show map">
-          <span aria-hidden="true" dangerouslySetInnerHTML={{ __html: oysterSvg() }} />
+          <span aria-hidden="true" dangerouslySetInnerHTML={{ __html: halfShell() }} />
           Map
         </button>
       )}
 
       {detail && (
         <Detail
-          r={enriched.find((x) => x.venue.id === detail.venue.id) ?? detail}
+          key={detail.venue.id}
+          r={detail}
           saved={saved.has(detail.venue.id)}
-          stale={stale}
-          onClose={() => setDetail(null)}
+          onClose={closeDetail}
           onShare={() => share(detail)}
           onSave={() => toggleSaved(detail.venue.id)}
         />
@@ -343,6 +364,30 @@ export default function OysterFinder() {
 }
 
 // ---------- Pieces ----------
+
+/** Ransom-note title: every letter cut from a different scrap of paper. */
+function RansomTitle() {
+  const words = ["OYSTERS", "NEAR ME"]
+  let k = 0
+  return (
+    <h1 id="mf-title" className="mf-title" aria-label="Oysters near me">
+      {words.map((word) => (
+        <span className="mf-title-word" key={word} aria-hidden="true">
+          {[...word].map((ch, i) => {
+            if (ch === " ") return <span className="mf-gap" key={i} />
+            const n = k++
+            const tilt = ((hash01(`${word}${i}`) - 0.5) * 12).toFixed(1)
+            return (
+              <span key={i} className={`mf-cut mf-cut-${n % 6}`} style={{ "--t": `${tilt}deg`, "--d": `${n * 45}ms` } as React.CSSProperties}>
+                {ch}
+              </span>
+            )
+          })}
+        </span>
+      ))}
+    </h1>
+  )
+}
 
 function AddressSearch({ onPick }: { onPick: (p: Place) => void }) {
   const [q, setQ] = useState("")
@@ -384,13 +429,13 @@ function AddressSearch({ onPick }: { onPick: (p: Place) => void }) {
         if (results[0]) onPick(results[0])
       }}
     >
-      <label htmlFor="mf-address">Address, hotel or landmark</label>
       <input
         id="mf-address"
         ref={input}
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="e.g. Jackson Square, 700 Canal St…"
+        placeholder="Address, hotel or landmark"
+        aria-label="Address, hotel or landmark"
         autoComplete="street-address"
         enterKeyHint="search"
         aria-autocomplete="list"
@@ -407,8 +452,8 @@ function AddressSearch({ onPick }: { onPick: (p: Place) => void }) {
         ))}
       </ul>
       {state === "loading" && <p className="mf-search-state">Searching…</p>}
-      {state === "empty" && <p className="mf-search-state">No match. Try a street name or landmark.</p>}
-      {state === "error" && <p className="mf-search-state">Address search is down. Check your connection and try again.</p>}
+      {state === "empty" && <p className="mf-search-state">No match.</p>}
+      {state === "error" && <p className="mf-search-state">Address search is down. Try again.</p>}
     </form>
   )
 }
@@ -418,8 +463,7 @@ type CardProps = {
   selected: boolean
   saved: boolean
   registerRef: (node: HTMLElement | null) => void
-  onSelect: () => void
-  onMore: () => void
+  onOpen: () => void
 }
 
 function HHChip({ r }: { r: Ranked }) {
@@ -427,51 +471,41 @@ function HHChip({ r }: { r: Ranked }) {
   return text ? <span className={`mf-chip mf-chip-${r.hh.state}`}>{text}</span> : null
 }
 
-function OpenLine({ r }: { r: Ranked }) {
-  return <span className={`mf-open mf-open-${r.open.state}`}>{formatOpen(r.open)}</span>
-}
-
-function PickCard({ r, index, onShare, onSave, ...p }: CardProps & { index: number; onShare: () => void; onSave: () => void }) {
+function PickCard({ r, index, ...p }: CardProps & { index: number }) {
   const v = r.venue
-  const price = priceLine(r)
+  const price = formatPrice(v)
   const walk = formatWalk(r)
+  const tilt = [-1.6, 1.2, -0.7][index]
   return (
     <li
       ref={p.registerRef}
       className={`mf-pick mf-pick-${index + 1}${p.selected ? " is-selected" : ""}${r.hh.state === "now" ? " is-hh" : ""}`}
-      style={{ "--tilt": `${[-1.6, 1.1, -0.6][index]}deg`, "--drop": `${index * 90}ms` } as React.CSSProperties}
+      style={{ "--tilt": `${tilt}deg`, "--drop": `${index * 90}ms` } as React.CSSProperties}
     >
-      <button type="button" className="mf-pick-main" onClick={p.onSelect} aria-pressed={p.selected}>
-        <span className="mf-pick-n">{index + 1}</span>
-        <span className="mf-pick-area">{v.area}</span>
-        <span className="mf-pick-name">{v.name}</span>
-        <span className="mf-pick-meta">
-          <span className="mf-walk">{walk ?? v.area}</span>
-          {price && (
-            <span className="mf-price">
-              <b>{price.headline}</b>
-              {price.per && <small>{price.per}</small>}
-            </span>
-          )}
-        </span>
-        <OpenLine r={r} />
-        <HHChip r={r} />
-        {v.start && v.deal && <span className="mf-deal">{v.deal}</span>}
-      </button>
-      <div className="mf-actions">
+      <div className="mf-paper" style={{ clipPath: tornClip(v.id) }}>
+        <button type="button" className="mf-pick-main" onClick={p.onOpen} aria-haspopup="dialog">
+          <span className="mf-pick-n">{index + 1}</span>
+          <span className="mf-pick-name">
+            {v.name}
+            {p.saved && <i aria-label="saved"> ★</i>}
+          </span>
+          <span className="mf-pick-meta">
+            <span>{[walk, formatOpen(r.open)].filter(Boolean).join(" · ")}</span>
+            {price && <b className="mf-price">{price}</b>}
+          </span>
+          <HHChip r={r} />
+        </button>
         <a className="mf-go" href={walkingDirections(v)} target="_blank" rel="noreferrer">
           Walk there ↗
         </a>
-        <button type="button" onClick={onShare} aria-label={`Share ${v.name}`}>
-          Share
-        </button>
-        <button type="button" onClick={onSave} aria-pressed={p.saved} aria-label={p.saved ? `Unsave ${v.name}` : `Save ${v.name}`}>
-          {p.saved ? "★" : "☆"}
-        </button>
-        <button type="button" onClick={p.onMore} aria-label={`Details for ${v.name}`}>
-          ⋯
-        </button>
       </div>
+      <span className="mf-pick-tape" aria-hidden="true" dangerouslySetInnerHTML={{ __html: tape() }} />
+      <span
+        className="mf-pick-art"
+        aria-hidden="true"
+        style={{ "--r": `${((hash01(v.id) - 0.5) * 40).toFixed(0)}deg` } as React.CSSProperties}
+        dangerouslySetInnerHTML={{ __html: halfShell(r.hh.state === "now" ? "is-live" : "") }}
+      />
     </li>
   )
 }
@@ -482,23 +516,18 @@ function Row({ r, n, ...p }: CardProps & { n: number }) {
   const walk = formatWalk(r)
   return (
     <li ref={p.registerRef} className={`mf-row${p.selected ? " is-selected" : ""}${isClosed(r) ? " is-closed" : ""}${r.hh.state === "now" ? " is-hh" : ""}`}>
-      <button type="button" className="mf-row-main" onClick={p.onSelect} aria-pressed={p.selected}>
+      <button type="button" className="mf-row-main" onClick={p.onOpen} aria-haspopup="dialog">
         <span className="mf-row-n">{String(n).padStart(2, "0")}</span>
         <span className="mf-row-name">
           {v.name}
           {p.saved && <i aria-label="saved"> ★</i>}
         </span>
-        <span className="mf-row-meta">
-          {[walk ?? v.area, formatOpen(r.open), price].filter(Boolean).join(" · ")}
-        </span>
+        <span className="mf-row-meta">{[walk, formatOpen(r.open), price].filter(Boolean).join(" · ")}</span>
         <HHChip r={r} />
       </button>
       <a className="mf-row-go" href={walkingDirections(v)} target="_blank" rel="noreferrer" aria-label={`Walking directions to ${v.name}`}>
         ↗
       </a>
-      <button type="button" className="mf-row-more" onClick={p.onMore} aria-label={`Details for ${v.name}`}>
-        ⋯
-      </button>
     </li>
   )
 }
@@ -521,100 +550,69 @@ function weekHours(hours: Venue["hours"]) {
   }))
 }
 
-function Detail({
-  r,
-  saved,
-  stale,
-  onClose,
-  onShare,
-  onSave,
-}: {
-  r: Ranked
-  saved: boolean
-  stale: boolean
-  onClose: () => void
-  onShare: () => void
-  onSave: () => void
-}) {
+/** The restaurant card. Pops up like a shell lid lifting off. */
+function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: boolean; onClose: () => void; onShare: () => void; onSave: () => void }) {
   const v = r.venue
   const price = priceLine(r)
   const hours = weekHours(v.hours)
   const closeRef = useRef<HTMLButtonElement>(null)
   useEffect(() => closeRef.current?.focus(), [])
   return (
-    <div className="mf-sheet" role="dialog" aria-modal="true" aria-label={v.name}>
+    <div className="mf-sheet" role="dialog" aria-modal="true" aria-labelledby="mf-sheet-title">
       <button type="button" className="mf-sheet-backdrop" onClick={onClose} aria-label="Close" tabIndex={-1} />
       <article>
-        <button ref={closeRef} type="button" className="mf-sheet-close" onClick={onClose}>
-          Close ×
-        </button>
-        <p className="mf-kicker">{v.area}</p>
-        <h2>{v.name}</h2>
-        <p className="mf-sheet-addr">{v.address}</p>
-        <dl>
-          <div>
-            <dt>Now</dt>
-            <dd>
-              <OpenLine r={r} />
-              {formatWalk(r) && <> · {formatWalk(r)}</>}
-            </dd>
-          </div>
+        <svg className="mf-art mf-sheet-lid" viewBox="0 0 60 44" aria-hidden="true" dangerouslySetInnerHTML={{ __html: closedTop() }} />
+        <div className="mf-sheet-paper" style={{ clipPath: tornClip(`${v.id}-sheet`, 9) }}>
+          <button ref={closeRef} type="button" className="mf-sheet-close" onClick={onClose} aria-label="Close">
+            ×
+          </button>
+          <h2 id="mf-sheet-title">{v.name}</h2>
+          <p className="mf-sheet-addr">{v.address.replace(/, New Orleans, LA$/, "")}</p>
+          <p className="mf-sheet-now">
+            <span className={`mf-open mf-open-${r.open.state}`}>{formatOpen(r.open)}</span>
+            {formatWalk(r) && <> · {formatWalk(r)}</>}
+          </p>
           {v.start && v.end && (
-            <div className={r.hh.state === "now" ? "is-hh" : ""}>
-              <dt>Happy hour</dt>
-              <dd>
-                <b>
-                  {formatDays(v.days)} {formatRange(v.start, v.end)}
-                </b>
-                {v.deal && <> · {v.deal}</>}
-                <br />
-                <HHChip r={r} />
-              </dd>
+            <div className={`mf-sheet-hh${r.hh.state === "now" ? " is-now" : ""}`}>
+              <b>
+                Happy hour {formatDays(v.days)} {formatRange(v.start, v.end)}
+              </b>
+              {v.deal && <span>{v.deal}</span>}
+              <HHChip r={r} />
             </div>
           )}
           {price && (
-            <div>
-              <dt>Price</dt>
-              <dd>
-                {price.headline}
-                {price.per && <small> {price.per}</small>}
-              </dd>
-            </div>
+            <p className="mf-sheet-price">
+              {price.headline}
+              {price.per && <small> {price.per}</small>}
+            </p>
           )}
           {hours.length > 0 && (
-            <div>
-              <dt>Oysters</dt>
-              <dd className="mf-hours">
-                {hours.map((h) => (
-                  <span key={h.days}>
-                    <b>{h.days}</b> {h.text}
-                  </span>
-                ))}
-              </dd>
-            </div>
+            <p className="mf-hours">
+              {hours.map((h) => (
+                <span key={h.days}>
+                  <b>{h.days}</b> {h.text}
+                </span>
+              ))}
+            </p>
           )}
-          {v.note && (
-            <div>
-              <dt>Note</dt>
-              <dd>{v.note}</dd>
-            </div>
-          )}
-        </dl>
-        {stale && <p className="mf-alert">Over {STALE_AFTER_DAYS} days since this was checked. Call ahead.</p>}
-        <div className="mf-actions">
-          <a className="mf-go" href={walkingDirections(v)} target="_blank" rel="noreferrer">
-            Walk there ↗
-          </a>
-          <a href={v.source} target="_blank" rel="noreferrer">
-            Source ↗
-          </a>
-          <button type="button" onClick={onShare}>
-            Share
-          </button>
-          <button type="button" onClick={onSave} aria-pressed={saved}>
-            {saved ? "★ Saved" : "☆ Save"}
-          </button>
+          {v.note && <p className="mf-sheet-note">{v.note}</p>}
+          <div className="mf-sheet-actions">
+            <a className="mf-go" href={walkingDirections(v)} target="_blank" rel="noreferrer">
+              Walk there ↗
+            </a>
+            <button type="button" onClick={onShare}>
+              Share
+            </button>
+            <button type="button" onClick={onSave} aria-pressed={saved} aria-label={saved ? "Unsave" : "Save"}>
+              {saved ? "★" : "☆"}
+            </button>
+            <a href={v.source} target="_blank" rel="noreferrer">
+              Source
+            </a>
+          </div>
         </div>
+        <span className="mf-sheet-tape" aria-hidden="true" dangerouslySetInnerHTML={{ __html: tape() }} />
       </article>
     </div>
   )

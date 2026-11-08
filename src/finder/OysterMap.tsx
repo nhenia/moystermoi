@@ -4,36 +4,7 @@ import "leaflet/dist/leaflet.css"
 import type { Ranked } from "./logic"
 import { hasCoords } from "./logic"
 import type { Origin } from "./location"
-
-// The oyster-eye: a ruffled half shell holding a human eye. Used for the logo and title.
-export const oysterEyeSvg = (n?: number | string) => `
-<svg class="mf-eye" viewBox="0 0 48 44" aria-hidden="true">
-  <path class="shell" d="M24 2c7 0 15 3 19 9 4 7 4 14 0 21-4 7-11 10-19 10S9 39 5 32C1 25 1 18 5 11 9 5 17 2 24 2z"/>
-  <path class="ruffle" d="M8 13c4-3 7 1 10-2s7 0 10-2 7 1 10 0M6 30c4 3 8-1 11 2s8 0 11 2 7-1 12-3"/>
-  <path class="lid" d="M9 22c5-8 25-8 30 0-5 8-25 8-30 0z"/>
-  <circle class="iris" cx="24" cy="22" r="6.4"/>
-  <circle class="pupil" cx="24" cy="22" r="2.8"/>
-  <circle class="glint" cx="26.2" cy="19.8" r="1.2"/>
-</svg>${n != null ? `<b>${n}</b>` : ""}`
-
-// An engraved half-shell oyster: ruffled rim, growth rings, hatching, pearly cup and a plump oyster
-// with a dark frilled mantle. Used for every map marker; CSS recolours it by state.
-const OYSTER_BODY = `
-  <path class="o-shell" d="M4 26C8 20 12 15 18 12q3-3 6-2q3-3 7-1q4-3 7 0q4-2 7 1q4 0 6 4q4 2 3 6q3 3 0 7q1 4-4 5q-1 4-6 3q-3 3-7 1q-3 3-7 0q-4 2-7-1q-4 1-6-3C12 31 7 29 4 26z"/>
-  <path class="o-ring" d="M10 20C16 13 26 10 36 11c8 0 14 3 16 8M12 31c8 5 20 6 30 4 5-1 8-4 10-7"/>
-  <path class="o-hatch" d="M14 33l2-3M18 35l2-3M22 36l2-3M26 37l2-3M30 37l2-3M8 29l2-2.5M6 24l3-1"/>
-  <path class="o-cup" d="M10 26c4-8 14-12 24-12s16 5 16 11-6 8-16 8c-10 0-20-2-24-7z"/>
-  <path class="o-meat" d="M16 25c3-6 12-8 19-8 8 0 12 4 12 8s-5 6-12 6c-8 0-16-2-19-6z"/>
-  <path class="o-gill" d="M21 26c6-3 13-4 22-2M24 28c5-1 11-1 17 0"/>
-  <path class="o-frill" d="M17 25q2-3 4-3q2-3 5-3q3-2 6-1q3-1 6 0q3 0 5 2q3 1 3 4q1 3-2 4q-2 2-5 2q-3 2-6 1q-3 1-6 0q-3 0-5-2q-3 0-5-4"/>
-  <ellipse class="o-belly" cx="38" cy="25" rx="3.2" ry="2.3"/>
-  <ellipse class="o-glint" cx="29" cy="20.5" rx="2.4" ry="1" transform="rotate(-12 29 20.5)"/>`
-
-export const oysterSvg = (n?: number | string) =>
-  `<svg class="mf-oyster" viewBox="0 0 60 44" aria-hidden="true">${OYSTER_BODY}</svg>${n != null ? `<b>${n}</b>` : ""}`
-
-const oysterPileSvg = (n: number) =>
-  `<svg class="mf-oyster mf-oyster-pile" viewBox="0 0 66 52" aria-hidden="true"><g transform="translate(6 8) rotate(12 30 24)">${OYSTER_BODY}</g><g transform="translate(0 0) rotate(-8 30 24)">${OYSTER_BODY}</g></svg><b>×${n}</b>`
+import { halfShell, hash01, shellPile } from "./art"
 
 const OSM_TILES = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 
@@ -171,7 +142,7 @@ export default function OysterMap({ items, origin, selectedId, onSelect, expande
         const marker = L.marker([c.lat, c.lng], {
           icon: L.divIcon({
             className: `mf-pin${selected ? " is-selected" : ""}${live ? " is-live" : ""}${closed ? " is-closed" : ""}`,
-            html: oysterSvg(order.get(id)),
+            html: `<span class="mf-pin-tilt" style="--r:${((hash01(id) - 0.5) * 30).toFixed(0)}deg">${halfShell()}</span><b>${order.get(id)}</b>`,
             iconSize: selected ? [66, 48] : [46, 34],
             iconAnchor: selected ? [33, 42] : [23, 30],
           }),
@@ -187,7 +158,7 @@ export default function OysterMap({ items, origin, selectedId, onSelect, expande
         const marker = L.marker([c.lat, c.lng], {
           icon: L.divIcon({
             className: `mf-pin mf-cluster${c.ids.some((id) => mapped.find((x) => x.venue.id === id)!.hh.state === "now") ? " is-live" : ""}`,
-            html: oysterPileSvg(c.ids.length),
+            html: `${shellPile()}<b>×${c.ids.length}</b>`,
             iconSize: [54, 42],
             iconAnchor: [27, 36],
           }),
@@ -213,14 +184,14 @@ export default function OysterMap({ items, origin, selectedId, onSelect, expande
       <div ref={el} className="mf-map-canvas" role="region" aria-label="Map of oyster spots" />
       <div className="mf-map-riso" aria-hidden="true" />
       <p className="mf-map-legend" aria-hidden="true">
-        <span className="is-live" dangerouslySetInnerHTML={{ __html: oysterSvg() }} />
+        <span className="is-live" dangerouslySetInnerHTML={{ __html: halfShell() }} />
         Happy hour
-        <span dangerouslySetInnerHTML={{ __html: oysterSvg() }} />
+        <span dangerouslySetInnerHTML={{ __html: halfShell() }} />
         Open
-        <span className="is-closed" dangerouslySetInnerHTML={{ __html: oysterSvg() }} />
+        <span className="is-closed" dangerouslySetInnerHTML={{ __html: halfShell() }} />
         Closed
       </p>
-      {tilesFailed && <p className="mf-map-note">Street map didn't load. Oysters are still in the right places.</p>}
+      {tilesFailed && <p className="mf-map-note">Street map didn't load.</p>}
       {unmappedCount > 0 && <p className="mf-map-count">{unmappedCount} not on map yet</p>}
     </div>
   )
