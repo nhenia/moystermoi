@@ -12,9 +12,9 @@ html {
 
 body {
   margin: 0;
-  background: #11100e;
-  color: #f1e9d9;
-  font-family: 'Courier Prime', ui-monospace, monospace;
+  background: #f5eedc;
+  color: #1e1a16;
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
 }
 
 h1,
@@ -31,6 +31,6 @@ button {
 }
 
 ::selection {
-  background: #f20a73;
+  background: #4a2377;
   color: #fff;
 }

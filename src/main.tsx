@@ -1,6 +1,10 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import App from "./App"
+import "@fontsource/rye/400.css"
+import "@fontsource/alfa-slab-one/400.css"
+import "@fontsource/atkinson-hyperlegible/400.css"
+import "@fontsource/atkinson-hyperlegible/700.css"
 import "./index.css"
 
 createRoot(document.getElementById("root")!).render(

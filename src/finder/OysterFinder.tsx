@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import deals from "../deals.json"
 import OysterMap from "./OysterMap"
-import { closedBottom, closedTop, halfShell, hash01, openBottom, roughFilterSvg, tape, tornClip } from "./art"
+import { closedBottom, closedTop, eyeOyster, halfShell, hash01, roughFilterSvg } from "./art"
+import { choosePalette } from "./palettes"
 import {
   DAY_NAMES,
   type Mode,
@@ -13,9 +14,8 @@ import {
   enrich,
   formatDays,
   formatHappyHour,
-  formatMoney,
+  formatMenuPrice,
   formatOpen,
-  formatPrice,
   formatRange,
   formatWalk,
   nolaClock,
@@ -40,7 +40,7 @@ const venues = deals.venues as Venue[]
 const UPDATED = deals.updated
 
 const MODES: { value: Mode; label: string }[] = [
-  { value: "near", label: "Near me" },
+  { value: "near", label: "Closest" },
   { value: "happy", label: "Happy hour" },
   { value: "cheap", label: "Cheapest" },
   { value: "map", label: "Map" },
@@ -73,15 +73,13 @@ function useMinuteClock() {
   return now
 }
 
-/** "$10 / 6" plus "≈ $1.67 each" when it isn't already per oyster. */
-function priceLine(r: Ranked) {
-  const headline = formatPrice(r.venue)
-  if (!headline) return null
-  const per = r.perOyster != null && r.venue.unit !== "each" ? `≈ ${formatMoney(r.perOyster)} each` : ""
-  return { headline, per }
-}
-
 const isClosed = (r: Ranked) => r.open.state === "opens" && r.hh.state !== "now"
+
+/** A small engraving for each restaurant: an open half shell or a closed oyster, chosen per venue. */
+const thumb = (id: string, live: boolean) =>
+  hash01(id) > 0.5
+    ? halfShell(live ? "is-live" : "")
+    : `<svg class="mf-art mf-closed${live ? " is-live" : ""}" viewBox="0 2 60 42" aria-hidden="true">${closedBottom()}${closedTop()}</svg>`
 
 export default function OysterFinder() {
   const now = useMinuteClock()
@@ -95,6 +93,7 @@ export default function OysterFinder() {
   const [saved, setSaved] = useState<Set<string>>(readSaved)
   const [toast, setToast] = useState("")
   const [shucking, setShucking] = useState(false)
+  const [palette] = useState(choosePalette)
   const rowRefs = useRef(new Map<string, HTMLElement>())
   const mapRef = useRef<HTMLDivElement>(null)
 
@@ -140,6 +139,8 @@ export default function OysterFinder() {
   const picks = mode === "map" ? [] : pickThree(ranked)
   const pickIds = new Set(picks.map((r) => r.venue.id))
   const rest = ranked.filter((r) => !pickIds.has(r.venue.id))
+  const restOpen = rest.filter((r) => !isClosed(r))
+  const restClosed = rest.filter(isClosed)
   const mapItems = mode === "near" || mode === "map" ? nearOrder : ranked
   const detail = detailId ? (enriched.find((r) => r.venue.id === detailId) ?? null) : null
 
@@ -222,70 +223,81 @@ export default function OysterFinder() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [detailId])
 
+  const row = (r: Ranked, n: number) => (
+    <Row
+      key={r.venue.id}
+      r={r}
+      n={n}
+      selected={selectedId === r.venue.id}
+      saved={saved.has(r.venue.id)}
+      registerRef={(node) => (node ? rowRefs.current.set(r.venue.id, node) : rowRefs.current.delete(r.venue.id))}
+      onOpen={() => open(r.venue.id)}
+    />
+  )
+
   return (
-    <section className="mf" id="finder" aria-labelledby="mf-title">
+    <section className="mf" id="finder" data-palette={palette} aria-labelledby="mf-title">
       <span className="mf-defs" dangerouslySetInnerHTML={{ __html: roughFilterSvg }} />
-      <div className="mf-scraps" aria-hidden="true">
-        <i className="mf-scrap mf-scrap-news" />
-        <i className="mf-scrap mf-scrap-kraft" />
-        <i className="mf-scrap mf-scrap-dots" />
-      </div>
 
       <header className="mf-head">
-        <RansomTitle />
+        <p className="mf-brand">
+          <span>MOYSTER.</span>
+          <small>New Orleans</small>
+        </p>
+
         <button
           type="button"
           className={`mf-oracle${shucking ? " is-shucking" : ""}`}
           onClick={shuck}
-          aria-label="Shuck me: pick a spot for me"
+          aria-label="Can't decide? Tap the oyster and it picks a place for you"
         >
-          <svg className="mf-art mf-oracle-art" viewBox="-2 0 64 46" aria-hidden="true">
-            <g className="a-open" dangerouslySetInnerHTML={{ __html: openBottom() }} />
-            <g className="a-closed" dangerouslySetInnerHTML={{ __html: closedBottom() }} />
-            <g className="a-top" dangerouslySetInnerHTML={{ __html: closedTop() }} />
-          </svg>
-          <span className="mf-oracle-label">shuck me</span>
+          <span className="mf-oracle-art" aria-hidden="true" dangerouslySetInnerHTML={{ __html: eyeOyster() }} />
+          <span className="mf-oracle-label" aria-hidden="true">
+            Can't decide? <b>Tap the oyster</b>
+          </span>
         </button>
 
+        <h1 id="mf-title" className="mf-title">
+          <span className="mf-brush">
+            Oysters
+            <br />
+            near me
+          </span>
+        </h1>
+
         <div className="mf-origin" aria-live="polite">
+          <span className="mf-pin-icon" aria-hidden="true">
+            ●
+          </span>
           <strong>{locating ? "Finding you…" : origin.label}</strong>
           {origin.source !== "device" && !locating && (
-            <button type="button" onClick={askForLocation}>
+            <button type="button" className="mf-link" onClick={askForLocation}>
               Use my location
             </button>
           )}
-          <button type="button" onClick={() => setSearchOpen((o) => !o)} aria-expanded={searchOpen}>
-            {searchOpen ? "Close" : "Address"}
+          <button type="button" className="mf-link" onClick={() => setSearchOpen((o) => !o)} aria-expanded={searchOpen}>
+            {searchOpen ? "Close" : "Change"}
           </button>
         </div>
         {locateError && <p className="mf-alert">{locateMessage[locateError]}</p>}
         {searchOpen && <AddressSearch onPick={chooseOrigin} />}
       </header>
 
-      <button
-        type="button"
-        className={`mf-hh${live.length ? " is-live" : ""}${mode === "happy" ? " is-active" : ""}`}
-        onClick={() => choose("happy")}
-      >
-        {live.length ? (
-          <>
-            <b>Happy hour now</b>
-            <span>{live.length}</span>
-          </>
-        ) : nextUp ? (
-          <>
-            <b>Next happy hour</b>
-            <span>
-              {nextUp.venue.name} · {formatHappyHour(nextUp.hh).replace("Happy hour ", "")}
-            </span>
-          </>
-        ) : (
-          <b>Happy hour</b>
-        )}
-        <i aria-hidden="true">→</i>
+      <button type="button" className={`mf-hh${live.length ? " is-live" : ""}`} onClick={() => choose("happy")}>
+        <span className="mf-hh-title">
+          <span className="mf-brush mf-brush-hl">{live.length ? "Happy hour now" : "Happy hour"}</span>
+        </span>
+        <span className="mf-hh-text">
+          {live.length
+            ? `${live.length} ${live.length === 1 ? "place" : "places"} with oyster deals right now`
+            : nextUp
+              ? `Next: ${nextUp.venue.name} · ${formatHappyHour(nextUp.hh).replace("Happy hour ", "")}`
+              : "No more today"}
+        </span>
+        <span className="mf-hh-go">See all ›</span>
       </button>
 
-      <div className="mf-modes" role="tablist" aria-label="Sort oyster spots">
+      <div className="mf-modes" role="tablist" aria-label="Sort oyster places">
         {MODES.map((m) => (
           <button
             key={m.value}
@@ -301,7 +313,7 @@ export default function OysterFinder() {
       </div>
 
       {picks.length > 0 && (
-        <ol className="mf-picks" aria-label="Top three picks">
+        <ol className="mf-picks" aria-label="Top three">
           {picks.map((r, i) => (
             <PickCard
               key={`${mode}-${r.venue.id}`}
@@ -320,26 +332,32 @@ export default function OysterFinder() {
         <OysterMap items={mapItems} origin={origin} selectedId={selectedId} onSelect={open} expanded={mode === "map"} />
       </div>
 
-      {rest.length > 0 && (
-        <ol className="mf-list" start={picks.length + 1} aria-label={picks.length ? "More spots" : "All spots"}>
-          {rest.map((r, i) => (
-            <Row
-              key={r.venue.id}
-              r={r}
-              n={picks.length + i + 1}
-              selected={selectedId === r.venue.id}
-              saved={saved.has(r.venue.id)}
-              registerRef={(node) => (node ? rowRefs.current.set(r.venue.id, node) : rowRefs.current.delete(r.venue.id))}
-              onOpen={() => open(r.venue.id)}
-            />
-          ))}
-        </ol>
+      {restOpen.length > 0 && (
+        <section className="mf-section" aria-labelledby="mf-more">
+          <h2 id="mf-more" className="mf-h2">
+            {picks.length ? "More oyster places" : "All oyster places"}
+          </h2>
+          <ol className="mf-list" start={picks.length + 1}>
+            {restOpen.map((r, i) => row(r, picks.length + i + 1))}
+          </ol>
+        </section>
+      )}
+
+      {restClosed.length > 0 && (
+        <section className="mf-section" aria-labelledby="mf-closed">
+          <h2 id="mf-closed" className="mf-h2">
+            Closed now
+          </h2>
+          <ol className="mf-list" start={picks.length + restOpen.length + 1}>
+            {restClosed.map((r, i) => row(r, picks.length + restOpen.length + i + 1))}
+          </ol>
+        </section>
       )}
 
       {stale && <p className="mf-fresh">Last checked {age} days ago. Call ahead.</p>}
 
       {mode !== "map" && !detail && (
-        <button type="button" className="mf-fab" onClick={() => choose("map")} aria-label="Show map">
+        <button type="button" className="mf-fab" onClick={() => choose("map")}>
           <span aria-hidden="true" dangerouslySetInnerHTML={{ __html: halfShell() }} />
           Map
         </button>
@@ -364,30 +382,6 @@ export default function OysterFinder() {
 }
 
 // ---------- Pieces ----------
-
-/** Ransom-note title: every letter cut from a different scrap of paper. */
-function RansomTitle() {
-  const words = ["OYSTERS", "NEAR ME"]
-  let k = 0
-  return (
-    <h1 id="mf-title" className="mf-title" aria-label="Oysters near me">
-      {words.map((word) => (
-        <span className="mf-title-word" key={word} aria-hidden="true">
-          {[...word].map((ch, i) => {
-            if (ch === " ") return <span className="mf-gap" key={i} />
-            const n = k++
-            const tilt = ((hash01(`${word}${i}`) - 0.5) * 12).toFixed(1)
-            return (
-              <span key={i} className={`mf-cut mf-cut-${n % 6}`} style={{ "--t": `${tilt}deg`, "--d": `${n * 45}ms` } as React.CSSProperties}>
-                {ch}
-              </span>
-            )
-          })}
-        </span>
-      ))}
-    </h1>
-  )
-}
 
 function AddressSearch({ onPick }: { onPick: (p: Place) => void }) {
   const [q, setQ] = useState("")
@@ -471,63 +465,86 @@ function HHChip({ r }: { r: Ranked }) {
   return text ? <span className={`mf-chip mf-chip-${r.hh.state}`}>{text}</span> : null
 }
 
+function PriceTag({ r }: { r: Ranked }) {
+  const p = r.price
+  return (
+    <span className={`mf-price mf-price-${p.kind}`}>
+      {p.text}
+      {p.kind === "happy" && <small> happy hour</small>}
+    </span>
+  )
+}
+
+function Status({ r }: { r: Ranked }) {
+  return <span className={`mf-open mf-open-${r.open.state}`}>{formatOpen(r.open)}</span>
+}
+
+function Walk({ r }: { r: Ranked }) {
+  const w = formatWalk(r)
+  return w ? (
+    <span className="mf-walk">
+      <span aria-hidden="true">🚶 </span>
+      {w}
+    </span>
+  ) : null
+}
+
 function PickCard({ r, index, ...p }: CardProps & { index: number }) {
   const v = r.venue
-  const price = formatPrice(v)
-  const walk = formatWalk(r)
-  const tilt = [-1.6, 1.2, -0.7][index]
   return (
     <li
       ref={p.registerRef}
-      className={`mf-pick mf-pick-${index + 1}${p.selected ? " is-selected" : ""}${r.hh.state === "now" ? " is-hh" : ""}`}
-      style={{ "--tilt": `${tilt}deg`, "--drop": `${index * 90}ms` } as React.CSSProperties}
+      className={`mf-card mf-pick mf-pick-${index + 1}${p.selected ? " is-selected" : ""}${r.hh.state === "now" ? " is-hh" : ""}`}
+      style={{ "--drop": `${index * 80}ms` } as React.CSSProperties}
     >
-      <div className="mf-paper" style={{ clipPath: tornClip(v.id) }}>
-        <button type="button" className="mf-pick-main" onClick={p.onOpen} aria-haspopup="dialog">
-          <span className="mf-pick-n">{index + 1}</span>
-          <span className="mf-pick-name">
+      <button type="button" className="mf-card-main" onClick={p.onOpen} aria-haspopup="dialog">
+        <span className="mf-thumb" aria-hidden="true" dangerouslySetInnerHTML={{ __html: thumb(v.id, r.hh.state === "now") }} />
+        <span className="mf-card-body">
+          <span className="mf-name">
             {v.name}
             {p.saved && <i aria-label="saved"> ★</i>}
           </span>
-          <span className="mf-pick-meta">
-            <span>{[walk, formatOpen(r.open)].filter(Boolean).join(" · ")}</span>
-            {price && <b className="mf-price">{price}</b>}
-          </span>
+          <PriceTag r={r} />
           <HHChip r={r} />
-        </button>
-        <a className="mf-go" href={walkingDirections(v)} target="_blank" rel="noreferrer">
-          Walk there ↗
+          <Status r={r} />
+          <Walk r={r} />
+        </span>
+      </button>
+      <div className="mf-card-actions">
+        <a className="mf-btn mf-btn-primary" href={walkingDirections(v)} target="_blank" rel="noreferrer">
+          Walk there →
         </a>
+        <button type="button" className="mf-btn mf-btn-quiet" onClick={p.onOpen} aria-haspopup="dialog" aria-label={`Details for ${v.name}`}>
+          Details
+        </button>
       </div>
-      <span className="mf-pick-tape" aria-hidden="true" dangerouslySetInnerHTML={{ __html: tape() }} />
-      <span
-        className="mf-pick-art"
-        aria-hidden="true"
-        style={{ "--r": `${((hash01(v.id) - 0.5) * 40).toFixed(0)}deg` } as React.CSSProperties}
-        dangerouslySetInnerHTML={{ __html: halfShell(r.hh.state === "now" ? "is-live" : "") }}
-      />
     </li>
   )
 }
 
 function Row({ r, n, ...p }: CardProps & { n: number }) {
   const v = r.venue
-  const price = formatPrice(v)
-  const walk = formatWalk(r)
   return (
-    <li ref={p.registerRef} className={`mf-row${p.selected ? " is-selected" : ""}${isClosed(r) ? " is-closed" : ""}${r.hh.state === "now" ? " is-hh" : ""}`}>
-      <button type="button" className="mf-row-main" onClick={p.onOpen} aria-haspopup="dialog">
-        <span className="mf-row-n">{String(n).padStart(2, "0")}</span>
-        <span className="mf-row-name">
-          {v.name}
-          {p.saved && <i aria-label="saved"> ★</i>}
+    <li ref={p.registerRef} className={`mf-card mf-row${p.selected ? " is-selected" : ""}${isClosed(r) ? " is-closed" : ""}${r.hh.state === "now" ? " is-hh" : ""}`}>
+      <button type="button" className="mf-card-main" onClick={p.onOpen} aria-haspopup="dialog">
+        <span className="mf-thumb" aria-hidden="true" dangerouslySetInnerHTML={{ __html: thumb(v.id, r.hh.state === "now") }} />
+        <span className="mf-card-body">
+          <span className="mf-name">
+            <span className="mf-n" aria-hidden="true">
+              {n}.{" "}
+            </span>
+            {v.name}
+            {p.saved && <i aria-label="saved"> ★</i>}
+          </span>
+          <PriceTag r={r} />
+          <HHChip r={r} />
+          <Status r={r} />
+          <Walk r={r} />
         </span>
-        <span className="mf-row-meta">{[walk, formatOpen(r.open), price].filter(Boolean).join(" · ")}</span>
-        <HHChip r={r} />
+        <span className="mf-chev" aria-hidden="true">
+          ›
+        </span>
       </button>
-      <a className="mf-row-go" href={walkingDirections(v)} target="_blank" rel="noreferrer" aria-label={`Walking directions to ${v.name}`}>
-        ↗
-      </a>
     </li>
   )
 }
@@ -536,7 +553,7 @@ function Row({ r, n, ...p }: CardProps & { n: number }) {
 function weekHours(hours: Venue["hours"]) {
   if (!hours) return []
   const order = [1, 2, 3, 4, 5, 6, 0]
-  const label = (h: string | null) => (h == null ? "not posted" : h === "closed" ? "closed" : formatRange(...(h.split("-") as [string, string])))
+  const label = (h: string | null) => (h == null ? "not listed" : h === "closed" ? "closed" : formatRange(...(h.split("-") as [string, string])))
   const rows: { days: number[]; text: string }[] = []
   for (const d of order) {
     const text = label(hours[d])
@@ -550,44 +567,67 @@ function weekHours(hours: Venue["hours"]) {
   }))
 }
 
-/** The restaurant card. Pops up like a shell lid lifting off. */
+/** The restaurant card. A shell lid lifts off it as it opens. */
 function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: boolean; onClose: () => void; onShare: () => void; onSave: () => void }) {
   const v = r.venue
-  const price = priceLine(r)
   const hours = weekHours(v.hours)
+  const menuPrice = formatMenuPrice(v.menu)
+  const grill = v.menu?.chargrilled
   const closeRef = useRef<HTMLButtonElement>(null)
   useEffect(() => closeRef.current?.focus(), [])
   return (
     <div className="mf-sheet" role="dialog" aria-modal="true" aria-labelledby="mf-sheet-title">
       <button type="button" className="mf-sheet-backdrop" onClick={onClose} aria-label="Close" tabIndex={-1} />
-      <article>
+      <article className="mf-sheet-card">
         <svg className="mf-art mf-sheet-lid" viewBox="0 0 60 44" aria-hidden="true" dangerouslySetInnerHTML={{ __html: closedTop() }} />
-        <div className="mf-sheet-paper" style={{ clipPath: tornClip(`${v.id}-sheet`, 9) }}>
-          <button ref={closeRef} type="button" className="mf-sheet-close" onClick={onClose} aria-label="Close">
-            ×
-          </button>
-          <h2 id="mf-sheet-title">{v.name}</h2>
-          <p className="mf-sheet-addr">{v.address.replace(/, New Orleans, LA$/, "")}</p>
-          <p className="mf-sheet-now">
-            <span className={`mf-open mf-open-${r.open.state}`}>{formatOpen(r.open)}</span>
-            {formatWalk(r) && <> · {formatWalk(r)}</>}
-          </p>
-          {v.start && v.end && (
-            <div className={`mf-sheet-hh${r.hh.state === "now" ? " is-now" : ""}`}>
+        <button ref={closeRef} type="button" className="mf-sheet-close" onClick={onClose}>
+          Close ✕
+        </button>
+        <h2 id="mf-sheet-title">{v.name}</h2>
+        <p className="mf-sheet-addr">{v.address.replace(/, New Orleans, LA$/, "")}</p>
+        <p className="mf-sheet-now">
+          <Status r={r} />
+          <Walk r={r} />
+        </p>
+
+        {v.start && v.end && (
+          <div className={`mf-sheet-box mf-sheet-hh${r.hh.state === "now" ? " is-now" : ""}`}>
+            <h3>Happy hour</h3>
+            <p>
               <b>
-                Happy hour {formatDays(v.days)} {formatRange(v.start, v.end)}
+                {formatDays(v.days)}, {formatRange(v.start, v.end)}
               </b>
-              {v.deal && <span>{v.deal}</span>}
-              <HHChip r={r} />
-            </div>
-          )}
-          {price && (
-            <p className="mf-sheet-price">
-              {price.headline}
-              {price.per && <small> {price.per}</small>}
             </p>
+            {v.deal && <p>{v.deal}</p>}
+            <HHChip r={r} />
+          </div>
+        )}
+
+        <div className="mf-sheet-box">
+          <h3>Oyster prices</h3>
+          {v.price != null && v.start && <p>Happy hour: {v.deal}</p>}
+          {v.menu?.raw?.half != null || v.menu?.raw?.dozen != null ? (
+            <p>
+              Raw: {[v.menu.raw.half != null && `$${v.menu.raw.half} for 6`, v.menu.raw.dozen != null && `$${v.menu.raw.dozen} a dozen`].filter(Boolean).join(" · ")}
+            </p>
+          ) : (
+            menuPrice && <p>Raw: {menuPrice}</p>
           )}
-          {hours.length > 0 && (
+          {grill && (grill.half != null || grill.dozen != null) && (
+            <p>Chargrilled: {[grill.half != null && `$${grill.half} for 6`, grill.dozen != null && `$${grill.dozen} a dozen`].filter(Boolean).join(" · ")}</p>
+          )}
+          {v.menu?.market && <p>Market price (changes daily)</p>}
+          {!menuPrice && !v.menu?.market && !(v.price != null && v.start) && <p>Prices not posted online.</p>}
+          {v.menu?.url && (
+            <a className="mf-link" href={v.menu.url} target="_blank" rel="noreferrer">
+              See menu ↗
+            </a>
+          )}
+        </div>
+
+        {hours.length > 0 && (
+          <div className="mf-sheet-box">
+            <h3>Oyster hours</h3>
             <p className="mf-hours">
               {hours.map((h) => (
                 <span key={h.days}>
@@ -595,24 +635,21 @@ function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: bool
                 </span>
               ))}
             </p>
-          )}
-          {v.note && <p className="mf-sheet-note">{v.note}</p>}
-          <div className="mf-sheet-actions">
-            <a className="mf-go" href={walkingDirections(v)} target="_blank" rel="noreferrer">
-              Walk there ↗
-            </a>
-            <button type="button" onClick={onShare}>
-              Share
-            </button>
-            <button type="button" onClick={onSave} aria-pressed={saved} aria-label={saved ? "Unsave" : "Save"}>
-              {saved ? "★" : "☆"}
-            </button>
-            <a href={v.source} target="_blank" rel="noreferrer">
-              Source
-            </a>
           </div>
+        )}
+        {v.note && <p className="mf-sheet-note">{v.note}</p>}
+
+        <a className="mf-btn mf-btn-primary mf-btn-wide" href={walkingDirections(v)} target="_blank" rel="noreferrer">
+          Walk there →
+        </a>
+        <div className="mf-sheet-actions">
+          <button type="button" className="mf-btn mf-btn-quiet" onClick={onShare}>
+            Share
+          </button>
+          <button type="button" className="mf-btn mf-btn-quiet" onClick={onSave} aria-pressed={saved}>
+            {saved ? "★ Saved" : "☆ Save"}
+          </button>
         </div>
-        <span className="mf-sheet-tape" aria-hidden="true" dangerouslySetInnerHTML={{ __html: tape() }} />
       </article>
     </div>
   )

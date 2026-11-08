@@ -38,18 +38,21 @@ with sync_playwright() as p:
     first = page.locator(".mf-pick").first.inner_text()
     check("min walk" in first, f"pick shows walking time ({first.splitlines()[2:4]})")
     check(page.locator(".mf-hh.is-live").count() == 1, "happy hour ribbon is live at 4:10pm Tue")
-    check(page.locator(".mf-pick .mf-go").first.get_attribute("href").startswith("https://www.google.com/maps/dir/"), "walk link is walking directions")
-    check("travelmode=walking" in page.locator(".mf-pick .mf-go").first.get_attribute("href"), "directions are walking mode")
+    check(page.locator(".mf-pick .mf-btn-primary").first.get_attribute("href").startswith("https://www.google.com/maps/dir/"), "walk link is walking directions")
+    check("travelmode=walking" in page.locator(".mf-pick .mf-btn-primary").first.get_attribute("href"), "directions are walking mode")
     check(page.locator(".mf-pin").count() >= 3, f"oyster markers on map ({page.locator('.mf-pin').count()})")
     check(page.locator(".mf-pin .mf-art .a-meat").count() >= 3, "markers are hand-drawn oysters")
     check(page.locator(".mf-pin.is-live").count() >= 1, "happy-hour oysters are highlighted on the map")
     check(page.locator(".mf-map-legend").is_visible(), "map legend is shown")
-    check("Open til" in first or "Closes" in first, "pick says whether it's open and until when")
+    check("Open now" in first, "pick says whether it's open and until when")
+    price_texts = page.locator(".mf-price").all_inner_texts()
+    check(len(price_texts) == 34 and all(t.strip() for t in price_texts), "every spot shows a price, market price or 'See menu'")
+    check(any("See menu" in t for t in price_texts) and any("$" in t for t in price_texts), "prices and 'See menu' both appear")
     check("MRB BAR" in page.locator(".mf").inner_text().upper(), "MRB is listed")
     total = page.locator(".mf-pick").count() + page.locator(".mf-row").count()
     check(total == 34, f"near mode lists every spot ({total})")
-    check(page.locator(".mf-cut").count() == 13, "ransom-note title letters")
-    check(page.locator(".mf-oracle").is_visible(), "shuck-me oyster is on screen")
+    check("OYSTERS" in page.locator("h1#mf-title").inner_text().upper(), "page heading says Oysters near me")
+    check(page.locator(".mf-oracle .mf-eye-oyster").is_visible(), "engraved oyster-eye is on screen")
     page.wait_for_timeout(900)
     page.screenshot(path=f"{OUT}/m1-near.png", full_page=False)
     page.screenshot(path=f"{OUT}/m1-near-full.png", full_page=True)
@@ -59,8 +62,8 @@ with sync_playwright() as p:
         return page.locator(".mf-sheet h2").inner_text().strip().upper()
 
     # tapping a restaurant name opens its card
-    name1 = page.locator(".mf-pick-name").first.inner_text().replace("★", "").strip().upper()
-    page.locator(".mf-pick-name").first.click()
+    name1 = page.locator(".mf-pick .mf-name").first.inner_text().replace("★", "").strip().upper()
+    page.locator(".mf-pick .mf-name").first.click()
     check(sheet_name() == name1, f"tapping a pick's name opens its card ({name1})")
     check(page.locator(".mf-pin.is-selected").get_attribute("title").upper() == name1, "…and highlights its oyster on the map")
     check(page.locator(".mf-fab").count() == 0, "map button steps aside while a card is open")
@@ -72,8 +75,9 @@ with sync_playwright() as p:
 
     # tapping a list row opens its card
     row = page.locator(".mf-row").nth(4)
-    row_name = row.locator(".mf-row-name").inner_text().replace("★", "").strip().upper()
-    row.locator(".mf-row-name").click()
+    row_name = row.locator(".mf-name").inner_text().replace("★", "").strip().upper()
+    row_name = row_name.split(". ", 1)[-1]
+    row.locator(".mf-name").click()
     check(sheet_name() == row_name, f"tapping a list name opens its card ({row_name})")
     page.keyboard.press("Escape")
     page.wait_for_timeout(200)
@@ -104,10 +108,11 @@ with sync_playwright() as p:
     check(page.locator(".mf-oracle.is-shucking").count() == 1, "the oyster cracks open")
     page.screenshot(path=f"{OUT}/m6-shuck.png")
     drawn = sheet_name()
-    names = [n.upper() for n in page.locator(".mf-pick-name, .mf-row-name").all_inner_texts()]
+    names = [n.upper() for n in page.locator(".mf-name").all_inner_texts()]
     check(any(drawn in n for n in names), f"shucking pulls a real spot ({drawn})")
     open_line = page.locator(".mf-sheet .mf-open").inner_text()
-    check("Open til" in open_line or "Closes" in open_line, f"the pull is open now ({open_line})")
+    check("Open now" in open_line, f"the pull is open now ({open_line})")
+    check(page.locator(".mf-sheet-box h3", has_text="Oyster prices").count() == 1, "card has an oyster prices section")
     page.keyboard.press("Escape")
 
     # happy hour mode
@@ -125,7 +130,7 @@ with sync_playwright() as p:
     # cheapest mode
     page.locator(".mf-mode-cheap").click()
     prices = page.locator(".mf-pick .mf-price").all_inner_texts()
-    check(all(x != "Market price" for x in prices), f"cheapest shows verified prices only {prices}")
+    check(all("$" in x or "¢" in x for x in prices), f"cheapest leads with real prices {prices}")
     page.screenshot(path=f"{OUT}/m3-cheap.png")
 
     # map button (floating, phones) opens the map
@@ -142,13 +147,13 @@ with sync_playwright() as p:
 
     # save from the card persists
     page.locator(".mf-mode-near").click()
-    page.locator(".mf-pick-name").first.click()
+    page.locator(".mf-pick .mf-name").first.click()
     page.wait_for_selector(".mf-sheet")
-    page.get_by_role("button", name="Save").click()
+    page.get_by_role("button", name="☆ Save").click()
     page.keyboard.press("Escape")
     page.reload()
     page.wait_for_selector(".mf-pick")
-    check("★" in page.locator(".mf-pick-name").first.inner_text(), "saved spot survives reload")
+    check("★" in page.locator(".mf-pick .mf-name").first.inner_text(), "saved spot survives reload")
     check(page.locator("h1#mf-title").count() == 1, "finder is the page's main heading")
     check(not errors, f"no console errors {errors[:3]}")
     ctx.close()
@@ -160,20 +165,16 @@ with sync_playwright() as p:
     page.clock.install(time="2026-11-10T15:00:00Z")  # Tue 9am: no happy hour yet
     page.goto(URL)
     page.wait_for_selector(".mf-row")
-    closed = page.locator(".mf-row.is-closed").count()
-    check(closed > 0, f"places not open yet are dimmed at 9am ({closed})")
-    rows = page.locator(".mf-row").all()
-    seen_closed = False
-    ok = True
-    for row in rows:
-        c = "is-closed" in (row.get_attribute("class") or "")
-        if c: seen_closed = True
-        elif seen_closed and "Hours not posted" not in row.inner_text(): ok = False
-    check(ok, "open places come before closed ones")
+    closed = page.locator("#mf-closed + .mf-list .mf-row").count()
+    check(closed > 0, f"places not open yet sit under a 'Closed now' heading at 9am ({closed})")
+    op = page.locator("#mf-closed + .mf-list .mf-row").first.evaluate("e => getComputedStyle(e).opacity")
+    check(op == "1", f"closed places are not faded ({op})")
+    txt = page.locator("#mf-closed + .mf-list .mf-row").first.inner_text()
+    check("Closed now" in txt and "opens" in txt, f"closed places say when they open ({txt.splitlines()[-2:]})")
     page.wait_for_selector(".mf-search input", timeout=15000)
     check(page.locator(".mf-alert").is_visible(), "denied location explains itself")
     check(page.locator(".mf-pick").count() == 3, "picks still shown from French Quarter while denied")
-    check("NEXT HAPPY HOUR" in page.locator(".mf-hh").inner_text(), "ribbon shows next happy hour in the morning")
+    check("Next:" in page.locator(".mf-hh").inner_text(), "banner shows the next happy hour in the morning")
     page.screenshot(path=f"{OUT}/m6-denied.png")
     page.fill(".mf-search input", "canal st")
     page.wait_for_selector(".mf-search-results button")

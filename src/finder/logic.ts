@@ -25,7 +25,25 @@ export type Venue = {
   hours?: (string | null)[] | null
   /** Date this venue was last checked against its source (YYYY-MM-DD). */
   verified?: string
+  /** Regular (non-happy-hour) oyster prices, when the restaurant posts them. */
+  menu?: Menu
 }
+
+export type Menu = {
+  raw?: { each?: number; half?: number; dozen?: number }
+  chargrilled?: { half?: number; dozen?: number }
+  /** The menu says "market price". */
+  market?: boolean
+  /** Where to see the menu. */
+  url: string
+}
+
+/** The one price to show right now: the happy hour deal while it applies today, else the regular menu. */
+export type PriceTag =
+  | { kind: "happy"; text: string; perOyster: number | null }
+  | { kind: "menu"; text: string; perOyster: number }
+  | { kind: "market"; text: string; perOyster: null }
+  | { kind: "none"; text: string; perOyster: null }
 
 export type Coordinates = { lat: number; lng: number }
 export type Mode = "near" | "happy" | "cheap" | "map"
@@ -49,7 +67,9 @@ export type Ranked = {
   walk: number | null
   hh: HappyHour
   open: OpenStatus
+  /** Happy hour price per oyster (null if none posted). */
   perOyster: number | null
+  price: PriceTag
 }
 
 export const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -172,13 +192,15 @@ export const hasCoords = (v: Venue): v is Venue & { lat: number; lng: number } =
 export function enrich(venues: Venue[], origin: Coordinates, clock: NolaClock): Ranked[] {
   return venues.map((venue) => {
     const miles = hasCoords(venue) ? milesBetween(origin, venue) : null
+    const hh = happyHour(venue, clock)
     return {
       venue,
       miles,
       walk: miles == null ? null : walkMinutes(miles),
-      hh: happyHour(venue, clock),
+      hh,
       open: openStatus(venue, clock),
       perOyster: perOyster(venue),
+      price: priceTag(venue, hh),
     }
   })
 }
@@ -198,8 +220,9 @@ const happyRank = (r: Ranked) => {
   return 2 + openRank(r)
 }
 
-/** Cheapest mode: a posted price you can get now, then later today, then the rest. */
-const cheapRank = (r: Ranked) => (r.perOyster == null ? 2 : r.hh.state === "now" ? 0 : r.hh.state === "later" ? 1 : 2)
+/** Cheapest mode: any price you can actually get today (happy hour or menu), cheapest first; then the rest. */
+const cheapRank = (r: Ranked) =>
+  r.price.perOyster == null || (r.open.state === "opens" && r.open.dayOffset > 0 && r.hh.state !== "later") ? 2 : 0
 
 export function rank(list: Ranked[], mode: Mode): Ranked[] {
   const items = [...list]
@@ -215,7 +238,7 @@ export function rank(list: Ranked[], mode: Mode): Ranked[] {
       return items.sort(
         (a, b) =>
           cheapRank(a) - cheapRank(b) ||
-          (cheapRank(a) < 2 ? a.perOyster! - b.perOyster! : openRank(a) - openRank(b)) ||
+          (cheapRank(a) < 2 ? a.price.perOyster! - b.price.perOyster! : openRank(a) - openRank(b)) ||
           byMiles(a, b),
       )
     default:
@@ -230,25 +253,29 @@ export function pickThree(ranked: Ranked[]): Ranked[] {
 
 // ---------- Formatting ----------
 
+/** "10 pm", "11:30 am", "12 am" — with a space, easier to read. */
 export function formatTime(time: string) {
   const [raw, m] = time.split(":").map(Number)
   const h = raw % 24
-  return `${h % 12 || 12}${m ? `:${String(m).padStart(2, "0")}` : ""}${h >= 12 ? "pm" : "am"}`
+  // A non-breaking space keeps "5 pm" on one line.
+  return `${h % 12 || 12}${m ? `:${String(m).padStart(2, "0")}` : ""}\u00a0${h >= 12 ? "pm" : "am"}`
 }
 
-/** "3–6pm", "11:30am–9pm", "3pm–1am" */
+/** "3–6 pm", "11:30 am–9 pm", "3 pm–1 am" */
 export function formatRange(start: string, end: string) {
   const a = formatTime(start)
   const b = formatTime(end)
   const meridiem = (t: string) => t.slice(-2)
-  return meridiem(a) === meridiem(b) ? `${a.slice(0, -2)}–${b}` : `${a}–${b}`
+  // Share "pm" only when it can't mislead: never across midnight ("8 am–1 am", not "8–1 am").
+  const overnight = toMinutes(end) <= toMinutes(start)
+  return !overnight && meridiem(a) === meridiem(b) ? `${a.slice(0, -3)}–${b}` : `${a}–${b}`
 }
 
 export function formatDuration(minutes: number) {
-  if (minutes < 60) return `${minutes}m`
+  if (minutes < 60) return `${minutes} min`
   const h = Math.floor(minutes / 60)
   const m = minutes % 60
-  return m ? `${h}h ${m}m` : `${h}h`
+  return m ? `${h} hr ${m} min` : `${h} hr`
 }
 
 export function formatMoney(value: number) {
@@ -277,7 +304,7 @@ export function formatHappyHour(hh: HappyHour): string {
     case "now":
       return `Happy hour now · ends ${formatTime(hh.end)}`
     case "later":
-      return `Happy hour ${formatRange(hh.start, hh.end)} · in ${formatDuration(hh.startsIn)}`
+      return `Happy hour ${formatRange(hh.start, hh.end)} · starts in ${formatDuration(hh.startsIn)}`
     case "upcoming":
       return `Happy hour ${hh.dayOffset === 1 ? "tomorrow" : DAY_NAMES[hh.day]} ${formatRange(hh.start, hh.end)}`
     default:
@@ -288,11 +315,13 @@ export function formatHappyHour(hh: HappyHour): string {
 export function formatOpen(open: OpenStatus): string {
   switch (open.state) {
     case "open":
-      return open.closesIn <= 45 ? `Closes ${formatTime(open.until)} · ${open.closesIn}m left` : `Open til ${formatTime(open.until)}`
+      return open.closesIn <= 45
+        ? `Open now · closes at ${formatTime(open.until)} (${open.closesIn} min)`
+        : `Open now · until ${formatTime(open.until)}`
     case "opens":
-      return `Opens ${open.dayOffset === 0 ? "" : open.dayOffset === 1 ? "tomorrow " : `${DAY_NAMES[open.day]} `}${formatTime(open.at)}`
+      return `Closed now · opens ${open.dayOffset === 0 ? "" : open.dayOffset === 1 ? "tomorrow " : `${DAY_NAMES[open.day]} `}${formatTime(open.at)}`
     default:
-      return "Hours not posted"
+      return "Hours not listed"
   }
 }
 
@@ -345,4 +374,41 @@ export function drawOyster(list: Ranked[], rnd: () => number = Math.random): Ran
     if (roll <= 0) return r
   }
   return pool[pool.length - 1]
+}
+
+const money = (n: number) => (Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`)
+
+/** Regular menu price per oyster: dozen, then half dozen, then by the oyster. */
+export function menuPerOyster(menu?: Menu): number | null {
+  const raw = menu?.raw
+  if (raw?.dozen != null) return raw.dozen / 12
+  if (raw?.half != null) return raw.half / 6
+  if (raw?.each != null) return raw.each
+  const grill = menu?.chargrilled
+  if (grill?.dozen != null) return grill.dozen / 12
+  if (grill?.half != null) return grill.half / 6
+  return null
+}
+
+/** "$22 a dozen", "$8 for 6", "from $2.75 each" */
+export function formatMenuPrice(menu?: Menu): string | null {
+  const raw = menu?.raw
+  if (raw?.dozen != null) return `${money(raw.dozen)} a dozen`
+  if (raw?.half != null) return `${money(raw.half)} for 6`
+  if (raw?.each != null) return `from ${money(raw.each)} each`
+  const grill = menu?.chargrilled
+  if (grill?.dozen != null) return `${money(grill.dozen)} a dozen (chargrilled)`
+  if (grill?.half != null) return `${money(grill.half)} for 6 (chargrilled)`
+  return null
+}
+
+export function priceTag(venue: Venue, hh: HappyHour): PriceTag {
+  if ((hh.state === "now" || hh.state === "later") && venue.price != null) {
+    const text = formatPrice(venue)!.replace(" ea", " each").replace(" / 6", " for 6").replace(" / 12", " a dozen")
+    return { kind: "happy", text, perOyster: perOyster(venue) }
+  }
+  const per = menuPerOyster(venue.menu)
+  if (per != null) return { kind: "menu", text: formatMenuPrice(venue.menu)!, perOyster: per }
+  if (venue.menu?.market) return { kind: "market", text: "Market price", perOyster: null }
+  return { kind: "none", text: "See menu", perOyster: null }
 }

@@ -25,12 +25,22 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [x] Collage look: ransom-note title, torn paper cards + tape, hand-drawn oysters (wobbly-ink filter, double-pass lines, misregistered riso plates), taped map
 - [x] Experimental: "shuck me" oracle pulls a spot; restaurant card opens with a shell lid swinging off
 
+## 2026-11-08 round 3
+- [x] Closed places no longer faded: own "Closed now" section, full contrast, "opens 4 pm"
+- [x] Price on every card: happy hour price → regular menu price → "Market price" → "See menu" link (6 spots post current regular prices; Bourbon House is market price; the rest link their menu)
+- [x] Redesign after the reference: engraved oyster-eye hero, woodtype brand, brush highlights, clean cards, pill buttons
+- [x] Five New Orleans palettes (Mardi Gras default), all AAA; ?palette= preview
+- [x] Senior pass: Atkinson Hyperlegible, 18px base, 44px+ targets, plain wording, calm motion, fonts bundled (offline)
+- [x] Triple check: palette contrast script, axe-core (0 violations, AAA rules, 5 palettes), large-text/small-screen/keyboard suite
+
 ## Open
 - [ ] Drago's source link didn't load for the robot — check it by hand
 - [ ] Unconfirmed, worth a call: Bourbon House, Royal House, Casamento's and St. Roch Market hours; Superior, Blue Crab, Mr. Ed's and Felix's Lakefront happy-hour times; Chemin à la Mer oyster hour
 - [ ] Five radically distinct visual designs (current build is design #1: night-print risograph)
 
 ## Lessons
+- Shared "pm" in time ranges misleads across midnight ("8–1 am"); spell out both halves when the range is overnight.
+- A restaurant literally named "Monday" reads like a day in "Next: Monday"; use full business names.
 - Base styles like `.mf button { color: inherit }` outrank single-class component styles; wrap defaults in `:where()` so components win (the Map button's label went invisible).
 - When copying a CSS block by text anchor, anchor on a newline + selector: `.mf-eye .shell {` also matched `.mf-head-art .mf-eye .shell {` and duplicated half the stylesheet.
 - Cheapest mode must rank by price before "open now", or a 75¢ deal starting in an hour hides under full-price spots.

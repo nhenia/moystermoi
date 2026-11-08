@@ -8,6 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/alfa-slab-one':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/atkinson-hyperlegible':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/rye':
+        specifier: ^5.3.0
+        version: 5.3.0
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
@@ -33,6 +42,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^6.0.0
         version: 6.2.1(vite@8.3.6(@types/node@22.20.5))
+      axe-core:
+        specifier: ^4.14.0
+        version: 4.14.0
       typescript:
         specifier: ^5.7.0
         version: 5.9.3
@@ -41,6 +53,15 @@ importers:
         version: 8.3.6(@types/node@22.20.5)
 
 packages:
+
+  '@fontsource/alfa-slab-one@5.3.0':
+    resolution: {integrity: sha512-J/ANFZ7S9CbZClr/QhMjmBtpFmmKipVkEXHj20aurR5uqJPCBChVPJn1/kx6vtrwnfnDY0kQaYSTYasSt4GruA==}
+
+  '@fontsource/atkinson-hyperlegible@5.3.0':
+    resolution: {integrity: sha512-Sp8Ve8+rQmENY2Lv02VH7sLpntzTTvnncnJMTbRE7DX6TLxGraN4ykZfzaUWIoCFmaomwkvNiqmlPkrKBuDoSA==}
+
+  '@fontsource/rye@5.3.0':
+    resolution: {integrity: sha512-nKMwMa2/y8LMfhxs7Wm6FnbwXLKsBrJKs6dygYOPrmbpRIvBlf7Kt1mDNm0lzDIuuU+ghluQsisqpQ7peDm7gA==}
 
   '@oxc-project/types@0.156.0':
     resolution: {integrity: sha512-1Duyg48TdJNdyhEB8Xn1L36bT9Pv6GUtlKjHxOys8xkaF/rQq3XJE+bAurSK/AgIz5mGFsb77cn9Pb20+WCScw==}
@@ -170,6 +191,10 @@ packages:
         optional: true
       oxc-transform-react:
         optional: true
+
+  axe-core@4.14.0:
+    resolution: {integrity: sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==}
+    engines: {node: '>=4'}
 
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
@@ -359,6 +384,12 @@ packages:
 
 snapshots:
 
+  '@fontsource/alfa-slab-one@5.3.0': {}
+
+  '@fontsource/atkinson-hyperlegible@5.3.0': {}
+
+  '@fontsource/rye@5.3.0': {}
+
   '@oxc-project/types@0.156.0': {}
 
   '@rolldown/binding-android-arm-eabi@1.2.16':
@@ -430,6 +461,8 @@ snapshots:
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       vite: 8.3.6(@types/node@22.20.5)
+
+  axe-core@4.14.0: {}
 
   csstype@3.2.3: {}
 

@@ -28,7 +28,11 @@
       "hours": null,
       "note": "Happy hour in the bar areas only. Specialty oysters $2.",
       "source": "https://www.bourbonhouse.com/menu/happy-hour/",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "market": true,
+        "url": "https://bourbonhouse.com/menu/dinner"
+      }
     },
     {
       "id": "luke",
@@ -63,9 +67,15 @@
         "07:00-22:00",
         "07:00-22:00"
       ],
-      "note": "Chef's dozen $26.",
+      "note": "Chef's dozen $26. Raw oysters $2.75–$4 each depending on the oyster.",
       "source": "https://lukeneworleans.com/",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "raw": {
+          "each": 2.75
+        },
+        "url": "https://lukeneworleans.com/menus-1"
+      }
     },
     {
       "id": "seaworthy",
@@ -102,7 +112,10 @@
       ],
       "note": "",
       "source": "https://es.acehotel.com/new-orleans/eat-drink/seaworthy/",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://es.acehotel.com/new-orleans/eat-drink/seaworthy/"
+      }
     },
     {
       "id": "desire",
@@ -137,7 +150,18 @@
       ],
       "note": "",
       "source": "https://www.sonesta.com/royal-sonesta/la/new-orleans/royal-sonesta-new-orleans/desire-oyster-bar",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "raw": {
+          "half": 12,
+          "dozen": 22
+        },
+        "chargrilled": {
+          "half": 16,
+          "dozen": 26
+        },
+        "url": "https://www.opentable.com.mx/r/desire-oyster-bar-new-orleans"
+      }
     },
     {
       "id": "otis",
@@ -172,7 +196,10 @@
       ],
       "note": "",
       "source": "https://www.opentable.com/r/otis-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://otisseafood.com/french-quarter-restaurant-menu/"
+      }
     },
     {
       "id": "acme",
@@ -204,7 +231,10 @@
       ],
       "note": "",
       "source": "https://www.neworleansrestaurants.com/acme",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://www.acmeoyster.com/"
+      }
     },
     {
       "id": "felix",
@@ -236,7 +266,10 @@
       ],
       "note": "",
       "source": "https://felixs.com/locations/",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://felixs.com/"
+      }
     },
     {
       "id": "felix-lakefront",
@@ -267,7 +300,10 @@
       "verified": "2026-11-08",
       "lat": 30.02297,
       "lng": -90.11353,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "url": "https://felixs.com/locations/"
+      }
     },
     {
       "id": "mr-eds",
@@ -299,7 +335,10 @@
       ],
       "note": "Has a happy hour with discounted oysters; times not posted.",
       "source": "https://frankiapp.com/business/mr-ed-s-oyster-bar-13064.md",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://mredsrestaurants.com/"
+      }
     },
     {
       "id": "mrb",
@@ -330,7 +369,10 @@
       "verified": "2026-11-08",
       "lat": 29.95931,
       "lng": -90.0608,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "url": "https://www.mrbnola.com/menu"
+      }
     },
     {
       "id": "fives",
@@ -365,7 +407,10 @@
       ],
       "note": "Chef's select oysters.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://fives.bar/"
+      }
     },
     {
       "id": "red-fish",
@@ -399,12 +444,19 @@
         "11:00-23:00",
         "10:00-23:00"
       ],
-      "note": "Raw $15 half dozen, $26 dozen.",
+      "note": "",
       "source": "https://www.redfishgrill.com/menus/happy-hour",
       "verified": "2026-11-08",
       "lat": 29.95406,
       "lng": -90.06978,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "raw": {
+          "half": 15,
+          "dozen": 26
+        },
+        "url": "https://www.redfishgrill.com/menus/happy-hour"
+      }
     },
     {
       "id": "creole-cookery",
@@ -443,7 +495,10 @@
       "verified": "2026-11-08",
       "lat": 29.95594,
       "lng": -90.06364,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "url": "https://opentable.com/r/new-orleans-creole-cookery-new-orleans"
+      }
     },
     {
       "id": "apothecary",
@@ -481,7 +536,10 @@
       "verified": "2026-11-08",
       "lat": 29.95806,
       "lng": -90.06476,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "url": "https://www.opentable.ie/r/apothecary-new-orleans"
+      }
     },
     {
       "id": "royal-house",
@@ -498,13 +556,24 @@
       "days": [],
       "start": null,
       "end": null,
-      "hours": null,
+      "hours": [
+        "11:00-22:00",
+        "11:00-22:00",
+        "11:00-22:00",
+        "11:00-22:00",
+        "11:00-22:00",
+        "11:00-23:00",
+        "11:00-23:00"
+      ],
       "note": "",
-      "source": "https://www.explorelouisiana.com/restaurants/royal-house-oyster-bar",
+      "source": "https://www.opentable.ie/r/royal-house-oyster-bar-new-orleans",
       "verified": "2026-11-08",
       "lat": 29.95601,
       "lng": -90.06658,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "url": "http://www.royalhouserestaurant.com/"
+      }
     },
     {
       "id": "oceana",
@@ -535,7 +604,10 @@
       "verified": "2026-11-08",
       "lat": 29.95594,
       "lng": -90.06714,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "url": "https://www.oceanagrill.com/"
+      }
     },
     {
       "id": "dragos",
@@ -566,7 +638,10 @@
       ],
       "note": "Inside the Hilton Riverside.",
       "source": "https://www.hilton.com/en/hotels/msynhhh-hilton-new-orleans-riverside/dining/",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://www.dragosrestaurant.com/"
+      }
     },
     {
       "id": "chemin",
@@ -596,7 +671,10 @@
       ],
       "note": "Has run a daily 3–5pm oyster hour; not confirmed for this season.",
       "source": "https://www.opentable.com.au/r/chemin-a-la-mer-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://www.opentable.com.au/r/chemin-a-la-mer-new-orleans"
+      }
     },
     {
       "id": "trenasse",
@@ -635,7 +713,10 @@
       "verified": "2026-11-08",
       "lat": 29.95016,
       "lng": -90.07028,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "url": "https://opentable.com/r/trenasse-new-orleans"
+      }
     },
     {
       "id": "peche",
@@ -666,7 +747,10 @@
       ],
       "note": "",
       "source": "https://www.opentable.com/peche-seafood-grill?rid=105748",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://www.pecherestaurant.com/"
+      }
     },
     {
       "id": "sidecar",
@@ -702,7 +786,10 @@
       ],
       "note": "",
       "source": "https://www.restaurantji.com/la/new-orleans/sidecar-patio-and-oyster-bar-",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://sidecarnola.com/"
+      }
     },
     {
       "id": "marias",
@@ -741,7 +828,10 @@
       ],
       "note": "",
       "source": "https://www.opentable.com.mx/r/marias-oyster-bar-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://www.mariasoysterbar.com/"
+      }
     },
     {
       "id": "basin",
@@ -774,7 +864,18 @@
       ],
       "note": "Mondays, with any menu item.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "raw": {
+          "half": 10,
+          "dozen": 18
+        },
+        "chargrilled": {
+          "half": 14,
+          "dozen": 26
+        },
+        "url": "https://www.opentable.ie/r/basin-seafood-and-spirits"
+      }
     },
     {
       "id": "boil",
@@ -810,7 +911,14 @@
       "verified": "2026-11-08",
       "lat": 29.92321,
       "lng": -90.08815,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "raw": {
+          "half": 8,
+          "dozen": 15
+        },
+        "url": "https://places.singleplatform.com/boil-seafood-house/menu"
+      }
     },
     {
       "id": "casamento",
@@ -833,7 +941,10 @@
       "verified": "2026-11-08",
       "lat": 29.92081,
       "lng": -90.10055,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "url": "https://www.theinfatuation.com/new-orleans/reviews/casamentos"
+      }
     },
     {
       "id": "superior",
@@ -864,7 +975,10 @@
       ],
       "note": "Happy hour raw dozen $15 (times not posted).",
       "source": "https://opentable.com/superior-seafood",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://superiorseafoodnola.com/"
+      }
     },
     {
       "id": "pascal",
@@ -894,7 +1008,10 @@
       ],
       "note": "",
       "source": "https://www.opentable.com/pascals-manale?lang=en",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://www.pascalsmanale.com/menus"
+      }
     },
     {
       "id": "pigeon-whale",
@@ -930,9 +1047,15 @@
         "16:00-23:00",
         "16:00-23:00"
       ],
-      "note": "Topped with ceviche.",
+      "note": "Topped with ceviche. Shucker's dozen (6 kinds) $24.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "raw": {
+          "dozen": 24
+        },
+        "url": "https://www.opentable.es/r/pigeon-and-whale-new-orleans"
+      }
     },
     {
       "id": "cooter",
@@ -964,7 +1087,10 @@
       ],
       "note": "Tuesdays.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://www.cooterbrowns.com/"
+      }
     },
     {
       "id": "salted-pearl",
@@ -992,7 +1118,10 @@
       "hours": null,
       "note": "",
       "source": "https://www.strochmarket.com/news/happy-hour-guide",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://www.strochmarket.com/news/happy-hour-guide"
+      }
     },
     {
       "id": "porgys",
@@ -1028,11 +1157,14 @@
       "verified": "2026-11-08",
       "lat": 29.9757,
       "lng": -90.09911,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "url": "https://www.finedininglovers.com/restaurants/porgys-seafood-market"
+      }
     },
     {
       "id": "monday",
-      "name": "Monday",
+      "name": "Monday Restaurant & Bar",
       "area": "Mid-City",
       "address": "4327 Bienville St, New Orleans, LA",
       "kind": [
@@ -1060,7 +1192,10 @@
       "verified": "2026-11-08",
       "lat": 29.9782,
       "lng": -90.10191,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "url": "https://www.opentable.com.au/r/monday-restaurant-bar-new-orleans"
+      }
     },
     {
       "id": "neyows",
@@ -1090,7 +1225,10 @@
       "verified": "2026-11-08",
       "lat": 29.97117,
       "lng": -90.09173,
-      "geocoded": "census"
+      "geocoded": "census",
+      "menu": {
+        "url": "https://www.eatokra.com/businesses/neyow-s-creole-cafe"
+      }
     },
     {
       "id": "blue-crab",
@@ -1121,7 +1259,10 @@
       ],
       "note": "Happy hour $1 raw, $1.50 chargrilled (times not posted).",
       "source": "https://autoreserve.com/en/restaurants/ZP93Rdqmh22fmqNVuLS3",
-      "verified": "2026-11-08"
+      "verified": "2026-11-08",
+      "menu": {
+        "url": "https://autoreserve.com/en/restaurants/ZP93Rdqmh22fmqNVuLS3"
+      }
     }
   ],
   "checks": {

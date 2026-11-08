@@ -7,11 +7,11 @@ import {
   DEFAULT_ORIGIN,
   daysSince,
   enrich,
-  formatHappyHour,
-  formatOpen,
+  formatHappyHour as formatHappyHourRaw,
+  formatOpen as formatOpenRaw,
   formatPrice,
-  formatRange,
-  formatTime,
+  formatRange as formatRangeRaw,
+  formatTime as formatTimeRaw,
   formatWalk,
   happyHour,
   milesBetween,
@@ -114,15 +114,32 @@ test("happy mode: live specials, then later today, then everything else", () => 
   assert.ok(list.some((r) => r.hh.state === "none"), "places without a happy hour are still listed")
 })
 
-test("cheap: a price you can get now beats a cheaper one later in the week", () => {
-  // Monday 10am: Basin's 75¢ Monday special starts at 11:30
+test("cheap: every price you can get today, happy hour or menu, cheapest first", () => {
+  // Monday 10am: Basin's 75¢ Monday special (from 11:30) is today's cheapest oyster
   const mon = rank(enrich(venues, DEFAULT_ORIGIN, at(1, 10)), "cheap")
-  const basin = mon.findIndex((r) => r.venue.id === "basin")
-  assert.ok(mon.slice(0, basin).every((r) => r.hh.state === "now" || r.hh.state === "later"))
-  // Tuesday: Basin's deal is days away, so it ranks below today's deals
-  const tue = rank(enrich(venues, DEFAULT_ORIGIN, at(2, 15, 30)), "cheap")
-  const lastToday = tue.findLastIndex((r) => r.perOyster != null && (r.hh.state === "now" || r.hh.state === "later"))
-  assert.ok(tue.findIndex((r) => r.venue.id === "basin") > lastToday)
+  assert.equal(mon[0].venue.id, "basin")
+  const priced = mon.filter((r) => r.price.perOyster != null && mon.indexOf(r) < mon.findIndex((x) => x.price.perOyster == null))
+  for (let i = 1; i < priced.length; i++) assert.ok(priced[i - 1].price.perOyster! <= priced[i].price.perOyster!)
+  // Tuesday: Basin's special is days away, so it shows its regular menu price instead
+  const tue = enrich(venues, DEFAULT_ORIGIN, at(2, 15, 30)).find((r) => r.venue.id === "basin")!
+  assert.equal(tue.price.kind, "menu")
+  assert.equal(tue.price.text, "$18 a dozen")
+})
+
+test("price tags: happy hour, menu, market price, see menu", () => {
+  const clock = at(2, 16, 10)
+  const all = enrich(venues, DEFAULT_ORIGIN, clock)
+  const by = (id: string) => all.find((r) => r.venue.id === id)!.price
+  assert.deepEqual([by("desire").kind, by("desire").text], ["happy", "$1.50 each"])
+  assert.deepEqual([by("acme").kind, by("acme").text], ["none", "See menu"])
+  assert.deepEqual([by("pigeon-whale").kind, by("pigeon-whale").text], ["happy", "$2 each"])
+  const wedMorning = enrich(venues, DEFAULT_ORIGIN, at(3, 9)).find((r) => r.venue.id === "bourbon-house")!.price
+  assert.equal(wedMorning.kind, "happy") // Bourbon House happy hour is later today (2–5 pm)
+  const sat = enrich(venues, DEFAULT_ORIGIN, at(6, 20)) // Saturday 8 pm, after happy hours
+  assert.equal(sat.find((r) => r.venue.id === "bourbon-house")!.price.text, "Market price")
+  assert.equal(sat.find((r) => r.venue.id === "desire")!.price.text, "$22 a dozen")
+  assert.equal(sat.find((r) => r.venue.id === "luke")!.price.text, "from $2.75 each")
+  for (const v of venues) assert.ok(v.menu?.url?.startsWith("http"), `${v.id} needs a menu link`)
 })
 
 test("three picks skip closed places", () => {
@@ -132,18 +149,25 @@ test("three picks skip closed places", () => {
 })
 
 test("labels read naturally and always show the happy hour end", () => {
-  assert.equal(formatHappyHour({ state: "now", endsIn: 30, start: "15:00", end: "18:00" }), "Happy hour now · ends 6pm")
-  assert.equal(formatHappyHour({ state: "later", startsIn: 75, start: "16:00", end: "18:00" }), "Happy hour 4–6pm · in 1h 15m")
-  assert.equal(formatHappyHour({ state: "upcoming", dayOffset: 1, day: 3, start: "15:30", end: "18:00" }), "Happy hour tomorrow 3:30–6pm")
-  assert.equal(formatHappyHour({ state: "upcoming", dayOffset: 3, day: 2, start: "15:00", end: "01:00" }), "Happy hour Tue 3pm–1am")
+  const sp = (s: string) => s.replace(/\u00a0/g, " ") // times use a non-breaking space
+  const formatHappyHour = (h: Parameters<typeof formatHappyHourRaw>[0]) => sp(formatHappyHourRaw(h))
+  const formatRange = (a: string, b: string) => sp(formatRangeRaw(a, b))
+  const formatTime = (a: string) => sp(formatTimeRaw(a))
+  const formatOpen = (o: Parameters<typeof formatOpenRaw>[0]) => sp(formatOpenRaw(o))
+  assert.equal(formatHappyHour({ state: "now", endsIn: 30, start: "15:00", end: "18:00" }), "Happy hour now · ends 6 pm")
+  assert.equal(formatHappyHour({ state: "later", startsIn: 75, start: "16:00", end: "18:00" }), "Happy hour 4–6 pm · starts in 1 hr 15 min")
+  assert.equal(formatHappyHour({ state: "upcoming", dayOffset: 1, day: 3, start: "15:30", end: "18:00" }), "Happy hour tomorrow 3:30–6 pm")
+  assert.equal(formatHappyHour({ state: "upcoming", dayOffset: 3, day: 2, start: "15:00", end: "01:00" }), "Happy hour Tue 3 pm–1 am")
   assert.equal(formatHappyHour({ state: "none" }), "")
-  assert.equal(formatRange("11:30", "21:00"), "11:30am–9pm")
-  assert.equal(formatTime("24:00"), "12am")
-  assert.equal(formatOpen({ state: "open", until: "22:00", closesIn: 300 }), "Open til 10pm")
-  assert.equal(formatOpen({ state: "open", until: "22:00", closesIn: 20 }), "Closes 10pm · 20m left")
-  assert.equal(formatOpen({ state: "opens", at: "16:00", dayOffset: 0, day: 2 }), "Opens 4pm")
-  assert.equal(formatOpen({ state: "opens", at: "11:00", dayOffset: 2, day: 0 }), "Opens Sun 11am")
-  assert.equal(formatOpen({ state: "unknown" }), "Hours not posted")
+  assert.equal(formatRange("11:30", "21:00"), "11:30 am–9 pm")
+  assert.equal(formatRange("08:00", "01:00"), "8 am–1 am") // across midnight: both halves spelled out
+  assert.equal(formatRange("16:00", "24:00"), "4 pm–12 am")
+  assert.equal(formatTime("24:00"), "12 am")
+  assert.equal(formatOpen({ state: "open", until: "22:00", closesIn: 300 }), "Open now · until 10 pm")
+  assert.equal(formatOpen({ state: "open", until: "22:00", closesIn: 20 }), "Open now · closes at 10 pm (20 min)")
+  assert.equal(formatOpen({ state: "opens", at: "16:00", dayOffset: 0, day: 2 }), "Closed now · opens 4 pm")
+  assert.equal(formatOpen({ state: "opens", at: "11:00", dayOffset: 2, day: 0 }), "Closed now · opens Sun 11 am")
+  assert.equal(formatOpen({ state: "unknown" }), "Hours not listed")
 })
 
 test("data file is well formed (no invented fields, valid times and coordinates)", () => {

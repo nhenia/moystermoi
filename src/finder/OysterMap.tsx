@@ -189,7 +189,7 @@ export default function OysterMap({ items, origin, selectedId, onSelect, expande
         <span dangerouslySetInnerHTML={{ __html: halfShell() }} />
         Open
         <span className="is-closed" dangerouslySetInnerHTML={{ __html: halfShell() }} />
-        Closed
+        Closed now
       </p>
       {tilesFailed && <p className="mf-map-note">Street map didn't load.</p>}
       {unmappedCount > 0 && <p className="mf-map-count">{unmappedCount} not on map yet</p>}
