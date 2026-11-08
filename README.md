@@ -34,8 +34,9 @@ It never touches prices, deals or times. Those stay human-verified.
 
 ## Going live
 
-The site deploys to GitHub Pages from `main` automatically (`.github/workflows/deploy-pages.yml`).
-One-time: repo **Settings → Pages → Source: GitHub Actions**, and **Settings → Actions → General → Workflow permissions: Read and write** (lets the robot save its updates).
+Live at **https://nhenia.github.io/moystermoi/**. Every change saved to `main` is tested and republished automatically (`.github/workflows/deploy-pages.yml`).
+
+If the site ever stops updating: repo **Settings → Pages → Source** should say **GitHub Actions**.
 
 ## For developers
 
