@@ -8,6 +8,7 @@ import { halfShell, hash01, shellPile } from "./art"
 import { PLATE_BOUNDS, topoOverlay } from "./topo"
 
 const OSM_TILES = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+const OSM_FALLBACK = "https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
 
 type Props = {
   items: Ranked[]
@@ -45,19 +46,20 @@ export default function OysterMap({ items, origin, selectedId, onSelect, expande
     let errors = 0
     let loads = 0
     let fellBack = false
-    const tiles = L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    // OpenStreetMap's own tiles: free, no key. (CARTO's basemaps now answer with an
+    // "API key required" picture instead of an error, so they can't be trusted as the primary.)
+    const tiles = L.tileLayer(OSM_TILES, {
       maxZoom: 19,
-      subdomains: "abcd",
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     })
       .on("tileerror", () => {
-        // Failing across the board (not one flaky tile): switch to OpenStreetMap's own tiles once,
-        // and only tell the visitor if those fail too.
+        // Failing across the board (not one flaky tile): try OpenStreetMap France's mirror once,
+        // and only tell the visitor if that fails too.
         if (++errors < 3 || loads > 0) return
         if (!fellBack) {
           fellBack = true
           errors = 0
-          tiles.setUrl(OSM_TILES)
+          tiles.setUrl(OSM_FALLBACK)
         } else setTilesFailed(true)
       })
       .on("tileload", () => {

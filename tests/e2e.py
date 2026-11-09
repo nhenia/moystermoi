@@ -18,7 +18,7 @@ def check(cond, msg):
     if not cond: fails.append(msg)
 
 def setup(ctx):
-    ctx.route("https://*.basemaps.cartocdn.com/**", lambda r: r.fulfill(status=200, content_type="image/png", body=TILE))
+    ctx.route("**/*tile.openstreetmap.*/**", lambda r: r.fulfill(status=200, content_type="image/png", body=TILE))
     ctx.route("**/photon.komoot.io/**", lambda r: r.fulfill(status=200, content_type="application/json", body=json.dumps(PHOTON)))
     ctx.route("**/fonts.googleapis.com/**", lambda r: r.fulfill(status=200, content_type="text/css", body=""))
 
@@ -201,8 +201,8 @@ with sync_playwright() as p:
     setup(ctx)
     ctx.unroute("**/photon.komoot.io/**")
     ctx.route("**/photon.komoot.io/**", lambda r: r.abort())
-    ctx.unroute("https://*.basemaps.cartocdn.com/**")
-    ctx.route("https://*.basemaps.cartocdn.com/**", lambda r: r.abort())
+    ctx.unroute("**/*tile.openstreetmap.*/**")
+    ctx.route("**/*tile.openstreetmap.*/**", lambda r: r.abort())
     page = ctx.new_page()
     page.goto(URL)
     page.wait_for_selector(".mf-search input", timeout=15000)

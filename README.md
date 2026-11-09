@@ -94,7 +94,7 @@ pnpm refresh-data        # run the data robot locally (needs internet)
 ```
 
 Code: `src/finder/` — `logic.ts` (all the rules, tested), `art.ts` (the engraved oysters), `topo.ts` (Plate I and the logo oyster), `location.ts`, `OysterMap.tsx` (Leaflet + oyster markers), `OysterFinder.tsx` (screen), `finder.css` (all styling).
-Outside services, all free with no keys: CARTO map tiles, Photon address search (OpenStreetMap data), Google Maps directions. Fonts are bundled.
+Outside services, all free with no keys: OpenStreetMap map tiles, Photon address search (OpenStreetMap data), Google Maps directions. Fonts are bundled.
 
 ## Credits
 

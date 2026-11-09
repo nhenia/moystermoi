@@ -49,7 +49,7 @@ with sync_playwright() as p:
     b=p.chromium.launch()
     for label, vw, scale in [("phone 390px, normal text", 390, 1), ("small phone 320px, normal text", 320, 1), ("phone 390px, 200% text", 390, 2), ("small phone 320px, 150% text", 320, 1.5)]:
         c=b.new_context(viewport={"width":vw,"height":740},geolocation={"latitude":29.9547,"longitude":-90.0697},permissions=["geolocation"],reduced_motion="reduce")
-        c.route("https://*.basemaps.cartocdn.com/**", lambda r: r.fulfill(status=200, content_type="image/png", body=TILE))
+        c.route("**/*tile.openstreetmap.*/**", lambda r: r.fulfill(status=200, content_type="image/png", body=TILE))
         pg=c.new_page(); pg.clock.install(time="2026-11-10T15:00:00Z")  # Tue 9am: some places closed
         pg.goto(URL); pg.wait_for_selector(".mf-pick"); pg.wait_for_timeout(500)
         if scale != 1: pg.add_style_tag(content=f"html{{font-size:{16*scale}px}}"); pg.wait_for_timeout(300)
@@ -121,7 +121,7 @@ with sync_playwright() as p:
     # axe-core audit (WCAG 2.1 A/AA/AAA + best practice) in light and dark, page and open card
     for pal in ["light","dark"]:
         c=b.new_context(viewport={"width":390,"height":844},geolocation={"latitude":29.9547,"longitude":-90.0697},permissions=["geolocation"],reduced_motion="reduce",color_scheme=pal)
-        c.route("https://*.basemaps.cartocdn.com/**", lambda r: r.fulfill(status=200, content_type="image/png", body=TILE))
+        c.route("**/*tile.openstreetmap.*/**", lambda r: r.fulfill(status=200, content_type="image/png", body=TILE))
         pg=c.new_page(); pg.clock.install(time="2026-11-10T22:10:00Z")
         pg.goto(URL); pg.wait_for_selector(".mf-pick"); pg.wait_for_timeout(600)
         pg.add_script_tag(path=AXE)
