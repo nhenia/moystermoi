@@ -342,7 +342,40 @@
       "source": "https://acmeoyster.com/french-quarter-la/",
       "verified": "2026-11-09",
       "menu": {
-        "url": "https://www.acmeoyster.com/"
+        "url": "https://places.singleplatform.com/acme-oyster-house-3/menu",
+        "market": true,
+        "items": [
+          {
+            "name": "Raw",
+            "price": "Market price"
+          },
+          {
+            "name": "Chargrilled",
+            "price": "Market price"
+          },
+          {
+            "name": "Oyster shooter",
+            "price": "$3.29"
+          },
+          {
+            "name": "Oyster remoulade",
+            "price": "$13.99"
+          },
+          {
+            "name": "Fried oyster po-boy",
+            "price": "$20.99"
+          },
+          {
+            "name": "Peace Maker po-boy: oysters & shrimp",
+            "price": "$17.99"
+          },
+          {
+            "name": "Fried oyster platter",
+            "price": "$25.99"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "other site"
       },
       "lore": "Home of the 15 Dozen Club."
     },
@@ -447,7 +480,43 @@
       "lng": -90.11353,
       "geocoded": "census",
       "menu": {
-        "url": "https://felixs.com/locations/"
+        "url": "https://felixs.com/?p=5013",
+        "raw": {
+          "half": 15,
+          "dozen": 25
+        },
+        "chargrilled": {
+          "half": 19,
+          "dozen": 29
+        },
+        "items": [
+          {
+            "name": "Half shell",
+            "price": "$15 for 6 · $25 a dozen"
+          },
+          {
+            "name": "Char-grilled, Parmesan breadcrumbs",
+            "price": "$19 · $29"
+          },
+          {
+            "name": "Oysters du jour",
+            "price": "$20 · $33"
+          },
+          {
+            "name": "Bienville",
+            "price": "$20 · $33"
+          },
+          {
+            "name": "Rockefeller",
+            "price": "$20 · $33"
+          },
+          {
+            "name": "Bienville & Rockefeller combo",
+            "price": "$20 · $33"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       },
       "phone": "(504) 304-4125",
       "website": "https://felixs.com/locations/",
@@ -1020,8 +1089,7 @@
       "geocoded": "census",
       "menu": {
         "url": "https://opentable.com/r/trenasse-new-orleans"
-      },
-      "lore": "Oyster Log: 36 broiled, six styles."
+      }
     },
     {
       "id": "peche",
@@ -1150,7 +1218,27 @@
       "source": "https://www.opentable.com.mx/r/marias-oyster-bar-new-orleans",
       "verified": "2026-11-08",
       "menu": {
-        "url": "https://www.mariasoysterbar.com/"
+        "url": "https://www.opentable.com.mx/r/marias-oyster-bar-new-orleans",
+        "items": [
+          {
+            "name": "Wild Louisiana oysters",
+            "price": "Not listed"
+          },
+          {
+            "name": "Chili butter roasted, Tabasco mash butter",
+            "price": "$22"
+          },
+          {
+            "name": "Fried oyster salad",
+            "price": "$19"
+          },
+          {
+            "name": "Seafood plateau with wild & specialty oysters",
+            "price": "$68"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "other site"
       },
       "phone": "(504) 350-4075",
       "website": "https://www.mariasoysterbar.com/",
@@ -1645,7 +1733,23 @@
       "lng": -90.10191,
       "geocoded": "census",
       "menu": {
-        "url": "https://www.opentable.com.au/r/monday-restaurant-bar-new-orleans"
+        "url": "https://order.toasttab.com/online/monday-restaurant-bar-4327-bienville-ave",
+        "items": [
+          {
+            "name": "5 fried oysters",
+            "price": "$8"
+          },
+          {
+            "name": "Seafood platter with oysters",
+            "price": "$30"
+          },
+          {
+            "name": "Tuesday happy hour",
+            "price": "$2 oysters"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       }
     },
     {
