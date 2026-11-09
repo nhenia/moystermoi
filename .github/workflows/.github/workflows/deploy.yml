@@ -1,0 +1,20 @@
+name: Deploy on PR Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Deployment
+        run: |
+          echo "Pull request #${{ github.event.pull_request.number }} was successfully merged into main."
+          # Your deployment and build commands run here automatically
