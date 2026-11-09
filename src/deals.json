@@ -42,7 +42,8 @@
         "url": "https://bourbonhouse.com/menu/dinner"
       },
       "phone": "(504) 522-0111",
-      "website": "https://www.bourbonhouse.com/"
+      "website": "https://www.bourbonhouse.com/",
+      "lore": "Dickie Brennan's upscale oyster bar pairs Gulf oysters with caviar or champagne."
     },
     {
       "id": "luke",
@@ -85,7 +86,8 @@
           "each": 2.75
         },
         "url": "https://lukeneworleans.com/menus-1"
-      }
+      },
+      "lore": "Alsace-meets-New Orleans brasserie; its belt-driven ceiling fans recreate a cooling system from 1880s Kolb's."
     },
     {
       "id": "seaworthy",
@@ -125,7 +127,8 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://es.acehotel.com/new-orleans/eat-drink/seaworthy/"
-      }
+      },
+      "lore": "In an 1832 Creole cottage beside the Ace Hotel, styled like a ship's cabin by two sailor brothers."
     },
     {
       "id": "desire",
@@ -171,7 +174,8 @@
           "dozen": 26
         },
         "url": "https://www.opentable.com.mx/r/desire-oyster-bar-new-orleans"
-      }
+      },
+      "lore": "Gulf oysters under a Broadway-style marquee at Bourbon and Bienville, inside the Royal Sonesta."
     },
     {
       "id": "otis",
@@ -209,7 +213,8 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://otisseafood.com/french-quarter-restaurant-menu/"
-      }
+      },
+      "lore": "Breakfast-to-dinner seafood house on the corner of Chartres and Iberville, in the old Crescent City Cooks space."
     },
     {
       "id": "acme",
@@ -244,7 +249,8 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://www.acmeoyster.com/"
-      }
+      },
+      "lore": "Shucking since 1910 (it began as the Acme Café); home of the 15 Dozen Club oyster-eating challenge."
     },
     {
       "id": "felix",
@@ -281,7 +287,8 @@
         "url": "https://felixs.com/"
       },
       "phone": "(504) 522-4440",
-      "website": "https://felixs.com/"
+      "website": "https://felixs.com/",
+      "lore": "Old-school oyster bar on Iberville, with a second room around the corner on Bourbon."
     },
     {
       "id": "felix-lakefront",
@@ -318,7 +325,8 @@
       },
       "phone": "(504) 304-4125",
       "website": "https://felixs.com/locations/",
-      "hhUnposted": "2–5 pm (days not posted) · raw $9 half dozen · chargrilled $15"
+      "hhUnposted": "2–5 pm (days not posted) · raw $9 half dozen · chargrilled $15",
+      "lore": "The French Quarter classic's waterfront outpost, on Lake Pontchartrain at West End."
     },
     {
       "id": "mr-eds",
@@ -356,7 +364,8 @@
       },
       "phone": "(504) 309-4848",
       "website": "https://mredsrestaurants.com/",
-      "hhUnposted": "Discounted oysters"
+      "hhUnposted": "Discounted oysters",
+      "lore": "Part of local restaurateur Ed McIntyre's Mr. Ed's family; oysters raw, chargrilled or as shooters."
     },
     {
       "id": "mrb",
@@ -390,7 +399,8 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.mrbnola.com/menu"
-      }
+      },
+      "lore": "One of the Quarter's latest options: the bar stays open until 4 a.m."
     },
     {
       "id": "fives",
@@ -428,7 +438,8 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://fives.bar/"
-      }
+      },
+      "lore": "Tiny raw bar in the historic Lower Pontalba Building on Jackson Square; a sister to the Columns Hotel."
     },
     {
       "id": "red-fish",
@@ -474,7 +485,8 @@
           "dozen": 26
         },
         "url": "https://www.redfishgrill.com/menus/happy-hour"
-      }
+      },
+      "lore": "Ralph Brennan's Bourbon Street seafood house; known for fried oysters with Crystal barbecue sauce and blue cheese."
     },
     {
       "id": "creole-cookery",
@@ -516,7 +528,8 @@
       "geocoded": "census",
       "menu": {
         "url": "https://opentable.com/r/new-orleans-creole-cookery-new-orleans"
-      }
+      },
+      "lore": "On the ground floor of the old Lanoix house, one of the Quarter's older homes, which is rumored to be haunted."
     },
     {
       "id": "apothecary",
@@ -557,7 +570,8 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.opentable.ie/r/apothecary-new-orleans"
-      }
+      },
+      "lore": "Bayou-witch and vampire-themed bar with tarot readings and a hidden upstairs vampire speakeasy."
     },
     {
       "id": "royal-house",
@@ -591,7 +605,8 @@
       "geocoded": "census",
       "menu": {
         "url": "http://www.royalhouserestaurant.com/"
-      }
+      },
+      "lore": "Eat oysters on a balcony over Royal Street; try the house Oysters Royale."
     },
     {
       "id": "oceana",
@@ -625,7 +640,8 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.oceanagrill.com/"
-      }
+      },
+      "lore": "Open 8 a.m. to 1 a.m. daily, which makes it a reliable late-night oyster stop."
     },
     {
       "id": "dragos",
@@ -659,7 +675,8 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://www.dragosrestaurant.com/"
-      }
+      },
+      "lore": "Invented charbroiled oysters in the early 1990s; founded by Croatian immigrants Drago and Klara Cvitanovich."
     },
     {
       "id": "chemin",
@@ -692,7 +709,8 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://www.opentable.com.au/r/chemin-a-la-mer-new-orleans"
-      }
+      },
+      "lore": "Donald Link's oyster bar inside the Four Seasons, with a panoramic Mississippi River view."
     },
     {
       "id": "trenasse",
@@ -734,7 +752,8 @@
       "geocoded": "census",
       "menu": {
         "url": "https://opentable.com/r/trenasse-new-orleans"
-      }
+      },
+      "lore": "Named for a Cajun marsh shortcut; the Oyster Log serves 36 broiled oysters in six styles."
     },
     {
       "id": "peche",
@@ -770,7 +789,8 @@
         "url": "https://www.pecherestaurant.com/"
       },
       "phone": "(504) 522-1744",
-      "website": "https://www.pecherestaurant.com/"
+      "website": "https://www.pecherestaurant.com/",
+      "lore": "Donald Link's wood-fired Gulf seafood grill; won the 2014 James Beard Award for Best New Restaurant."
     },
     {
       "id": "sidecar",
@@ -809,7 +829,8 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://sidecarnola.com/"
-      }
+      },
+      "lore": "Two-level patio with a second-floor deck and a Madison Roy mural, from the Cooter Brown's team."
     },
     {
       "id": "marias",
@@ -853,7 +874,8 @@
         "url": "https://www.mariasoysterbar.com/"
       },
       "phone": "(504) 350-4075",
-      "website": "https://www.mariasoysterbar.com/"
+      "website": "https://www.mariasoysterbar.com/",
+      "lore": "Named for co-owner Brian Weisnicht's mother, a nod to the tradition of naming boats after influential women."
     },
     {
       "id": "basin",
@@ -897,7 +919,8 @@
           "dozen": 26
         },
         "url": "https://www.opentable.ie/r/basin-seafood-and-spirits"
-      }
+      },
+      "lore": "Raw oysters are just 75¢ on Mondays with any menu item."
     },
     {
       "id": "boil",
@@ -940,7 +963,8 @@
           "dozen": 15
         },
         "url": "https://places.singleplatform.com/boil-seafood-house/menu"
-      }
+      },
+      "lore": "A backyard-boil-style joint, one of the first of its kind in town."
     },
     {
       "id": "casamento",
@@ -968,7 +992,8 @@
         "url": "https://www.theinfatuation.com/new-orleans/reviews/casamentos"
       },
       "phone": "(504) 895-9761",
-      "website": "http://www.casamentosrestaurant.com/"
+      "website": "http://www.casamentosrestaurant.com/",
+      "lore": "Tiled oyster house serving since 1919; cash only, and it closes every summer."
     },
     {
       "id": "superior",
@@ -1005,7 +1030,8 @@
       },
       "phone": "(504) 293-3474",
       "website": "https://www.superiorseafoodnola.com/",
-      "hhUnposted": "Raw dozen $15"
+      "hhUnposted": "Raw dozen $15",
+      "lore": "Big raw bar on the St. Charles streetcar line at Napoleon Avenue."
     },
     {
       "id": "pascal",
@@ -1038,7 +1064,8 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://www.pascalsmanale.com/menus"
-      }
+      },
+      "lore": "Oysters since 1913 at its stand-up bar; barbecue shrimp was born here in the 1950s."
     },
     {
       "id": "pigeon-whale",
@@ -1082,7 +1109,8 @@
           "dozen": 24
         },
         "url": "https://www.opentable.es/r/pigeon-and-whale-new-orleans"
-      }
+      },
+      "lore": "Tops half-shell oysters with ceviche; the shucker's dozen samples six kinds from around the coasts."
     },
     {
       "id": "cooter",
@@ -1117,7 +1145,8 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://www.cooterbrowns.com/"
-      }
+      },
+      "lore": "Riverbend tavern since 1978, lined with 100+ statues of dead celebrities, each holding a beer."
     },
     {
       "id": "salted-pearl",
@@ -1158,7 +1187,8 @@
         "url": "https://www.strochmarket.com/news/happy-hour-guide"
       },
       "phone": "(504) 267-0388",
-      "website": "https://www.strochmarket.com/"
+      "website": "https://www.strochmarket.com/",
+      "lore": "Inside St. Roch Market, a public market since 1875 with cast-iron columns from an 1861 market."
     },
     {
       "id": "porgys",
@@ -1197,7 +1227,8 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.finedininglovers.com/restaurants/porgys-seafood-market"
-      }
+      },
+      "lore": "Chef-run market selling only wild Gulf seafood, including underused bycatch fish like porgy."
     },
     {
       "id": "monday",
@@ -1232,7 +1263,8 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.opentable.com.au/r/monday-restaurant-bar-new-orleans"
-      }
+      },
+      "lore": "Mid-City spot with $2 oysters all day on Tuesdays."
     },
     {
       "id": "neyows",
@@ -1265,7 +1297,8 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.eatokra.com/businesses/neyow-s-creole-cafe"
-      }
+      },
+      "lore": "Began after Katrina, when Tanya Dubuclet fed neighbors from home; it now sells about 40,000 oysters a week."
     },
     {
       "id": "blue-crab",
@@ -1302,11 +1335,326 @@
       },
       "phone": "(504) 284-2898",
       "website": "http://www.thebluecrabnola.com/",
-      "hhUnposted": "$1 raw · $1.50 chargrilled"
+      "hhUnposted": "$1 raw · $1.50 chargrilled",
+      "lore": "Deck seating on Lake Pontchartrain at West End; come for the sunset."
+    },
+    {
+      "id": "revolution",
+      "name": "Restaurant R'evolution",
+      "area": "French Quarter",
+      "address": "777 Bienville St, New Orleans, LA",
+      "kind": [
+        "raw",
+        "fried",
+        "roasted"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "Market oysters on the half shell, $14 (bar only)",
+      "days": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "start": "16:00",
+      "end": "18:00",
+      "hours": [
+        "16:00-21:00",
+        "16:00-21:00",
+        "16:00-21:00",
+        "16:00-21:00",
+        "16:00-21:00",
+        "16:00-22:00",
+        "16:00-22:00"
+      ],
+      "note": "Happy hour in Bar R'evolution only. Dining room opens at 5 pm.",
+      "source": "https://revolutionnola.com/?p=852",
+      "verified": "2026-11-09",
+      "menu": {
+        "market": true,
+        "url": "https://revolutionnola.com/menus/"
+      },
+      "website": "https://revolutionnola.com/",
+      "lore": "Its raw oysters are Bayou Rosa, farmed in Lafourche Parish by United Houma Nation members."
+    },
+    {
+      "id": "antoines",
+      "name": "Antoine's",
+      "area": "French Quarter",
+      "address": "713 St Louis St, New Orleans, LA",
+      "kind": [
+        "roasted"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "",
+      "days": [],
+      "start": null,
+      "end": null,
+      "hours": [
+        "17:00-21:00",
+        "17:00-21:00",
+        "17:00-21:00",
+        "17:00-21:00",
+        "17:00-21:00",
+        "17:00-21:00",
+        "17:00-21:00"
+      ],
+      "note": "Dinner hours shown; lunch Mon and Fri, brunch Sat and Sun. Closed June 30 to July 15.",
+      "source": "https://antoines.com/about",
+      "verified": "2026-11-09",
+      "menu": {
+        "url": "https://antoines.com/about"
+      },
+      "phone": "(504) 581-4422",
+      "website": "https://antoines.com/",
+      "lore": "Birthplace of Oysters Rockefeller (1899); open since 1840, and the recipe is still a family secret."
+    },
+    {
+      "id": "arnauds",
+      "name": "Arnaud's",
+      "area": "French Quarter",
+      "address": "813 Bienville St, New Orleans, LA",
+      "kind": [
+        "roasted"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "",
+      "days": [],
+      "start": null,
+      "end": null,
+      "hours": [
+        "18:00-22:00",
+        "18:00-22:00",
+        "18:00-22:00",
+        "18:00-22:00",
+        "18:00-22:00",
+        "18:00-22:30",
+        "18:00-22:30"
+      ],
+      "note": "Dinner hours shown; jazz brunch on Sunday.",
+      "source": "https://www.neworleans.com/articles/post/arnauds/",
+      "verified": "2026-11-09",
+      "menu": {
+        "url": "https://www.arnaudsrestaurant.com/?p=1642"
+      },
+      "phone": "(504) 523-5433",
+      "website": "https://www.arnaudsrestaurant.com/",
+      "lore": "Oysters Arnaud bakes five house toppings on one plate; a Mardi Gras gown museum hides upstairs."
+    },
+    {
+      "id": "holywater",
+      "name": "Holywater",
+      "area": "French Quarter",
+      "address": "622 Conti St, New Orleans, LA",
+      "kind": [
+        "raw"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "",
+      "days": [],
+      "start": null,
+      "end": null,
+      "hours": [
+        "11:00-23:00",
+        "closed",
+        "closed",
+        "11:00-23:00",
+        "11:00-23:00",
+        "11:00-23:00",
+        "11:00-23:00"
+      ],
+      "note": "New in fall 2026. From the brothers behind Seaworthy.",
+      "source": "https://foodle.pro/restaurants/new-orleans/holywater",
+      "verified": "2026-11-09",
+      "menu": {
+        "url": "https://foodle.pro/restaurants/new-orleans/holywater"
+      },
+      "phone": "(504) 290-8790",
+      "website": "https://crew.fun/holywater-nola",
+      "lore": "Opened fall 2026 in an 1837 ship chandlery; serves its own Sailor Baby oysters from Peconic Bay."
+    },
+    {
+      "id": "galliers",
+      "name": "Gallier's Seafood & Oyster Bar",
+      "area": "CBD",
+      "address": "129 Carondelet St, New Orleans, LA",
+      "kind": [
+        "raw",
+        "chargrilled",
+        "roasted"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "",
+      "days": [],
+      "start": null,
+      "end": null,
+      "hours": [
+        "08:30-22:00",
+        "10:30-22:00",
+        "10:30-22:00",
+        "10:30-22:00",
+        "10:30-22:00",
+        "08:30-22:00",
+        "08:30-22:00"
+      ],
+      "note": "Rockefeller $21 half dozen. Gallier's Special $34 dozen.",
+      "source": "https://galliernola.com/seafood-oysters/best-oysters-new-orleans/",
+      "verified": "2026-11-09",
+      "menu": {
+        "raw": {
+          "half": 16,
+          "dozen": 25
+        },
+        "chargrilled": {
+          "half": 19,
+          "dozen": 28
+        },
+        "url": "https://galliernola.com/seafood-oysters/best-oysters-new-orleans/"
+      },
+      "phone": "(504) 267-5672",
+      "website": "https://galliernola.com/",
+      "lore": "Its Special dozen mixes three each: raw, charbroiled, Rockefeller and Creole-style."
+    },
+    {
+      "id": "deanies",
+      "name": "Deanie's Seafood",
+      "area": "French Quarter",
+      "address": "841 Iberville St, New Orleans, LA",
+      "kind": [
+        "raw",
+        "chargrilled",
+        "fried"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "$5 off any dozen oysters",
+      "days": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "start": "15:00",
+      "end": "18:00",
+      "hours": [
+        "11:00-21:30",
+        "11:00-21:30",
+        "16:00-21:30",
+        "16:00-21:30",
+        "11:00-21:30",
+        "11:00-22:00",
+        "11:00-22:00"
+      ],
+      "note": "Happy hour excludes holidays. No reservations.",
+      "source": "https://blog.deanies.com/french-quarter/",
+      "verified": "2026-11-09",
+      "menu": {
+        "url": "https://blog.deanies.com/french-quarter/"
+      },
+      "website": "https://www.deanies.com/",
+      "lore": "Family-owned for over 60 years; serves barbecue oysters alongside raw and charbroiled."
+    },
+    {
+      "id": "bon-temps",
+      "name": "Le Bon Temps Roulé",
+      "area": "Uptown",
+      "address": "4801 Magazine St, New Orleans, LA",
+      "kind": [
+        "raw"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "",
+      "days": [],
+      "start": null,
+      "end": null,
+      "hhUnposted": "Free oysters on Fridays (time not posted)",
+      "note": "Bar open 24 hours.",
+      "source": "https://lbtrnola.com/new-orleans-le-bon-temps-roule-about",
+      "verified": "2026-11-09",
+      "menu": {
+        "url": "https://lbtrnola.com/new-orleans-le-bon-temps-roule-about"
+      },
+      "website": "https://lbtrnola.com/",
+      "lore": "24-hour corner bar from around 1890; free oysters on Fridays while pianist Joe Krown plays."
+    },
+    {
+      "id": "mosquito",
+      "name": "Mosquito Supper Club",
+      "area": "Uptown",
+      "address": "3824 Dryades St, New Orleans, LA",
+      "kind": [
+        "raw"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "",
+      "days": [],
+      "start": null,
+      "end": null,
+      "hours": [
+        "17:30-21:00",
+        "closed",
+        "closed",
+        "17:30-21:00",
+        "17:30-21:00",
+        "17:30-21:00",
+        "17:30-21:00"
+      ],
+      "note": "Oyster bar is walk-in only; no phone line.",
+      "source": "https://mosquitosupperclub.squarespace.com",
+      "verified": "2026-11-09",
+      "menu": {
+        "url": "https://mosquitosupperclub.squarespace.com"
+      },
+      "website": "https://mosquitosupperclub.squarespace.com",
+      "lore": "Chef Melissa Martin's Cajun supper club; its 20-seat oyster bar takes walk-ins."
+    },
+    {
+      "id": "saffron",
+      "name": "Saffron NOLA",
+      "area": "Uptown",
+      "address": "4128 Magazine St, New Orleans, LA",
+      "kind": [
+        "roasted"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "",
+      "days": [],
+      "start": null,
+      "end": null,
+      "hours": [
+        null,
+        null,
+        "17:00-21:00",
+        "17:00-21:00",
+        "17:00-21:00",
+        null,
+        null
+      ],
+      "note": "",
+      "source": "https://www.timeout.com/new-orleans/restaurants/saffron-nola",
+      "verified": "2026-11-09",
+      "menu": {
+        "url": "https://www.timeout.com/new-orleans/restaurants/saffron-nola"
+      },
+      "phone": "(504) 323-2626",
+      "website": "https://saffronnola.com/",
+      "lore": "The Vilkhu family's Indian-Louisiana kitchen; its Oyster Bed Roast finishes Gulf oysters with curry leaves."
     }
   ],
   "checks": {
-    "ranAt": "2026-11-09",
+    "ranAt": "2026-11-08",
     "brokenLinks": [
       "seaworthy",
       "peche"

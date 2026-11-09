@@ -1018,6 +1018,14 @@ a.mf-link {
   color: var(--muted);
 }
 
+/* One notable thing about the place: full-contrast ink so it stays easy to read. */
+.mf-sheet-lore {
+  font-style: italic;
+  border-left: 4px solid var(--ink);
+  padding-left: 0.75rem;
+  max-width: 34rem;
+}
+
 .mf-sheet-now {
   display: flex;
   flex-wrap: wrap;

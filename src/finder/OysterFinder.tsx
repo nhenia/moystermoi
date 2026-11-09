@@ -647,6 +647,7 @@ function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: bool
         </button>
         <h2 id="mf-sheet-title">{v.name}</h2>
         <p className="mf-sheet-addr">{v.address.replace(/, New Orleans, LA$/, "")}</p>
+        {v.lore && <p className="mf-sheet-lore">{v.lore}</p>}
         <p className="mf-sheet-now">
           <Status r={r} />
           <Walk r={r} />

@@ -32,6 +32,8 @@ export type Venue = {
   website?: string
   /** A happy hour the restaurant has, but whose times aren't posted. */
   hhUnposted?: string
+  /** One notable thing about the place, 25 words or fewer. Shown on its card. */
+  lore?: string
 }
 
 /** "(504) 522-0111" → "tel:+15045220111" */
