@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-08",
+  "updated": "2026-11-09",
   "timezone": "America/Chicago",
   "scope": "New Orleans city, including French Quarter, CBD, Warehouse District, Uptown, Garden District, Marigny, Bywater, Mid-City, Riverbend, and Lakefront; exclude Kenner, Metairie and other surrounding suburbs.",
   "venues": [
@@ -661,11 +661,19 @@
         "11:30-22:00",
         "11:30-22:00"
       ],
-      "note": "Inside the Hilton Riverside.",
-      "source": "https://www.hilton.com/en/hotels/msynhhh-hilton-new-orleans-riverside/dining/",
-      "verified": "2026-11-08",
+      "note": "Inside the Hilton Riverside. Salty Coast raw oysters $3 each. Shuckee Duckee ($39.95): fried duck, oysters, cream sauce. Raw oysters dine-in only.",
+      "source": "https://www.dragosrestaurant.com/hilton-riverside-new-orleans-menu",
+      "verified": "2026-11-09",
       "menu": {
-        "url": "https://www.dragosrestaurant.com/"
+        "raw": {
+          "half": 15.95,
+          "dozen": 24.95
+        },
+        "chargrilled": {
+          "half": 17.95,
+          "dozen": 32.95
+        },
+        "url": "https://www.dragosrestaurant.com/hilton-riverside-new-orleans-menu"
       },
       "lore": "Invented charbroiled oysters."
     },

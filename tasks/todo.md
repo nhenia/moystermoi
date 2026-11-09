@@ -42,7 +42,7 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [ ] Rescan 2026-11-09 added 9 spots (R'evolution, Antoine's, Arnaud's, Holywater, Gallier's, Deanie's, Le Bon Temps Roulé, Mosquito Supper Club, Saffron). Check their hours by phone; Arnaud's hours come from a 2022 page
 - [ ] Maria's: Big Easy Magazine (Jan 2025) lists a daily 4–6 pm $1.50 oyster happy hour; the data has none. Confirm and add
 - [ ] Found but not added (couldn't confirm current oysters or hours): Grand Isle, Lilette, Frankie & Johnny's, Bud Rip's oyster pop-up, The Bell (fried oyster loaf only), Domilise's and Mahony's (oyster po-boys)
-- [ ] Drago's source link didn't load for the robot — check it by hand
+- [x] Drago's: checked by hand 2026-11-09 against dragosrestaurant.com Hilton Riverside menu; added raw + chargrilled prices, Salty Coast $3 each and Shuckee Duckee (oysters inside a duck dish) in the note
 - [ ] Unconfirmed, worth a call: Bourbon House, Royal House, Casamento's and St. Roch Market hours; Superior, Blue Crab, Mr. Ed's and Felix's Lakefront happy-hour times; Chemin à la Mer oyster hour
 - [ ] Five radically distinct visual designs (current build is design #1: night-print risograph)
 
