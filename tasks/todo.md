@@ -34,11 +34,16 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [x] Triple check: palette contrast script, axe-core (0 violations, AAA rules, 5 palettes), large-text/small-screen/keyboard suite
 
 ## Open
+- [ ] Rescan 2026-11-09 added 9 spots (R'evolution, Antoine's, Arnaud's, Holywater, Gallier's, Deanie's, Le Bon Temps Roulé, Mosquito Supper Club, Saffron). Check their hours by phone; Arnaud's hours come from a 2022 page
+- [ ] Maria's: Big Easy Magazine (Jan 2025) lists a daily 4–6 pm $1.50 oyster happy hour; the data has none. Confirm and add
+- [ ] Found but not added (couldn't confirm current oysters or hours): Grand Isle, Lilette, Frankie & Johnny's, Bud Rip's oyster pop-up, The Bell (fried oyster loaf only), Domilise's and Mahony's (oyster po-boys)
 - [ ] Drago's source link didn't load for the robot — check it by hand
 - [ ] Unconfirmed, worth a call: Bourbon House, Royal House, Casamento's and St. Roch Market hours; Superior, Blue Crab, Mr. Ed's and Felix's Lakefront happy-hour times; Chemin à la Mer oyster hour
 - [ ] Five radically distinct visual designs (current build is design #1: night-print risograph)
 
 ## Lessons
+- Check sourcing claims against the farm's own page: R'evolution's Bayou Rosa oysters are farmed by United Houma Nation members.
+- Never run the data robot from a sandbox without internet: it marks every link "broken".
 - Shared "pm" in time ranges misleads across midnight ("8–1 am"); spell out both halves when the range is overnight.
 - A restaurant literally named "Monday" reads like a day in "Next: Monday"; use full business names.
 - Base styles like `.mf button { color: inherit }` outrank single-class component styles; wrap defaults in `:where()` so components win (the Map button's label went invisible).

@@ -789,7 +789,7 @@ a.mf-link {
   padding: 4px 10px 4px 6px;
   border: 2px solid var(--ink);
   background: var(--paper);
-  font-size: 0.95rem;
+  font-size: 1rem; /* 16px floor for older eyes */
   font-weight: 700;
 }
 
@@ -805,7 +805,7 @@ a.mf-link {
   padding: 4px 10px;
   border: 2px solid var(--ink);
   background: var(--paper);
-  font-size: 0.95rem;
+  font-size: 1rem; /* 16px floor for older eyes */
   font-weight: 700;
 }
 
@@ -1016,6 +1016,14 @@ a.mf-link {
 
 .mf-sheet-addr {
   color: var(--muted);
+}
+
+/* One notable thing about the place: full-contrast ink so it stays easy to read. */
+.mf-sheet-lore {
+  font-style: italic;
+  border-left: 4px solid var(--ink);
+  padding-left: 0.75rem;
+  max-width: 34rem;
 }
 
 .mf-sheet-now {
