@@ -36,7 +36,7 @@
       ],
       "note": "Happy hour in the bar areas only. Specialty oysters $2.",
       "source": "https://www.bourbonhouse.com/menu/happy-hour/",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "menu": {
         "market": true,
         "url": "https://bourbonhouse.com/menu/dinner"
@@ -697,7 +697,7 @@
       ],
       "note": "Has run a daily 3–5pm oyster hour; not confirmed for this season.",
       "source": "https://www.opentable.com.au/r/chemin-a-la-mer-new-orleans",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "menu": {
         "url": "https://www.opentable.com.au/r/chemin-a-la-mer-new-orleans"
       }
@@ -1108,14 +1108,14 @@
       "lat": 29.94246,
       "lng": -90.13452,
       "geocoded": "census",
-      "price": 8,
-      "unit": "dozen",
-      "deal": "$8 raw dozen",
+      "price": null,
+      "unit": "variable",
+      "deal": "Half-price Louisiana wild oysters",
       "days": [
         2
       ],
       "start": "15:00",
-      "end": "01:00",
+      "end": "24:00",
       "hours": [
         "11:00-01:00",
         "11:00-01:00",
@@ -1126,8 +1126,8 @@
         "11:00-01:00"
       ],
       "note": "Tuesdays.",
-      "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08",
+      "source": "https://www.cooterbrowns.com/",
+      "verified": "2026-11-09",
       "menu": {
         "url": "https://www.cooterbrowns.com/"
       },
