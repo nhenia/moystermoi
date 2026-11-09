@@ -2157,7 +2157,10 @@
           }
         ]
       },
-      "lore": "Fried oysters with Brie."
+      "lore": "Fried oysters with Brie.",
+      "lat": 29.91906,
+      "lng": -90.12505,
+      "geocoded": "census"
     },
     {
       "id": "galatoires",
@@ -2192,7 +2195,10 @@
           }
         ]
       },
-      "website": "https://www.galatoires.com/"
+      "website": "https://www.galatoires.com/",
+      "lat": 29.95482,
+      "lng": -90.06905,
+      "geocoded": "census"
     },
     {
       "id": "coterie",
@@ -2233,7 +2239,10 @@
             "price": "$24"
           }
         ]
-      }
+      },
+      "lat": 29.95227,
+      "lng": -90.06679,
+      "geocoded": "census"
     }
   ],
   "checks": {
@@ -2243,7 +2252,8 @@
       "dragos",
       "peche",
       "antoines",
-      "deanies"
+      "deanies",
+      "coterie"
     ]
   }
 }
