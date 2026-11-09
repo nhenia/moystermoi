@@ -1,0 +1,36 @@
+https://docs.google.com/spreadsheets/d/e/2PACX-1vQlkqebtUhbnqCYZzl8sA795yMBIDQGiBuUKuXEUQUwQ2rrUyF1M5FgqrRRoAgu8AWwnMScvLu_yzEx/pub?gid=2051274477&single=true&output=csv
+
+name: Sync Google Sheet to GitHub
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # Runs every day at 8:00 AM UTC (adjust as needed)
+  workflow_dispatch: # Allows you to run it manually from the Actions tab anytime
+
+jobs:
+  sync-sheet:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to commit and push changes back to the repo
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download latest CSV from Google Sheets
+        run: |
+          # Create data directory if it doesn't exist
+          mkdir -p data
+          
+          # Replace the URL below with your published CSV link from Step 1
+          CSV_URL="YOUR_PUBLISHED_CSV_URL_HERE"
+          
+          curl -L "$CSV_URL" -o data/restaurants.csv
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.net'
+          git add data/restaurants.csv
+          
+          # Check if there are any changes to commit
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-sync oyster data from Google Sheets" && git push)
