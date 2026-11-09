@@ -63,7 +63,7 @@ Everything lives in **`src/deals.json`**. On GitHub, open the file, click the pe
 - **`source`** is the page you checked; **`verified`** is the date you checked it.
 - **After re-checking prices,** set `"updated"` at the top to today's date. After 45 days the app warns visitors the info may be stale.
 - **New restaurant:** copy an entry, give it a unique `id`, leave out `lat`/`lng`. The robot maps it.
-- **Notable thing:** `lore` is one line (25 words max) shown on the restaurant's card, e.g. where its oysters come from. A test fails if it's missing or too long.
+- **Notable fact:** `lore` is one striking fact, under 7 words, shown on the card (e.g. "Invented charbroiled oysters."). Never a general description; leave it out if there's nothing remarkable.
 - **Never guess.** No posted price? `"price": null, "unit": "variable"` and the app says "Market price".
 
 ### The data robot

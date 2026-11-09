@@ -183,7 +183,7 @@ test("data file is well formed (no invented fields, valid times and coordinates)
       assert.equal(v.hours.length, 7, `${v.id} hours must list 7 days`)
       for (const h of v.hours) assert.ok(h == null || h === "closed" || /^\d{2}:\d{2}-\d{2}:\d{2}$/.test(h), `${v.id} bad hours ${h}`)
     }
-    assert.ok(v.lore && v.lore.split(/\s+/).length <= 25, `${v.id} needs a notable-thing line of 25 words or fewer`)
+    if (v.lore != null) assert.ok(v.lore.split(/\s+/).length < 7, `${v.id} notable fact must be under 7 words`)
     if (v.lat != null) assert.ok(v.lat > 29.8 && v.lat < 30.2 && v.lng! < -89.8 && v.lng! > -90.3, `${v.id} coordinates outside New Orleans`)
   }
   assert.ok(ids.has("mrb"), "MRB is listed")
