@@ -39,10 +39,35 @@
       "verified": "2026-11-09",
       "menu": {
         "market": true,
-        "url": "https://bourbonhouse.com/menu/dinner"
+        "url": "https://bourbonhouse.com/menu/dinner-menu",
+        "items": [
+          {
+            "name": "Gulf oysters, half shell",
+            "price": "Market price"
+          },
+          {
+            "name": "Charbroiled, Creole bordelaise butter",
+            "price": "Market price"
+          },
+          {
+            "name": "Fried oyster loaf, triple-cream brie, tasso cream",
+            "price": "$17"
+          },
+          {
+            "name": "Fried Gulf oyster platter",
+            "price": "$31"
+          },
+          {
+            "name": "Fruit de mer tower",
+            "price": "$75 / $140"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       },
       "phone": "(504) 522-0111",
-      "website": "https://www.bourbonhouse.com/"
+      "website": "https://www.bourbonhouse.com/",
+      "lore": "Home of its own Oysters Fonseca."
     },
     {
       "id": "luke",
@@ -79,14 +104,46 @@
       ],
       "note": "Chef's dozen $26. Raw oysters $2.75–$4 each depending on the oyster.",
       "source": "https://lukeneworleans.com/",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "menu": {
         "raw": {
           "each": 2.75
         },
-        "url": "https://lukeneworleans.com/menus-1"
+        "url": "https://lukeneworleans.com/menus-1",
+        "items": [
+          {
+            "name": "Louisiana Gulf, Area 3",
+            "price": "$2.75 each"
+          },
+          {
+            "name": "Skiff Lake (Hopedale, LA)",
+            "price": "$3 each"
+          },
+          {
+            "name": "Bright Side (Grand Isle, LA)",
+            "price": "$4 each"
+          },
+          {
+            "name": "Murder Point (Sandy Bay, AL)",
+            "price": "$4 each"
+          },
+          {
+            "name": "\"BBQ\" Gulf oysters, Herbsaint butter",
+            "price": "$18"
+          },
+          {
+            "name": "Happy hour 3–6: raw",
+            "price": "$1.50 each"
+          },
+          {
+            "name": "Happy hour 3–6: fried (6)",
+            "price": "$12"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       },
-      "lore": "Belt-driven fans copy 1880s Kolb's."
+      "lore": "Lists raw oysters by farm."
     },
     {
       "id": "seaworthy",
@@ -127,7 +184,7 @@
       "menu": {
         "url": "https://es.acehotel.com/new-orleans/eat-drink/seaworthy/"
       },
-      "lore": "Inside an 1832 Creole cottage."
+      "lore": "Wild oysters from three U.S. coasts."
     },
     {
       "id": "desire",
@@ -162,17 +219,45 @@
       ],
       "note": "",
       "source": "https://www.sonesta.com/royal-sonesta/la/new-orleans/royal-sonesta-new-orleans/desire-oyster-bar",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "menu": {
         "raw": {
-          "half": 12,
+          "half": 14,
           "dozen": 22
         },
         "chargrilled": {
-          "half": 16,
-          "dozen": 26
+          "half": 17,
+          "dozen": 29
         },
-        "url": "https://www.opentable.com.mx/r/desire-oyster-bar-new-orleans"
+        "url": "https://neworleansroyal.sonesta.com/wp-content/uploads/2025/09/Desire-Lunch-Dinner-Menu-6.25.pdf",
+        "items": [
+          {
+            "name": "Raw",
+            "price": "$14 for 6 · $22 a dozen"
+          },
+          {
+            "name": "Chargrilled",
+            "price": "$17 · $29"
+          },
+          {
+            "name": "Rockin' Chargrilled, Rockefeller-style",
+            "price": "$18 · $30"
+          },
+          {
+            "name": "Fried oysters Herbsaint",
+            "price": "$18"
+          },
+          {
+            "name": "Fried oyster po-boy",
+            "price": "$20"
+          },
+          {
+            "name": "Fried oyster plate",
+            "price": "$29"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       }
     },
     {
@@ -208,9 +293,21 @@
       ],
       "note": "",
       "source": "https://www.opentable.com/r/otis-new-orleans",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "menu": {
-        "url": "https://otisseafood.com/french-quarter-restaurant-menu/"
+        "url": "https://www.toasttab.com/local/order/otis-201-chartres-street",
+        "items": [
+          {
+            "name": "Fried oyster po-boy",
+            "price": "$24"
+          },
+          {
+            "name": "Fried oyster platter",
+            "price": "$28"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       }
     },
     {
@@ -279,9 +376,42 @@
       ],
       "note": "",
       "source": "https://felixs.com/locations/",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "menu": {
-        "url": "https://felixs.com/"
+        "url": "https://felixs.com/french-quarter-menu",
+        "market": true,
+        "items": [
+          {
+            "name": "Half shell",
+            "price": "Market price"
+          },
+          {
+            "name": "Char-grilled",
+            "price": "Market price"
+          },
+          {
+            "name": "Bienville",
+            "price": "Market price"
+          },
+          {
+            "name": "Rockefeller",
+            "price": "Market price"
+          },
+          {
+            "name": "Bienville & Rockefeller combo",
+            "price": "Market price"
+          },
+          {
+            "name": "Oysters du jour (daily special)",
+            "price": "Market price"
+          },
+          {
+            "name": "Pasta Felix, sautéed oysters & shrimp",
+            "price": "$26"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       },
       "phone": "(504) 522-4440",
       "website": "https://felixs.com/"
@@ -353,13 +483,50 @@
       ],
       "note": "",
       "source": "https://frankiapp.com/business/mr-ed-s-oyster-bar-13064.md",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "menu": {
-        "url": "https://mredsrestaurants.com/"
+        "url": "https://cdn.eversite.com/media/9bee54a87dcb69064c363966fbfdb2b40658fa2e/32443/Royal+Menu+Apr+2024.pdf",
+        "raw": {
+          "half": 17.95,
+          "dozen": 28.95
+        },
+        "chargrilled": {
+          "half": 17.95,
+          "dozen": 28.95
+        },
+        "items": [
+          {
+            "name": "Raw",
+            "price": "$17.95 for 6 · $28.95 a dozen"
+          },
+          {
+            "name": "Charbroiled",
+            "price": "$17.95 · $28.95"
+          },
+          {
+            "name": "Southwest, jalapeño",
+            "price": "$19.95 · $29.95"
+          },
+          {
+            "name": "Bienville",
+            "price": "$19.95 · $29.95"
+          },
+          {
+            "name": "Crawfish Rockefeller",
+            "price": "$19.95 · $29.95"
+          },
+          {
+            "name": "Spicy oyster shooter",
+            "price": "$8.95"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       },
       "phone": "(504) 309-4848",
       "website": "https://mredsrestaurants.com/",
-      "hhUnposted": "Discounted oysters"
+      "hhUnposted": "Discounted oysters",
+      "lore": "Crawfish-topped Oysters Rockefeller."
     },
     {
       "id": "mrb",
@@ -393,8 +560,7 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.mrbnola.com/menu"
-      },
-      "lore": "Open until 4 a.m."
+      }
     },
     {
       "id": "fives",
@@ -432,8 +598,7 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://fives.bar/"
-      },
-      "lore": "Inside Jackson Square's Pontalba Building."
+      }
     },
     {
       "id": "red-fish",
@@ -444,9 +609,9 @@
         "raw",
         "chargrilled"
       ],
-      "price": null,
-      "unit": "variable",
-      "deal": "Oyster bar happy hour",
+      "price": 13,
+      "unit": "half-dozen",
+      "deal": "$13 half dozen Grand Isle Jewel raw, or $25 with a mini Moët",
       "days": [
         0,
         1,
@@ -469,7 +634,7 @@
       ],
       "note": "",
       "source": "https://www.redfishgrill.com/menus/happy-hour",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "lat": 29.95406,
       "lng": -90.06978,
       "geocoded": "census",
@@ -478,8 +643,41 @@
           "half": 15,
           "dozen": 26
         },
-        "url": "https://www.redfishgrill.com/menus/happy-hour"
-      }
+        "url": "https://redfishgrill.com/menus/happy-hour",
+        "items": [
+          {
+            "name": "Gulf oysters, half shell",
+            "price": "$15 for 6 · $26 a dozen"
+          },
+          {
+            "name": "BBQ oysters (theirs, since late '90s)",
+            "price": "$19"
+          },
+          {
+            "name": "Garlic Parmesan baked",
+            "price": "$18"
+          },
+          {
+            "name": "Alligator chorizo baked",
+            "price": "$19"
+          },
+          {
+            "name": "BBQ oyster po-boy",
+            "price": "$22"
+          },
+          {
+            "name": "Happy hour 3–6: 6 Grand Isle Jewel raw",
+            "price": "$13"
+          },
+          {
+            "name": "Happy hour: 6 oysters + mini Moët",
+            "price": "$25"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
+      },
+      "lore": "Created the BBQ oyster, late '90s."
     },
     {
       "id": "creole-cookery",
@@ -515,14 +713,46 @@
       ],
       "note": "With a drink. Chargrilled $16 half dozen.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "lat": 29.95594,
       "lng": -90.06364,
       "geocoded": "census",
       "menu": {
-        "url": "https://opentable.com/r/new-orleans-creole-cookery-new-orleans"
+        "url": "https://www.opentable.com/r/new-orleans-creole-cookery-new-orleans",
+        "raw": {
+          "half": 9,
+          "dozen": 13
+        },
+        "chargrilled": {
+          "half": 12,
+          "dozen": 18
+        },
+        "items": [
+          {
+            "name": "Raw",
+            "price": "$9 for 6 · $13 a dozen"
+          },
+          {
+            "name": "Char-grilled",
+            "price": "$12 for 6 · $18 a dozen"
+          },
+          {
+            "name": "Rockefeller, Bienville or Toulouse",
+            "price": "$18"
+          },
+          {
+            "name": "Trilogy: 2 of each",
+            "price": "$18"
+          },
+          {
+            "name": "Louisiana oyster plate",
+            "price": "$21"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "other site"
       },
-      "lore": "Rumored haunted house."
+      "lore": "House-named Oysters Toulouse."
     },
     {
       "id": "apothecary",
@@ -563,8 +793,7 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.opentable.ie/r/apothecary-new-orleans"
-      },
-      "lore": "Hidden upstairs vampire speakeasy."
+      }
     },
     {
       "id": "royal-house",
@@ -598,7 +827,8 @@
       "geocoded": "census",
       "menu": {
         "url": "http://www.royalhouserestaurant.com/"
-      }
+      },
+      "lore": "Raw oysters served on saltines."
     },
     {
       "id": "oceana",
@@ -626,12 +856,52 @@
       ],
       "note": "",
       "source": "https://neworleansrestaurants.com/oceana_grill",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "lat": 29.95594,
       "lng": -90.06714,
       "geocoded": "census",
       "menu": {
-        "url": "https://www.oceanagrill.com/"
+        "url": "https://places.singleplatform.com/oceana-grill/menu",
+        "raw": {
+          "half": 16,
+          "dozen": 21
+        },
+        "chargrilled": {
+          "half": 18,
+          "dozen": 29
+        },
+        "items": [
+          {
+            "name": "Raw",
+            "price": "$16 for 6 · $21 a dozen"
+          },
+          {
+            "name": "Original charbroiled",
+            "price": "$18 · $29"
+          },
+          {
+            "name": "Oceana's Famous: Cajun garlic-herb cream",
+            "price": "$18 · $29"
+          },
+          {
+            "name": "Rockefeller",
+            "price": "$18 · $29"
+          },
+          {
+            "name": "Big Chief's fried oyster Florentine pasta",
+            "price": "$26"
+          },
+          {
+            "name": "Fried oyster po-boy",
+            "price": "$23"
+          },
+          {
+            "name": "Fried oyster platter",
+            "price": "$28"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "other site"
       }
     },
     {
@@ -675,7 +945,7 @@
         },
         "url": "https://www.dragosrestaurant.com/hilton-riverside-new-orleans-menu"
       },
-      "lore": "Invented charbroiled oysters."
+      "lore": "Invented charbroiled oysters, 1993."
     },
     {
       "id": "chemin",
@@ -751,7 +1021,7 @@
       "menu": {
         "url": "https://opentable.com/r/trenasse-new-orleans"
       },
-      "lore": "36-oyster \"Oyster Log\" board."
+      "lore": "Oyster Log: 36 broiled, six styles."
     },
     {
       "id": "peche",
@@ -788,7 +1058,7 @@
       },
       "phone": "(504) 522-1744",
       "website": "https://www.pecherestaurant.com/",
-      "lore": "2014 James Beard Best New Restaurant."
+      "lore": "Different shucking knife per shell shape."
     },
     {
       "id": "sidecar",
@@ -824,9 +1094,21 @@
       ],
       "note": "",
       "source": "https://www.restaurantji.com/la/new-orleans/sidecar-patio-and-oyster-bar-",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "menu": {
-        "url": "https://sidecarnola.com/"
+        "url": "https://usmenuguide.com/places/united-states/louisiana/new-orleans/sidecar-nola-patio-oyster-bar-new-orleans/",
+        "items": [
+          {
+            "name": "Charbroiled Gulf (6)",
+            "price": "$18"
+          },
+          {
+            "name": "Raw: East, Gulf & West Coast (changes daily)",
+            "price": "Not listed"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "other site"
       }
     },
     {
@@ -871,7 +1153,8 @@
         "url": "https://www.mariasoysterbar.com/"
       },
       "phone": "(504) 350-4075",
-      "website": "https://www.mariasoysterbar.com/"
+      "website": "https://www.mariasoysterbar.com/",
+      "lore": "Chili-butter roasted oysters; oyster banh mi."
     },
     {
       "id": "basin",
@@ -904,7 +1187,7 @@
       ],
       "note": "Mondays, with any menu item.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "menu": {
         "raw": {
           "half": 10,
@@ -914,7 +1197,27 @@
           "half": 14,
           "dozen": 26
         },
-        "url": "https://www.opentable.ie/r/basin-seafood-and-spirits"
+        "url": "https://places.singleplatform.com/basin-seafood-and-spirits/menu",
+        "items": [
+          {
+            "name": "Raw",
+            "price": "$10 for 6 · $18 a dozen"
+          },
+          {
+            "name": "Charbroiled, Parmesan-pecorino butter",
+            "price": "$14 · $26"
+          },
+          {
+            "name": "Oyster Caesar, cornmeal-crusted",
+            "price": "$14"
+          },
+          {
+            "name": "Mondays: raw oysters with any item",
+            "price": "75¢ each"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "other site"
       }
     },
     {
@@ -948,7 +1251,7 @@
       ],
       "note": "Raw dozen $11.95.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "lat": 29.92321,
       "lng": -90.08815,
       "geocoded": "census",
@@ -957,7 +1260,23 @@
           "half": 8,
           "dozen": 15
         },
-        "url": "https://places.singleplatform.com/boil-seafood-house/menu"
+        "url": "https://order.toasttab.com/online/boil-seafood-house",
+        "chargrilled": {
+          "half": 14,
+          "dozen": 25
+        },
+        "items": [
+          {
+            "name": "CharBOIL chargrilled",
+            "price": "$14 for 6 · $25 a dozen"
+          },
+          {
+            "name": "Oyster po-boy",
+            "price": "$16.95"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       }
     },
     {
@@ -987,7 +1306,7 @@
       },
       "phone": "(504) 895-9761",
       "website": "http://www.casamentosrestaurant.com/",
-      "lore": "Closes every summer, since 1919."
+      "lore": "Oyster loaf on thick toasted bread."
     },
     {
       "id": "superior",
@@ -1024,7 +1343,8 @@
       },
       "phone": "(504) 293-3474",
       "website": "https://www.superiorseafoodnola.com/",
-      "hhUnposted": "Raw dozen $15"
+      "hhUnposted": "Raw dozen $15",
+      "lore": "Bacon-wrapped \"angels on horseback\" oysters."
     },
     {
       "id": "pascal",
@@ -1054,11 +1374,51 @@
       ],
       "note": "",
       "source": "https://www.opentable.com/pascals-manale?lang=en",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "menu": {
-        "url": "https://www.pascalsmanale.com/menus"
+        "url": "https://www.toasttab.com/local/order/pascal-s-manale-1838-napoleon-ave",
+        "raw": {
+          "half": 14,
+          "dozen": 28
+        },
+        "items": [
+          {
+            "name": "Raw",
+            "price": "$14 for 6 · $28 a dozen"
+          },
+          {
+            "name": "Oysters Rockefeller (6)",
+            "price": "$18"
+          },
+          {
+            "name": "Oysters Bordelaise (6)",
+            "price": "$18"
+          },
+          {
+            "name": "Oysters Casino, house andouille (6)",
+            "price": "$18"
+          },
+          {
+            "name": "Pan roast: oysters, shrimp, crab",
+            "price": "$18"
+          },
+          {
+            "name": "Combination pan roast (entrée)",
+            "price": "$32"
+          },
+          {
+            "name": "Fried oyster plate",
+            "price": "$19.13"
+          },
+          {
+            "name": "Fried oyster salad",
+            "price": "$21"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       },
-      "lore": "Birthplace of barbecue shrimp."
+      "lore": "Oyster bar open since 1913."
     },
     {
       "id": "pigeon-whale",
@@ -1137,9 +1497,28 @@
       "source": "https://www.cooterbrowns.com/",
       "verified": "2026-11-09",
       "menu": {
-        "url": "https://www.cooterbrowns.com/"
-      },
-      "lore": "100+ beer-holding dead-celebrity statues."
+        "url": "https://www.toasttab.com/local/order/cooterbrowns/r-ed63f8f9-13ab-47bd-9108-48de193fb00b/item-small-house-salad_69f39eee-0184-4e12-b70e-fa26ba4b7fbc",
+        "items": [
+          {
+            "name": "Oyster po-boy",
+            "price": "$29.75"
+          },
+          {
+            "name": "Radiator po-boy: oysters, shrimp, cheese",
+            "price": "$25"
+          },
+          {
+            "name": "Oyster on a bun",
+            "price": "$16.25"
+          },
+          {
+            "name": "Oyster basket",
+            "price": "$32"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
+      }
     },
     {
       "id": "salted-pearl",
@@ -1175,13 +1554,25 @@
       ],
       "note": "",
       "source": "https://www.strochmarket.com/news/happy-hour-guide",
-      "verified": "2026-11-08",
+      "verified": "2026-11-09",
       "menu": {
-        "url": "https://www.strochmarket.com/news/happy-hour-guide"
+        "url": "https://www.strochmarket.com/news/happy-hour-guide",
+        "items": [
+          {
+            "name": "Happy hour, weekdays 3–5: raw",
+            "price": "$1 each"
+          },
+          {
+            "name": "Oysters by the sack, to take home",
+            "price": "Not listed"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "other site"
       },
       "phone": "(504) 267-0388",
       "website": "https://www.strochmarket.com/",
-      "lore": "Market building dates to 1875."
+      "lore": "Sells oysters by the sack."
     },
     {
       "id": "porgys",
@@ -1220,8 +1611,7 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.finedininglovers.com/restaurants/porgys-seafood-market"
-      },
-      "lore": "Sells overlooked bycatch fish."
+      }
     },
     {
       "id": "monday",
@@ -1367,7 +1757,15 @@
       "verified": "2026-11-09",
       "menu": {
         "market": true,
-        "url": "https://revolutionnola.com/menus/"
+        "url": "https://revolutionnola.com/happy-hour-menu",
+        "items": [
+          {
+            "name": "Happy hour 4–6: market oysters, half shell",
+            "price": "$14"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       },
       "website": "https://revolutionnola.com/",
       "lat": 29.95537,
@@ -1438,14 +1836,31 @@
       "source": "https://www.neworleans.com/articles/post/arnauds/",
       "verified": "2026-11-09",
       "menu": {
-        "url": "https://www.arnaudsrestaurant.com/?p=1642"
+        "url": "https://www.arnaudsrestaurant.com/menus/appetizers/",
+        "market": true,
+        "items": [
+          {
+            "name": "Half shell, mignonette (6)",
+            "price": "Market price"
+          },
+          {
+            "name": "Oysters Bienville",
+            "price": "$18"
+          },
+          {
+            "name": "Oysters Arnaud: Bienville, Kathryn, Ohan, Rockefeller, Suzette",
+            "price": "$18"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       },
       "phone": "(504) 523-5433",
       "website": "https://www.arnaudsrestaurant.com/",
       "lat": 29.95564,
       "lng": -90.06853,
       "geocoded": "census",
-      "lore": "Mardi Gras gown museum upstairs."
+      "lore": "Five baked oyster styles, one plate."
     },
     {
       "id": "holywater",
@@ -1481,7 +1896,7 @@
       "lat": 29.9551,
       "lng": -90.06609,
       "geocoded": "census",
-      "lore": "Inside an 1837 ship chandlery."
+      "lore": "Serves its own Sailor Baby oysters."
     },
     {
       "id": "galliers",
@@ -1520,13 +1935,34 @@
           "half": 19,
           "dozen": 28
         },
-        "url": "https://galliernola.com/seafood-oysters/best-oysters-new-orleans/"
+        "url": "https://galliernola.com/seafood-oysters/best-oysters-new-orleans/",
+        "items": [
+          {
+            "name": "Raw",
+            "price": "$16 for 6 · $25 a dozen"
+          },
+          {
+            "name": "Charbroiled",
+            "price": "$19 · $28"
+          },
+          {
+            "name": "Rockefeller (6)",
+            "price": "$21"
+          },
+          {
+            "name": "Gallier's Special: 3 raw, 3 char, 3 Rockefeller, 3 Creole",
+            "price": "$34"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant"
       },
       "phone": "(504) 267-5672",
       "website": "https://galliernola.com/",
       "lat": 29.95345,
       "lng": -90.07033,
-      "geocoded": "census"
+      "geocoded": "census",
+      "lore": "Special dozen mixes four oyster styles."
     },
     {
       "id": "deanies",
@@ -1563,12 +1999,34 @@
       "source": "https://blog.deanies.com/french-quarter/",
       "verified": "2026-11-09",
       "menu": {
-        "url": "https://blog.deanies.com/french-quarter/"
+        "url": "https://places.singleplatform.com/deanies-seafood-restaurant-in-the-french-quarter/menu",
+        "market": true,
+        "items": [
+          {
+            "name": "Raw, charbroiled or barbecue (6 or 12)",
+            "price": "Market price"
+          },
+          {
+            "name": "Happy hour, weekdays 3–6",
+            "price": "$5 off a dozen"
+          },
+          {
+            "name": "Creole spinach salad, crispy oysters",
+            "price": "$19.50"
+          },
+          {
+            "name": "Oyster add-on",
+            "price": "$10"
+          }
+        ],
+        "checked": "2026-11-09",
+        "checkedFrom": "other site"
       },
       "website": "https://www.deanies.com/",
       "lat": 29.95498,
       "lng": -90.06941,
-      "geocoded": "census"
+      "geocoded": "census",
+      "lore": "Signature barbecue oysters, oven-broiled."
     },
     {
       "id": "bon-temps",
@@ -1595,7 +2053,7 @@
       "lat": 29.92045,
       "lng": -90.10616,
       "geocoded": "census",
-      "lore": "Free oysters Fridays; Oswald's barstool."
+      "lore": "Free oysters every Friday."
     },
     {
       "id": "mosquito",
@@ -1666,6 +2124,116 @@
       "lng": -90.0983,
       "geocoded": "census",
       "lore": "Oysters roasted with curry leaves."
+    },
+    {
+      "id": "clancys",
+      "name": "Clancy's",
+      "area": "Uptown",
+      "address": "6100 Annunciation St, New Orleans, LA",
+      "kind": [
+        "fried"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "",
+      "days": [],
+      "start": null,
+      "end": null,
+      "note": "",
+      "source": "https://www.allmenus.com/la/new-orleans/274292-clancys/menu/",
+      "verified": "2026-11-09",
+      "menu": {
+        "url": "https://www.allmenus.com/la/new-orleans/274292-clancys/menu/",
+        "checked": "2026-11-09",
+        "checkedFrom": "other site",
+        "items": [
+          {
+            "name": "Fried oysters with Brie (dinner)",
+            "price": "$15.75"
+          },
+          {
+            "name": "Fried oysters, blue cheese vinaigrette (lunch)",
+            "price": "$14.75"
+          }
+        ]
+      },
+      "lore": "Fried oysters with Brie."
+    },
+    {
+      "id": "galatoires",
+      "name": "Galatoire's",
+      "area": "French Quarter",
+      "address": "209 Bourbon St, New Orleans, LA",
+      "kind": [
+        "fried",
+        "roasted"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "",
+      "days": [],
+      "start": null,
+      "end": null,
+      "note": "",
+      "source": "https://www.galatoires.com/menus/dining-room",
+      "verified": "2026-11-09",
+      "menu": {
+        "url": "https://www.galatoires.com/menus/dining-room",
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant",
+        "items": [
+          {
+            "name": "Oysters en brochette: fried, bacon, meunière",
+            "price": "$19"
+          },
+          {
+            "name": "Oysters Rockefeller",
+            "price": "$20"
+          }
+        ]
+      },
+      "website": "https://www.galatoires.com/"
+    },
+    {
+      "id": "coterie",
+      "name": "Coterie Restaurant & Oyster Bar",
+      "area": "French Quarter",
+      "address": "135 Decatur St, New Orleans, LA",
+      "kind": [
+        "fried"
+      ],
+      "price": null,
+      "unit": "variable",
+      "deal": "",
+      "days": [],
+      "start": null,
+      "end": null,
+      "note": "",
+      "source": "https://order.toasttab.com/online/coterie-restaurant-oyster-bar-135-decatur-st",
+      "verified": "2026-11-09",
+      "menu": {
+        "url": "https://order.toasttab.com/online/coterie-restaurant-oyster-bar-135-decatur-st",
+        "checked": "2026-11-09",
+        "checkedFrom": "restaurant",
+        "items": [
+          {
+            "name": "Oyster po-boy",
+            "price": "$24"
+          },
+          {
+            "name": "Fried oyster platter",
+            "price": "$32"
+          },
+          {
+            "name": "Shrimp & oyster platter",
+            "price": "$26"
+          },
+          {
+            "name": "Oyster salad",
+            "price": "$24"
+          }
+        ]
+      }
     }
   ],
   "checks": {

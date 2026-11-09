@@ -1230,3 +1230,23 @@ a.mf-link {
   background: var(--paper);
   border-style: dashed;
 }
+
+/* Every oyster dish on the menu: name left, price right, full-size text. */
+.mf-sheet-items {
+  list-style: none;
+  margin: 0.5rem 0;
+  padding: 0;
+}
+.mf-sheet-items li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed var(--ink);
+}
+.mf-sheet-items b {
+  white-space: nowrap;
+}
+.mf-sheet-checked {
+  font-style: italic;
+}

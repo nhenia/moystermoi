@@ -699,6 +699,21 @@ function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: bool
             <p>Chargrilled: {[grill.half != null && `$${grill.half} for 6`, grill.dozen != null && `$${grill.dozen} a dozen`].filter(Boolean).join(" · ")}</p>
           )}
           {v.menu?.market && <p>Market price (changes daily)</p>}
+          {v.menu?.items && v.menu.items.length > 0 && (
+            <ul className="mf-sheet-items">
+              {v.menu.items.map((it) => (
+                <li key={it.name}>
+                  <span>{it.name}</span> <b>{it.price}</b>
+                </li>
+              ))}
+            </ul>
+          )}
+          {v.menu?.checked && (
+            <p className="mf-sheet-checked">
+              Checked {v.menu.checked}
+              {v.menu.checkedFrom === "other site" ? " (from a menu site, not the restaurant's own)" : ""}
+            </p>
+          )}
           {!menuPrice && !v.menu?.market && !(v.price != null && v.start) && <p>Prices not posted online.</p>}
           {v.menu?.url && (
             <a className="mf-link" href={v.menu.url} target="_blank" rel="noreferrer">

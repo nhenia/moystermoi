@@ -46,6 +46,11 @@ export type Menu = {
   chargrilled?: { half?: number; dozen?: number }
   /** The menu says "market price". */
   market?: boolean
+  /** Every oyster dish on the menu, with its price as printed ("$18 for 6", "Market price"). */
+  items?: { name: string; price: string }[]
+  /** When the menu was checked, and whether it was the restaurant's own menu or another site. */
+  checked?: string
+  checkedFrom?: "restaurant" | "other site"
   /** Where to see the menu. */
   url: string
 }
