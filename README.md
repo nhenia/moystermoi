@@ -61,14 +61,25 @@ Everything lives in **`src/deals.json`**. On GitHub, open the file, click the pe
 - **Regular prices:** `menu.raw` (`each`, `half`, `dozen`), `menu.chargrilled` (`half`, `dozen`), `menu.market: true` for "market price", and `menu.url` (the "See menu" link — every spot needs one). Only use prices from the restaurant's own site or a current listing.
 - **`note`** shows on the details screen: use it for things like "Bar areas only" or a happy hour whose times aren't posted.
 - **`source`** is the page you checked; **`verified`** is the date you checked it.
-- **After re-checking prices,** set `"updated"` at the top to today's date. After 45 days the app warns visitors the info may be stale.
+- **After re-checking a spot,** set its `verified` to today. `"updated"` at the top is the oldest `verified` date; after 45 days the app warns visitors the info may be stale.
 - **New restaurant:** copy an entry, give it a unique `id`, leave out `lat`/`lng`. The robot maps it.
 - **Notable fact:** `lore` is one striking fact, under 7 words, shown on the card (e.g. "Invented charbroiled oysters."). Never a general description; leave it out if there's nothing remarkable.
 - **Never guess.** No posted price? `"price": null, "unit": "variable"` and the app says "Market price".
 
+### Keeping deals fresh (automatic)
+
+Happy hours change quietly, so nothing is trusted forever:
+
+- **Every restaurant has a `verified` date.** If its happy hour hasn't been re-confirmed in **21 days**, the app stops showing it as a live deal (no price, no highlight) and shows "Happy hour · call to confirm" with the phone number instead. Change the limit with `DEAL_STALE_AFTER_DAYS` in `src/finder/logic.ts`.
+- **Every morning at about 6:40 am**, a Claude scheduled task re-checks 7 restaurants (oldest checks first, so each spot is checked about once a week) against the restaurant's own site, menu, booking page or recent posts. Its checklist is `.claude/skills/verify-oyster-deals/SKILL.md`.
+  - Same as before → it updates the `verified` date and publishes on its own.
+  - Something changed → it opens a pull request on GitHub with a Was / Now / Proof table. **Nothing changes in the app until you merge it.**
+  - Can't tell (site down, only a blog mentions it) → it leaves the entry alone and puts it on a "worth a call" list in the morning notification.
+- `"updated"` at the top of `deals.json` is set to the oldest check, so it means "everything checked since this date".
+
 ### The data robot
 
-`.github/workflows/refresh-data.yml` runs every Monday and whenever `deals.json` changes. It:
+`.github/workflows/refresh-data.yml` runs every morning (about 6:17 am, before the deal check) and whenever `deals.json` changes. It:
 1. finds map locations for addresses missing them (US Census geocoder, OpenStreetMap fallback),
 2. checks every source link still loads (broken ones are listed in the run summary and in `checks.brokenLinks`),
 3. commits the result and redeploys the site.

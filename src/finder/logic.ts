@@ -32,6 +32,8 @@ export type Venue = {
   website?: string
   /** A happy hour the restaurant has, but whose times aren't posted. */
   hhUnposted?: string
+  /** Set by freshen(): the happy hour hasn't been re-confirmed since this date ("Nov 1"). Never in deals.json. */
+  hhStale?: string
   /** One striking fact (under 7 words), never a general description. Leave out if there is none. */
   lore?: string
 }
@@ -349,6 +351,38 @@ export function daysSince(isoDate: string, now: Date = new Date()) {
 }
 
 export const STALE_AFTER_DAYS = 45
+
+/** A happy hour not re-confirmed within this many days stops showing as a live deal. */
+export const DEAL_STALE_AFTER_DAYS = 21
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+/**
+ * Old happy-hour info is worse than none: a tourist walks there for a $1 oyster that ended in October.
+ * If a venue's timed happy hour hasn't been checked in DEAL_STALE_AFTER_DAYS, return a copy that
+ * shows it as "call to confirm" (via hhUnposted) instead of a live deal with a price.
+ */
+export function freshen(venue: Venue, now: Date = new Date()): Venue {
+  if (!venue.start || !venue.end || venue.days.length === 0) return venue
+  const age = venue.verified ? daysSince(venue.verified, now) : Infinity
+  if (age <= DEAL_STALE_AFTER_DAYS) return venue
+  const [, m, d] = (venue.verified ?? "").split("-").map(Number)
+  const when = venue.verified && m ? `${MONTHS[m - 1]} ${d}` : "a while"
+  const summary = [venue.deal, `${formatDays(venue.days)} ${formatRange(venue.start, venue.end)}`]
+    .filter(Boolean)
+    .join(" · ")
+  return {
+    ...venue,
+    price: null,
+    unit: "variable",
+    deal: "",
+    days: [],
+    start: null,
+    end: null,
+    hhUnposted: summary,
+    hhStale: when,
+  }
+}
 
 export function walkingDirections(venue: Venue) {
   // Name + address lands on the actual business listing in Google Maps (better than raw coordinates).

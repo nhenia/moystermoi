@@ -33,6 +33,11 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [x] Senior pass: Atkinson Hyperlegible, 18px base, 44px+ targets, plain wording, calm motion, fonts bundled (offline)
 - [x] Triple check: palette contrast script, axe-core (0 violations, AAA rules, 5 palettes), large-text/small-screen/keyboard suite
 
+## 2026-11-09 — daily freshness
+- [x] Per-restaurant freshness: happy hours not confirmed in 21 days show "call to confirm" instead of a live deal (tested, screenshot reviewed)
+- [x] Daily deal-check checklist (`.claude/skills/verify-oyster-deals/SKILL.md`) + Claude scheduled task, ~6:40 am
+- [x] Link/map robot now runs daily (~6:17 am) instead of weekly
+
 ## Open
 - [ ] Rescan 2026-11-09 added 9 spots (R'evolution, Antoine's, Arnaud's, Holywater, Gallier's, Deanie's, Le Bon Temps Roulé, Mosquito Supper Club, Saffron). Check their hours by phone; Arnaud's hours come from a 2022 page
 - [ ] Maria's: Big Easy Magazine (Jan 2025) lists a daily 4–6 pm $1.50 oyster happy hour; the data has none. Confirm and add
@@ -42,6 +47,7 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [ ] Five radically distinct visual designs (current build is design #1: night-print risograph)
 
 ## Lessons
+- One global "updated" date hid per-spot staleness: a single old happy hour looked as current as the rest. Freshness is now per venue.
 - Check sourcing claims against the farm's own page: R'evolution's Bayou Rosa oysters are farmed by United Houma Nation members.
 - Never run the data robot from a sandbox without internet: it marks every link "broken".
 - Shared "pm" in time ranges misleads across midnight ("8–1 am"); spell out both halves when the range is overnight.

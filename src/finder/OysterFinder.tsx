@@ -9,6 +9,7 @@ import {
   type Ranked,
   type Venue,
   STALE_AFTER_DAYS,
+  freshen,
   daysSince,
   drawOyster,
   enrich,
@@ -161,7 +162,10 @@ export default function OysterFinder() {
   }
 
   const clock = useMemo(() => nolaClock(now), [now])
-  const enriched = useMemo(() => enrich(venues, origin, clock), [origin, clock])
+  const enriched = useMemo(
+    () => enrich(venues.map((v) => freshen(v, now)), origin, clock),
+    [origin, clock, now],
+  )
   const ranked = useMemo(() => rank(enriched, mode), [enriched, mode])
   const nearOrder = useMemo(() => rank(enriched, "near"), [enriched])
   const happyOrder = useMemo(() => rank(enriched, "happy"), [enriched])
@@ -502,7 +506,12 @@ type CardProps = {
 function HHChip({ r }: { r: Ranked }) {
   const text = formatHappyHour(r.hh)
   if (text) return <span className={`mf-chip mf-chip-${r.hh.state}`}>{text}</span>
-  return r.venue.hhUnposted ? <span className="mf-chip mf-chip-ask">Happy hour · call for times</span> : null
+  if (!r.venue.hhUnposted) return null
+  return (
+    <span className="mf-chip mf-chip-ask">
+      {r.venue.hhStale ? "Happy hour · call to confirm" : "Happy hour · call for times"}
+    </span>
+  )
 }
 
 /** Tap-to-call and website, offered wherever hours or happy-hour times are missing. */
@@ -669,7 +678,7 @@ function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: bool
           <div className="mf-sheet-box mf-sheet-hh">
             <h3>Happy hour</h3>
             <p>
-              <b>Times not posted</b>
+              <b>{v.hhStale ? `Not confirmed since ${v.hhStale}` : "Times not posted"}</b>
             </p>
             <p>{v.hhUnposted}</p>
             <Contact v={v} />

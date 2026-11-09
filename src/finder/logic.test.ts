@@ -215,3 +215,35 @@ test("shuck me: draws an open, walkable spot and favours live happy hours", asyn
   const pick = drawOyster(late)
   assert.ok(pick == null || pick.open.state === "open")
 })
+
+test("stale happy hours turn into 'call to confirm' instead of showing as live", async () => {
+  const { freshen, DEAL_STALE_AFTER_DAYS } = await import("./logic.ts")
+  const now = new Date("2026-12-15T18:00:00-06:00")
+  const deal = { ...base, deal: "$1 raw oysters", price: 1, unit: "each" }
+
+  // Checked recently: untouched
+  const fresh = { ...deal, verified: "2026-12-01" }
+  assert.equal(freshen(fresh, now), fresh)
+
+  // Older than the limit: no live happy hour, no happy hour price, but the deal is still mentioned
+  const old = freshen({ ...deal, verified: "2026-11-01" }, now)
+  assert.equal(happyHour(old, nolaClock(now)).state, "none")
+  assert.equal(old.price, null)
+  assert.equal(old.unit, "variable")
+  assert.equal(old.hhStale, "Nov 1")
+  assert.match(old.hhUnposted ?? "", /\$1 raw oysters/)
+  assert.match(old.hhUnposted ?? "", /3–6\spm/)
+
+  // Never checked counts as stale
+  assert.equal(freshen({ ...deal, verified: undefined }, now).price, null)
+
+  // Venues without a happy hour are left alone however old
+  const noDeal = { ...base, days: [], start: null, end: null, verified: "2020-01-01" }
+  assert.equal(freshen(noDeal, now), noDeal)
+
+  assert.ok(DEAL_STALE_AFTER_DAYS >= 14 && DEAL_STALE_AFTER_DAYS <= 30)
+})
+
+test("every venue has a verified date", () => {
+  for (const v of venues) assert.match(v.verified ?? "", /^\d{4}-\d{2}-\d{2}$/, v.id)
+})

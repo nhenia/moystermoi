@@ -3,7 +3,7 @@ name: Refresh oyster data
 # Never edits prices or happy-hour times — those stay human-verified.
 on:
   schedule:
-    - cron: "17 13 * * 1" # Mondays, ~8am New Orleans time
+    - cron: "17 12 * * *" # Daily, ~6:17am New Orleans time (before the 6:40 deal check)
   workflow_dispatch:
   push:
     branches: [main, "feature/**"]
