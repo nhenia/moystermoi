@@ -1,5 +1,8 @@
 import json, os, sys, base64
 from playwright.sync_api import sync_playwright
+import json as _json, pathlib as _pl
+VENUES = len(_json.loads((_pl.Path(__file__).parent.parent / "src" / "deals.json").read_text())["venues"])
+MAPPED = sum(1 for v in _json.loads((_pl.Path(__file__).parent.parent / "src" / "deals.json").read_text())["venues"] if v.get("lat") is not None)  # follows the data, so adding spots never breaks tests
 
 OUT = os.environ.get("SHOTS", "test-screenshots")
 os.makedirs(OUT, exist_ok=True)
@@ -50,14 +53,14 @@ with sync_playwright() as p:
     check(page.locator(".mf-map-legend").is_visible(), "map legend is shown")
     check("Open now" in first, "pick says whether it's open and until when")
     price_texts = page.locator(".mf-price").all_inner_texts()
-    check(len(price_texts) == 34 and all(t.strip() for t in price_texts), "every spot shows a price, market price or 'See menu'")
+    check(len(price_texts) == VENUES and all(t.strip() for t in price_texts), "every spot shows a price, market price or 'See menu'")
     check(any("See menu" in t for t in price_texts) and any("$" in t for t in price_texts), "prices and 'See menu' both appear")
     check("MRB BAR" in page.locator(".mf").inner_text().upper(), "MRB is listed")
     total = page.locator(".mf-pick").count() + page.locator(".mf-row").count()
-    check(total == 34, f"near mode lists every spot ({total})")
+    check(total == VENUES, f"near mode lists every spot ({total})")
     check("OYSTERS" in page.locator("h1#mf-title").inner_text().upper(), "page heading says Oysters near me")
     check(page.locator(".mf-plate .mf-topo").is_visible(), "Plate I (the shell map) is on screen")
-    check(page.locator(".mf-topo .t-pearl").count() == 34, "every spot is a pearl on the shell map")
+    check(page.locator(".mf-topo .t-pearl").count() == MAPPED, "every spot is a pearl on the shell map")
     check(page.locator("video").count() == 0, "no video on the page")
     looping = page.evaluate("""() => [...document.querySelectorAll('.mf *')].filter(e => getComputedStyle(e).animationIterationCount === 'infinite').length""")
     check(looping == 0, f"no looping animation ({looping})")
@@ -131,7 +134,7 @@ with sync_playwright() as p:
     chips = page.locator(".mf-pick .mf-chip").all_inner_texts()
     check(all("NOW" in c.upper() and "ENDS" in c.upper() for c in chips), f"happy mode leads with live specials and their end time {chips}")
     total = page.locator(".mf-pick").count() + page.locator(".mf-row").count()
-    check(total == 34, f"happy mode still lists every spot ({total})")
+    check(total == VENUES, f"happy mode still lists every spot ({total})")
     no_hh = page.locator(".mf-row:not(:has(.mf-chip))").count()
     check(no_hh > 0, f"places without a happy hour are listed too ({no_hh})")
     later = [c for c in page.locator(".mf-row .mf-chip").all_inner_texts() if "IN " in c.upper() or "TOMORROW" in c.upper()]
