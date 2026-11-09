@@ -16,13 +16,14 @@ type Props = {
   selectedId: string | null
   onSelect: (id: string) => void
   expanded: boolean
+  routingId?: string | null
 }
 
 type Cluster = { ids: string[]; lat: number; lng: number }
 
 const CLUSTER_PX = 28
 
-export default function OysterMap({ items, origin, selectedId, onSelect, expanded }: Props) {
+export default function OysterMap({ items, origin, selectedId, onSelect, expanded, routingId }: Props) {
   const el = useRef<HTMLDivElement>(null)
   const map = useRef<L.Map | null>(null)
   const layer = useRef<L.LayerGroup | null>(null)
@@ -33,6 +34,47 @@ export default function OysterMap({ items, origin, selectedId, onSelect, expande
   const userMoved = useRef(false)
   const [tilesFailed, setTilesFailed] = useState(false)
   const [view, setView] = useState(0) // bumps on zoom/move so clusters recompute
+
+
+  const routeLayer = useRef<L.Polyline | null>(null)
+
+  // Fetch and draw route when routingId changes
+  useEffect(() => {
+    if (!map.current || !routingId) {
+      if (routeLayer.current && map.current) {
+        map.current.removeLayer(routeLayer.current)
+        routeLayer.current = null
+      }
+      return
+    }
+
+    const venue = items.find((i) => i.venue.id === routingId)?.venue
+    if (!venue || !hasCoords(venue) || !origin.lat) return
+
+    const fetchRoute = async () => {
+      try {
+        const res = await fetch(`https://router.project-osrm.org/route/v1/foot/${origin.lng},${origin.lat};${venue.lng},${venue.lat}?geometries=geojson`)
+        const data = await res.json()
+        if (data.routes && data.routes[0]) {
+          const coords = data.routes[0].geometry.coordinates.map((c: number[]) => [c[1], c[0]] as [number, number])
+
+          if (routeLayer.current) map.current!.removeLayer(routeLayer.current)
+
+          routeLayer.current = L.polyline(coords, { color: '#0b57d0', weight: 5, opacity: 0.8, dashArray: '10, 10' }).addTo(map.current!)
+
+          const bounds = L.latLngBounds([
+            [origin.lat, origin.lng],
+            [venue.lat!, venue.lng!]
+          ])
+          map.current!.fitBounds(bounds, { padding: [50, 50] })
+          userMoved.current = true
+        }
+      } catch (err) {
+        console.error("Routing failed:", err)
+      }
+    }
+    fetchRoute()
+  }, [routingId, origin, items])
 
   const mapped = items.filter((r) => hasCoords(r.venue))
   const unmappedCount = items.length - mapped.length

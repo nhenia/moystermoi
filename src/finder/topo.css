@@ -72,7 +72,7 @@
 }
 
 .t-label {
-  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-family: 'UnifrakturMaguntia', serif;
   font-style: italic;
   font-weight: 800;
   font-size: 10px;
@@ -145,7 +145,7 @@
 .t-compass text,
 .t-scale text,
 .t-plate {
-  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-family: 'UnifrakturMaguntia', serif;
   font-weight: 800;
   font-size: 10px;
   fill: var(--ink);
@@ -227,7 +227,7 @@
 }
 
 .mf-compass text {
-  font: 800 11px 'Bodoni Moda', Didot, Georgia, serif;
+  font: 800 11px 'UnifrakturMaguntia', serif;
   fill: var(--ink);
   paint-order: stroke;
   stroke: var(--paper);
@@ -239,5 +239,5 @@
   border-top: 0;
   background: var(--paper);
   color: var(--ink);
-  font: italic 800 16px 'Bodoni Moda', Didot, Georgia, serif;
+  font: italic 800 16px 'UnifrakturMaguntia', serif;
 }

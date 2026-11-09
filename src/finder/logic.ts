@@ -390,9 +390,12 @@ export function freshen(venue: Venue, now: Date = new Date()): Venue {
 }
 
 export function walkingDirections(venue: Venue) {
-  // Name + address lands on the actual business listing in Google Maps (better than raw coordinates).
-  const destination = `${venue.name}, ${venue.address}`
-  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=walking`
+  // Used for sharing the location.
+  const q = encodeURIComponent(`${venue.name}, ${venue.address}`)
+  if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+    return `http://maps.apple.com/?q=${q}`
+  }
+  return `https://www.openstreetmap.org/search?query=${q}`
 }
 
 /** "Daily", "Mon–Fri", "Tue", "Fri–Sun", "Mon, Wed" */

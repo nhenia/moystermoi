@@ -49,7 +49,7 @@ const MODES: { value: Mode; label: string }[] = [
   { value: "map", label: "Map" },
 ]
 
-const SAVED_KEY = "moyster-saved"
+const SAVED_KEY = "pearl-clutcher-saved"
 
 function readSaved(): Set<string> {
   try {
@@ -59,7 +59,7 @@ function readSaved(): Set<string> {
   }
 }
 
-const THEME_KEY = "moyster-theme"
+const THEME_KEY = "pearl-clutcher-theme"
 type Theme = "light" | "dark"
 
 function readTheme(): Theme {
@@ -286,7 +286,7 @@ export default function OysterFinder() {
 
       <header className="mf-head">
         <p className="mf-logo">
-          <span className="mf-sr">Moyster</span>
+          <span className="mf-sr">Pearl Clutcher</span>
           <span aria-hidden="true">M</span>
           <button
             type="button"
@@ -366,6 +366,7 @@ export default function OysterFinder() {
               saved={saved.has(r.venue.id)}
               registerRef={(node) => (node ? rowRefs.current.set(r.venue.id, node) : rowRefs.current.delete(r.venue.id))}
               onOpen={() => open(r.venue.id)}
+
             />
           ))}
         </ol>
@@ -501,6 +502,7 @@ type CardProps = {
   saved: boolean
   registerRef: (node: HTMLElement | null) => void
   onOpen: () => void
+  onWalk?: (id: string) => void
 }
 
 function HHChip({ r }: { r: Ranked }) {
@@ -581,9 +583,7 @@ function PickCard({ r, index, ...p }: CardProps & { index: number }) {
         </span>
       </button>
       <div className="mf-card-actions">
-        <a className="mf-btn mf-btn-primary" href={walkingDirections(v)} target="_blank" rel="noreferrer">
-          Walk there →
-        </a>
+        <button type="button" className="mf-btn mf-btn-primary" onClick={() => p.onWalk?.(v.id)}>Walk there →</button>
         <button type="button" className="mf-btn mf-btn-quiet" onClick={p.onOpen} aria-haspopup="dialog" aria-label={`Details for ${v.name}`}>
           Details
         </button>
@@ -639,7 +639,7 @@ function weekHours(hours: Venue["hours"]) {
 }
 
 /** The restaurant card. A shell lid lifts off it as it opens. */
-function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: boolean; onClose: () => void; onShare: () => void; onSave: () => void }) {
+function Detail({ r, saved, onClose, onShare, onSave, onWalk }: { r: Ranked; saved: boolean; onClose: () => void; onShare: () => void; onSave: () => void; onWalk?: (id: string) => void }) {
   const v = r.venue
   const hours = weekHours(v.hours)
   const menuPrice = formatMenuPrice(v.menu)
@@ -739,9 +739,7 @@ function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: bool
         </div>
         {v.note && <p className="mf-sheet-note">{v.note}</p>}
 
-        <a className="mf-btn mf-btn-primary mf-btn-wide" href={walkingDirections(v)} target="_blank" rel="noreferrer">
-          Walk there →
-        </a>
+        <button type="button" className="mf-btn mf-btn-primary mf-btn-wide" onClick={() => onWalk?.(v.id)}>Walk there →</button>
         <div className="mf-sheet-actions">
           <button type="button" className="mf-btn mf-btn-quiet" onClick={onShare}>
             Share

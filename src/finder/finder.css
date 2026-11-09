@@ -1,4 +1,4 @@
-/* MOYSTER — Plate I.
+/* PEARL CLUTCHER — Plate I.
    A naturalist's engraving: New Orleans drawn as an oyster shell, growth rings as contour lines,
    the river crescent across the lip, every oyster bar a seed pearl. Ink on pearl paper by day,
    white-line scratchboard by night (dark mode). Prism foil marks happy hour. Nothing loops.
@@ -177,7 +177,7 @@
 .mf-logo {
   display: flex;
   align-items: flex-end;
-  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-family: 'UnifrakturMaguntia', serif;
   font-weight: 800;
   font-size: clamp(3rem, 13vw, 4rem);
   line-height: 1;
@@ -283,7 +283,7 @@
 .mf-title {
   display: grid;
   gap: 10px;
-  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-family: 'UnifrakturMaguntia', serif;
   font-style: italic;
   font-weight: 800;
   font-size: clamp(2.2rem, 10vw, 3.4rem);
@@ -412,7 +412,7 @@ a.mf-link {
 }
 
 .mf-hh-title {
-  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-family: 'UnifrakturMaguntia', serif;
   font-weight: 800;
   font-size: 1.5rem;
   line-height: 1.1;
@@ -563,7 +563,7 @@ a.mf-link {
 }
 
 .mf-name {
-  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-family: 'UnifrakturMaguntia', serif;
   font-weight: 800;
   font-size: 1.45rem;
   line-height: 1.12;
@@ -710,7 +710,7 @@ a.mf-link {
 }
 
 .mf-h2 {
-  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-family: 'UnifrakturMaguntia', serif;
   font-style: italic;
   font-weight: 800;
   font-size: 1.75rem;
@@ -1008,7 +1008,7 @@ a.mf-link {
 }
 
 .mf-sheet h2 {
-  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-family: 'UnifrakturMaguntia', serif;
   font-weight: 800;
   font-size: clamp(1.9rem, 8vw, 2.6rem);
   line-height: 1.05;
@@ -1042,7 +1042,7 @@ a.mf-link {
 }
 
 .mf-sheet-box h3 {
-  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-family: 'UnifrakturMaguntia', serif;
   font-style: italic;
   font-weight: 800;
   font-size: 1.3rem;

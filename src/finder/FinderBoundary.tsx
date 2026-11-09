@@ -10,7 +10,7 @@ export default class FinderBoundary extends Component<{ children: ReactNode }, {
   }
 
   componentDidCatch(error: unknown) {
-    console.error("Moyster finder crashed:", error)
+    console.error("Pearl Clutcher finder crashed:", error)
   }
 
   render() {
@@ -22,9 +22,7 @@ export default class FinderBoundary extends Component<{ children: ReactNode }, {
           <button type="button" onClick={() => this.setState({ failed: false })}>
             Try again →
           </button>
-          <a href="https://www.google.com/maps/search/oysters+near+me/" target="_blank" rel="noreferrer">
-            Or search oysters near you on Google Maps ↗
-          </a>
+          {/* Google Maps link removed */}
         </div>
       </section>
     )
