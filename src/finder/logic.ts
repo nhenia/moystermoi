@@ -32,7 +32,7 @@ export type Venue = {
   website?: string
   /** A happy hour the restaurant has, but whose times aren't posted. */
   hhUnposted?: string
-  /** One notable thing about the place, 25 words or fewer. Shown on its card. */
+  /** One striking fact (under 7 words), never a general description. Leave out if there is none. */
   lore?: string
 }
 
