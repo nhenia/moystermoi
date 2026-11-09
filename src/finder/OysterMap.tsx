@@ -5,6 +5,7 @@ import type { Ranked } from "./logic"
 import { hasCoords } from "./logic"
 import type { Origin } from "./location"
 import { halfShell, hash01, shellPile } from "./art"
+import { PLATE_BOUNDS, topoOverlay } from "./topo"
 
 const OSM_TILES = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 
@@ -64,6 +65,21 @@ export default function OysterMap({ items, origin, selectedId, onSelect, expande
         setTilesFailed(false)
       })
       .addTo(m)
+    // Plate I laid over the street map: the shell's growth rings run across the city as contour lines.
+    const tpl = document.createElement("template")
+    tpl.innerHTML = topoOverlay()
+    L.svgOverlay(tpl.content.firstElementChild as SVGElement, L.latLngBounds(PLATE_BOUNDS), { interactive: false, className: "mf-topo-layer" }).addTo(m)
+    // Engraver's furniture: a compass rose and a scale bar in miles.
+    const Compass = L.Control.extend({
+      onAdd() {
+        const d = L.DomUtil.create("div", "mf-compass")
+        d.setAttribute("aria-hidden", "true")
+        d.innerHTML = `<svg viewBox="-24 -32 48 58"><circle r="15"/><path d="M0 -22 L4 0 L0 22 L-4 0 Z"/><path class="n" d="M0 -22 L4 0 L-4 0 Z"/><text y="-25" text-anchor="middle">N</text></svg>`
+        return d
+      },
+    })
+    new Compass({ position: "topright" }).addTo(m)
+    L.control.scale({ position: "bottomright", metric: false, maxWidth: 90 }).addTo(m)
     layer.current = L.layerGroup().addTo(m)
     m.on("zoomend moveend", () => setView((v) => v + 1))
     // Once someone drags or zooms, stop re-framing the map under their fingers.

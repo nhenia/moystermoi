@@ -90,18 +90,13 @@ const BASE: ShellOpts = { cx: 160, cy: 205, rx: 138, ry: 168, seed: 7 }
 
 let cached: { key: string; svg: string } | null = null
 
-/** The full plate. `pearls` are the oyster bars; live happy hours get the prism fill. */
-export function topoShell(pearls: Pearl[]): string {
-  const key = pearls.map((p) => `${p.lat},${p.lng},${p.live ? 1 : 0}`).join("|")
-  if (cached?.key === key) return cached.svg
-
+/** The shell itself: outline, growth rings (= contour lines, every fourth an index contour), ribs. */
+function shellParts() {
   const outline = shellOutline(BASE)
   const outlineD = smooth(outline)
   const top = outline.reduce((a, b) => (b[1] < a[1] ? b : a))
   const umbo: Pt = [top[0], top[1] + 4]
   const r = rng(11)
-
-  // Growth rings = contour lines. Every fourth one is an index contour, drawn heavier.
   const rings: string[] = []
   for (let k = 1; k <= 13; k++) {
     const s = 1 - k * 0.068
@@ -110,7 +105,6 @@ export function topoShell(pearls: Pearl[]): string {
     )
     rings.push(`<path class="${k % 4 === 0 ? "t-index" : "t-contour"}" d="${smooth(ring)}"/>`)
   }
-
   // Radial ribs from the hinge, faint, like the shell's plications.
   const ribs: string[] = []
   for (let i = 0; i < 28; i++) {
@@ -118,6 +112,41 @@ export function topoShell(pearls: Pearl[]): string {
     const k = 0.62 + r() * 0.3
     ribs.push(`M${f(umbo[0] + (p[0] - umbo[0]) * 0.2)} ${f(umbo[1] + (p[1] - umbo[1]) * 0.2)} L${f(umbo[0] + (p[0] - umbo[0]) * k)} ${f(umbo[1] + (p[1] - umbo[1]) * k)}`)
   }
+  return { outline, outlineD, top, umbo, rings, ribs, r }
+}
+
+/** Where the plate's 320×380 box sits on Earth (the inverse of `project`). */
+export const PLATE_BOUNDS: [[number, number], [number, number]] = [
+  [LAT0 - (((H - 26) / 340) * (LAT0 - LAT1)), LNG0 - (26 / 268) * (LNG1 - LNG0)], // south-west
+  [LAT0 + (26 / 340) * (LAT0 - LAT1), LNG0 + ((W - 26) / 268) * (LNG1 - LNG0)], // north-east
+]
+
+/**
+ * Plate I as a map overlay: the same shell, laid over the real street map at true scale, so the
+ * growth rings run across the city as contour lines and the lip outlines it at low zoom.
+ * Only the shell and its rings are drawn (no ribs, which would read as streets); the real map supplies
+ * river, lake and streets. Lines keep a fixed
+ * on-screen width at every zoom (non-scaling strokes), and nothing in it takes taps.
+ */
+export function topoOverlay(): string {
+  const { outlineD, top, rings } = shellParts()
+  return `<svg xmlns="http://www.w3.org/2000/svg" class="mf-topo mf-topo-overlay" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+<defs><clipPath id="o-clip"><path d="${outlineD}"/></clipPath></defs>
+<path class="t-shell o-shell" d="${outlineD}"/>
+<g clip-path="url(#o-clip)">
+  <g class="t-rings">${rings.join("")}</g>
+</g>
+<path class="t-lip" d="${outlineD}"/>
+<path class="t-hinge" d="M${f(top[0] - 13)} ${f(top[1] + 3)} Q${f(top[0])} ${f(top[1] - 10)} ${f(top[0] + 13)} ${f(top[1] + 3)} Q${f(top[0])} ${f(top[1] + 10)} ${f(top[0] - 13)} ${f(top[1] + 3)} Z"/>
+</svg>`
+}
+
+/** The full plate. `pearls` are the oyster bars; live happy hours get the prism fill. */
+export function topoShell(pearls: Pearl[]): string {
+  const key = pearls.map((p) => `${p.lat},${p.lng},${p.live ? 1 : 0}`).join("|")
+  if (cached?.key === key) return cached.svg
+
+  const { outline, outlineD, top, umbo, rings, ribs, r } = shellParts()
 
   // Lake: hatched water north of the shoreline.
   const shore = SHORE.map(([lng, lat]) => project(lng, lat))

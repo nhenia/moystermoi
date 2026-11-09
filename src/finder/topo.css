@@ -177,3 +177,67 @@
 .mf .mf-logo-shell .l-lip {
   stroke-width: 5.5;
 }
+
+/* ---------- Plate I as a map overlay ---------- */
+
+/* lines stay hairline-fine at every zoom */
+.mf-topo-overlay path {
+  vector-effect: non-scaling-stroke;
+}
+
+.mf .mf-topo-overlay .o-shell {
+  fill: var(--shell);
+  fill-opacity: 0.32;
+}
+
+.mf-topo-overlay .t-contour {
+  stroke-width: 1;
+  opacity: 0.55;
+}
+
+.mf-topo-overlay .t-index {
+  stroke-width: 1.8;
+  opacity: 0.7;
+}
+
+.mf .mf-topo-overlay .t-lip {
+  stroke-width: 3;
+}
+
+.mf-compass {
+  width: 46px;
+  pointer-events: none;
+}
+
+.mf-compass svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.mf-compass circle,
+.mf-compass path {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 1.4;
+}
+
+.mf .mf-compass .n {
+  fill: var(--ink);
+}
+
+.mf-compass text {
+  font: 800 11px 'Bodoni Moda', Didot, Georgia, serif;
+  fill: var(--ink);
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 3px;
+}
+
+.mf .leaflet-control-scale-line {
+  border: 2px solid var(--ink);
+  border-top: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: italic 800 16px 'Bodoni Moda', Didot, Georgia, serif;
+}
