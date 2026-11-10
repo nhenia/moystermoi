@@ -33,7 +33,8 @@ const data = JSON.parse(await fs.readFile(dataFile, "utf8"))
 const state = JSON.parse(await fs.readFile(stateFile, "utf8").catch(() => "{}"))
 const venues = data.venues.filter((v) => !only.length || only.includes(v.id))
 
-const report = { changed: [], confirmed: [], unchanged: [], couldNotRead: [], rejected: [], needsHuman: [] }
+const report = { changed: [], confirmed: [], unchanged: [], couldNotRead: [], rejected: [], needsHuman: [], aiSkipped: [] }
+let aiDown = null
 const browser = await launch()
 let http1 = null
 
@@ -71,11 +72,19 @@ async function checkVenue(venue) {
   const fitted = sent.filter((p) => (used += p.text.length) <= budget)
   const fewPrices = fitted.reduce((n, p) => n + (p.text.match(/\$\s?\d/g)?.length ?? 0), 0) < 3
 
+  if (aiDown) {
+    report.aiSkipped.push(venue)
+    return venue
+  }
   let answer
   try {
     answer = await extract(venue, fitted)
   } catch (e) {
-    report.couldNotRead.push({ venue, why: `AI reader failed: ${e.message}` })
+    // The AI service itself isn't working (no key, bad key, service off): stop asking, say so once.
+    if (/unreadable reply|fetch failed|\b40[13]\b|ANTHROPIC_API_KEY/.test(e.message)) {
+      aiDown = e.message
+      report.aiSkipped.push(venue)
+    } else report.couldNotRead.push({ venue, why: `AI reader failed: ${e.message}` })
     return venue
   }
   const { result, rejected } = verifyExtraction(answer, fitted)
@@ -121,8 +130,20 @@ const line = (v) => `**${v.name}**`
 const md = [
   `# Daily restaurant check: ${today}`,
   "",
-  `Read each restaurant's own website with ${provider()}. ${venues.length} checked: ${report.changed.length} changed, ${report.confirmed.length + report.unchanged.length} confirmed, ${report.couldNotRead.length} couldn't be read.`,
+  `Read each restaurant's own website with ${provider()}. ${venues.length} checked: ${report.changed.length} changed, ${report.confirmed.length + report.unchanged.length} confirmed, ${report.couldNotRead.length} couldn't be read${report.aiSkipped.length ? `, ${report.aiSkipped.length} waiting on the AI reader` : ""}.`,
   "",
+  ...(aiDown
+    ? [
+        "## ⚠️ The AI reader isn't working, so prices weren't updated",
+        "",
+        process.env.ANTHROPIC_API_KEY
+          ? `Claude refused the request (${aiDown.slice(0, 200)}). Check the ANTHROPIC_API_KEY secret is a valid, funded key.`
+          : "No `ANTHROPIC_API_KEY` secret is set, and GitHub's free AI models aren't available on this account. Add the key: repository Settings → Secrets and variables → Actions → New repository secret → name `ANTHROPIC_API_KEY`.",
+        "",
+        `Restaurant sites read fine and were left untouched: ${report.aiSkipped.map((v) => v.name).sort().join(" · ")}`,
+        "",
+      ]
+    : []),
   ...(report.changed.length
     ? ["## Changed", "", "| Restaurant | What | Was | Now | Proof |", "|---|---|---|---|---|", ...report.changed.flatMap(({ venue, changes }) => changes.map((c) => `| ${venue.name} | ${c.field} | ${String(c.was).slice(0, 160)} | ${String(c.now).slice(0, 160)} | ${c.proof ? `[page](${c.proof})` : ""} |`)), ""]
     : []),

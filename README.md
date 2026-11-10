@@ -92,7 +92,7 @@ Happy hours change quietly, so nothing is trusted forever:
 
 **The report:** each run's page on GitHub (Actions → Daily restaurant check) and the file `data/last-check.md` list what changed (Was / Now / Proof link), what couldn't be read and why (site down, bot check, menu only a photo), and what was confirmed.
 
-**Which AI reads the pages:** free GitHub Models by default (no setup). For better reading of long menus, add an Anthropic API key as a repository secret named `ANTHROPIC_API_KEY` (Settings → Secrets and variables → Actions) and it switches to Claude automatically.
+**Which AI reads the pages:** Claude, using an Anthropic API key saved as a repository secret named `ANTHROPIC_API_KEY` (Settings → Secrets and variables → Actions → New repository secret). Without the key, the check still reads every site but changes nothing, and the report says the key is missing. (It would fall back to GitHub's free AI models, but in November 2026 they only answered "OK" on this account.) Most days few menus change, and unchanged pages are confirmed without asking the AI at all.
 
 **Run it now / for one restaurant:** Actions → Daily restaurant check → Run workflow. Optionally type restaurant ids (e.g. `dragos blue-crab`) or tick "Report only".
 
