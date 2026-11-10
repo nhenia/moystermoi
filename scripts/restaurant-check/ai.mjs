@@ -131,15 +131,20 @@ export async function extract(venue, pages) {
     return call.input
   }
   if (!process.env.GITHUB_TOKEN) throw new Error("Set ANTHROPIC_API_KEY, or run inside GitHub Actions (GITHUB_TOKEN) to use GitHub Models")
-  const res = await post(
-    "https://models.github.ai/inference/chat/completions",
-    { authorization: `Bearer ${process.env.GITHUB_TOKEN}`, accept: "application/vnd.github+json", "x-github-api-version": "2022-11-28" },
-    {
-      model: GITHUB_MODEL,
-      temperature: 0,
-      messages: [{ role: "user", content: text }],
-      response_format: { type: "json_schema", json_schema: { name: "report", strict: true, schema: EXTRACTION_SCHEMA } },
-    },
-  )
+  const body = (model) => ({
+    model,
+    temperature: 0,
+    messages: [{ role: "user", content: text }],
+    response_format: { type: "json_schema", json_schema: { name: "report", strict: true, schema: EXTRACTION_SCHEMA } },
+  })
+  const headers = { authorization: `Bearer ${process.env.GITHUB_TOKEN}`, accept: "application/json" }
+  let res
+  try {
+    res = await post("https://models.github.ai/inference/chat/completions", headers, body(GITHUB_MODEL))
+  } catch (e) {
+    // GitHub's older address for the same free models
+    if (!/unreadable reply|404/.test(e.message)) throw e
+    res = await post("https://models.inference.ai.azure.com/chat/completions", headers, body(GITHUB_MODEL.replace(/^[^/]+\//, "")))
+  }
   return JSON.parse(res.choices[0].message.content)
 }

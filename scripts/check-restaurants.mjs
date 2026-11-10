@@ -15,7 +15,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import crypto from "node:crypto"
 import { fileURLToPath } from "node:url"
-import { readSite, launch } from "./restaurant-check/pages.mjs"
+import { readSite, launch, launchHttp1 } from "./restaurant-check/pages.mjs"
 import { extract, provider, textBudget } from "./restaurant-check/ai.mjs"
 import { verifyExtraction, applyResult, relevantText, oldestVerified } from "./restaurant-check/lib.mjs"
 
@@ -35,9 +35,14 @@ const venues = data.venues.filter((v) => !only.length || only.includes(v.id))
 
 const report = { changed: [], confirmed: [], unchanged: [], couldNotRead: [], rejected: [], needsHuman: [] }
 const browser = await launch()
+let http1 = null
 
 async function checkVenue(venue) {
-  const site = await readSite(browser, venue)
+  let site = await readSite(browser, venue)
+  if (!site.pages.length && site.problems.some((p) => /ERR_HTTP2|ERR_EMPTY_RESPONSE|ERR_CONNECTION_CLOSED/.test(p))) {
+    http1 ??= await launchHttp1()
+    site = await readSite(http1, venue)
+  }
   const pages = site.pages.map((p) => ({ url: p.url, text: relevantText(p.text, 20000) })).filter((p) => p.text.length > 40)
   if (!pages.length) {
     report.couldNotRead.push({ venue, why: site.problems.join("; ") || "no readable text on its site" })
@@ -106,6 +111,7 @@ await Promise.all(
   }),
 )
 await browser.close()
+await http1?.close()
 console.log("")
 
 data.venues = data.venues.map((v) => results.get(v.id) ?? v)

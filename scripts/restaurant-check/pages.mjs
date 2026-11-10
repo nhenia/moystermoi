@@ -131,5 +131,6 @@ export async function readSite(browser, venue) {
   return { pages, images: [...images].slice(0, 6), problems }
 }
 
-// Some restaurant hosts reject headless Chrome's HTTP/2 handshake; HTTP/1.1 reads them fine.
-export const launch = () => chromium.launch({ args: ["--disable-http2"] })
+export const launch = () => chromium.launch()
+// Some restaurant hosts drop headless Chrome's HTTP/2 connection; a second try over HTTP/1.1 reads them.
+export const launchHttp1 = () => chromium.launch({ args: ["--disable-http2"] })
