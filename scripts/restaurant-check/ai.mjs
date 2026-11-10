@@ -93,8 +93,14 @@ export const textBudget = () => (process.env.ANTHROPIC_API_KEY ? 60000 : 16000)
 async function post(url, headers, body) {
   for (let attempt = 1; ; attempt++) {
     const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify(body), signal: AbortSignal.timeout(120000) })
-    if (res.ok) return res.json()
     const text = await res.text()
+    if (res.ok) {
+      try {
+        return JSON.parse(text)
+      } catch {
+        throw new Error(`unreadable reply (HTTP ${res.status}, ${res.headers.get("content-type")}): ${text.slice(0, 200)}`)
+      }
+    }
     if ((res.status === 429 || res.status >= 500) && attempt < 4) {
       const wait = Number(res.headers.get("retry-after")) || 20 * attempt
       await new Promise((r) => setTimeout(r, wait * 1000))
@@ -127,7 +133,7 @@ export async function extract(venue, pages) {
   if (!process.env.GITHUB_TOKEN) throw new Error("Set ANTHROPIC_API_KEY, or run inside GitHub Actions (GITHUB_TOKEN) to use GitHub Models")
   const res = await post(
     "https://models.github.ai/inference/chat/completions",
-    { authorization: `Bearer ${process.env.GITHUB_TOKEN}` },
+    { authorization: `Bearer ${process.env.GITHUB_TOKEN}`, accept: "application/vnd.github+json", "x-github-api-version": "2022-11-28" },
     {
       model: GITHUB_MODEL,
       temperature: 0,

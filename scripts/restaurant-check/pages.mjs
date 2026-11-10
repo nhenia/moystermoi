@@ -110,7 +110,10 @@ export async function readSite(browser, venue) {
           }
         }
       } catch (e) {
-        problems.push(`${url}: ${e.message.split("\n")[0]}`)
+        // A site's certificate often covers only "www." or only the bare domain: try the other once.
+        const alt = url.includes("://www.") ? url.replace("://www.", "://") : url.replace("://", "://www.")
+        if (start.includes(url) && !seen.has(alt.replace(/#.*$/, "").replace(/\/$/, "")) && /ERR_CERT|ERR_NAME|ERR_CONNECTION/.test(e.message)) queue.unshift(alt)
+        else problems.push(`${url}: ${e.message.split("\n")[0]}`)
       } finally {
         await page.close()
       }
@@ -128,4 +131,5 @@ export async function readSite(browser, venue) {
   return { pages, images: [...images].slice(0, 6), problems }
 }
 
-export const launch = () => chromium.launch()
+// Some restaurant hosts reject headless Chrome's HTTP/2 handshake; HTTP/1.1 reads them fine.
+export const launch = () => chromium.launch({ args: ["--disable-http2"] })
