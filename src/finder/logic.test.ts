@@ -131,7 +131,7 @@ test("price tags: happy hour, menu, market price, see menu", () => {
   const all = enrich(venues, DEFAULT_ORIGIN, clock)
   const by = (id: string) => all.find((r) => r.venue.id === id)!.price
   assert.deepEqual([by("desire").kind, by("desire").text], ["happy", "$1.50 each"])
-  assert.deepEqual([by("acme").kind, by("acme").text], ["none", "See menu"])
+  assert.deepEqual([by("acme").kind, by("acme").text], ["market", "Market price"]) // its menu lists raw and chargrilled at market price
   assert.deepEqual([by("pigeon-whale").kind, by("pigeon-whale").text], ["happy", "$2 each"])
   const wedMorning = enrich(venues, DEFAULT_ORIGIN, at(3, 9)).find((r) => r.venue.id === "bourbon-house")!.price
   assert.equal(wedMorning.kind, "happy") // Bourbon House happy hour is later today (2–5 pm)
