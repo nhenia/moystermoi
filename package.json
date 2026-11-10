@@ -10,7 +10,9 @@
     "test": "node --test src/finder/logic.test.ts",
     "typecheck": "tsc --noEmit -p .",
     "refresh-data": "node scripts/refresh-data.mjs",
-    "check-palettes": "node scripts/check-palettes.mjs"
+    "check-palettes": "node scripts/check-palettes.mjs",
+    "check-restaurants": "node scripts/check-restaurants.mjs",
+    "test:robot": "node --test scripts/restaurant-check/lib.test.mjs scripts/restaurant-check/pages.test.mjs"
   },
   "dependencies": {
     "@fontsource/atkinson-hyperlegible": "^5.3.0",
@@ -27,6 +29,8 @@
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^6.0.0",
     "axe-core": "^4.14.0",
+    "pdfjs-dist": "4.10.38",
+    "playwright": "1.63.0",
     "typescript": "^5.7.0",
     "vite": "^8.0.5"
   }

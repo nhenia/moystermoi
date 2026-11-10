@@ -29,7 +29,10 @@ export type Venue = {
   menu?: Menu
   /** Shown (tap to call) whenever hours or happy-hour times are missing. */
   phone?: string
+  /** The restaurant's own website: the daily check reads only this site. */
   website?: string
+  /** Pages on the restaurant's own site to always read (menus, happy hour), besides the ones it finds. */
+  pages?: string[]
   /** A happy hour the restaurant has, but whose times aren't posted. */
   hhUnposted?: string
   /** Set by freshen(): the happy hour hasn't been re-confirmed since this date ("Nov 1"). Never in deals.json. */

@@ -58,7 +58,8 @@ Everything lives in **`src/deals.json`**. On GitHub, open the file, click the pe
 
 - **Prices/deals:** `price`, `unit` (`each`, `half-dozen`, `dozen`, or `variable` if not posted), `deal`, `days` (0 = Sunday … 6 = Saturday), `start`/`end` in 24-hour time (`"15:00"`). A deal that runs past midnight just ends earlier than it starts (`"15:00"` → `"01:00"`).
 - **Oyster hours:** `hours` lists the 7 days **starting with Sunday**: `"11:00-22:00"`, `"closed"`, or `null` if that day isn't published. Use the hours oysters are served (MRB's bar is open till 4am, but oysters stop at 10pm). Leave `hours` as `null` if you don't know them; the app says "Hours not posted" instead of guessing.
-- **Regular prices:** `menu.raw` (`each`, `half`, `dozen`), `menu.chargrilled` (`half`, `dozen`), `menu.market: true` for "market price", and `menu.url` (the "See menu" link — every spot needs one). Only use prices from the restaurant's own site or a current listing.
+- **Regular prices:** `menu.raw` (`each`, `half`, `dozen`), `menu.chargrilled` (`half`, `dozen`), `menu.market: true` for "market price", `menu.items` (every oyster dish and its price as printed), and `menu.url` (the "See menu" link — every spot needs one). Only use prices from the restaurant's own site.
+- **`website`** is the restaurant's own site, and **`pages`** (optional) lists pages on it the daily check should always read, such as a menu that the home page doesn't link to.
 - **`note`** shows on the details screen: use it for things like "Bar areas only" or a happy hour whose times aren't posted.
 - **`source`** is the page you checked; **`verified`** is the date you checked it.
 - **After re-checking a spot,** set its `verified` to today. `"updated"` at the top is the oldest `verified` date; after 45 days the app warns visitors the info may be stale.
@@ -77,6 +78,24 @@ Happy hours change quietly, so nothing is trusted forever:
   - Can't tell (site down, only a blog mentions it) → it leaves the entry alone and puts it on a "worth a call" list in the morning notification.
 - `"updated"` at the top of `deals.json` is set to the oldest check, so it means "everything checked since this date".
 
+### Daily restaurant check (automatic, 9am)
+
+`.github/workflows/daily-restaurant-check.yml` runs **every day at 9am New Orleans time** (summer and winter). For each restaurant it:
+
+1. opens the restaurant's **own website** (`website`, plus any `pages` listed) in a headless browser, follows its menu, happy hour and oyster links, and reads menu PDFs;
+2. if those pages haven't changed since the last good read, re-confirms the data for free and moves on;
+3. otherwise has an AI model read the pages for oyster dishes and prices, the oyster happy hour, hours and address, **each with the exact words it read them from**;
+4. keeps a value **only if those exact words are on the restaurant's page**: anything it can't prove is thrown out and listed;
+5. saves the changes to `deals.json`, re-maps any new address, runs the data checks, and republishes the site.
+
+**What it never does:** use review sites or blogs, solve bot checks, delete a restaurant, or delete a happy hour just because a page doesn't mention it. A "we're closing" notice goes on the report for you to decide.
+
+**The report:** each run's page on GitHub (Actions → Daily restaurant check) and the file `data/last-check.md` list what changed (Was / Now / Proof link), what couldn't be read and why (site down, bot check, menu only a photo), and what was confirmed.
+
+**Which AI reads the pages:** Claude, using an Anthropic API key saved as a repository secret named `ANTHROPIC_API_KEY` (Settings → Secrets and variables → Actions → New repository secret). Without the key, the check still reads every site but changes nothing, and the report says the key is missing. (It would fall back to GitHub's free AI models, but in November 2026 they only answered "OK" on this account.) Most days few menus change, and unchanged pages are confirmed without asking the AI at all.
+
+**Run it now / for one restaurant:** Actions → Daily restaurant check → Run workflow. Optionally type restaurant ids (e.g. `dragos blue-crab`) or tick "Report only".
+
 ### The data robot
 
 `.github/workflows/refresh-data.yml` runs every morning (about 6:17 am, before the deal check) and whenever `deals.json` changes. It:
@@ -84,7 +103,7 @@ Happy hours change quietly, so nothing is trusted forever:
 2. checks every source link still loads (broken ones are listed in the run summary and in `checks.brokenLinks`),
 3. commits the result and redeploys the site.
 
-It never touches prices, deals or times. Those stay human-verified.
+It never touches prices, deals or times. Those are updated by the daily restaurant check above, or by hand.
 
 ## Going live
 
@@ -102,6 +121,8 @@ pnpm typecheck
 pnpm build && pnpm preview --port 4173
 python3 tests/e2e.py     # browser tests at phone + desktop sizes (needs Python Playwright)
 pnpm refresh-data        # run the data robot locally (needs internet)
+pnpm check-restaurants -- --dry-run dragos   # read one restaurant's site and print the report (needs internet + ANTHROPIC_API_KEY)
+pnpm test:robot          # the daily check's safety rules and page reader
 ```
 
 Code: `src/finder/` — `logic.ts` (all the rules, tested), `art.ts` (the engraved oysters), `topo.ts` (Plate I and the logo oyster), `location.ts`, `OysterMap.tsx` (Leaflet + oyster markers), `OysterFinder.tsx` (screen), `finder.css` (all styling).

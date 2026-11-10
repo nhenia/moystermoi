@@ -67,7 +67,11 @@
       },
       "phone": "(504) 522-0111",
       "website": "https://www.bourbonhouse.com/",
-      "lore": "Home of its own Oysters Fonseca."
+      "lore": "Home of its own Oysters Fonseca.",
+      "pages": [
+        "https://bourbonhouse.com/menu/dinner-menu",
+        "https://www.bourbonhouse.com/menu/happy-hour/"
+      ]
     },
     {
       "id": "luke",
@@ -143,7 +147,11 @@
         "checked": "2026-11-09",
         "checkedFrom": "restaurant"
       },
-      "lore": "Lists raw oysters by farm."
+      "lore": "Lists raw oysters by farm.",
+      "website": "https://www.lukeneworleans.com/",
+      "pages": [
+        "https://lukeneworleans.com/menus-1"
+      ]
     },
     {
       "id": "seaworthy",
@@ -184,7 +192,11 @@
       "menu": {
         "url": "https://es.acehotel.com/new-orleans/eat-drink/seaworthy/"
       },
-      "lore": "Wild oysters from three U.S. coasts."
+      "lore": "Wild oysters from three U.S. coasts.",
+      "website": "https://seaworthynola.com/",
+      "pages": [
+        "https://seaworthynola.com/menu/"
+      ]
     },
     {
       "id": "desire",
@@ -258,7 +270,11 @@
         ],
         "checked": "2026-11-09",
         "checkedFrom": "restaurant"
-      }
+      },
+      "website": "https://www.sonesta.com/royal-sonesta/la/new-orleans/royal-sonesta-new-orleans/desire-oyster-bar",
+      "pages": [
+        "https://neworleansroyal.sonesta.com/wp-content/uploads/2025/09/Desire-Lunch-Dinner-Menu-6.25.pdf"
+      ]
     },
     {
       "id": "otis",
@@ -308,7 +324,8 @@
         ],
         "checked": "2026-11-09",
         "checkedFrom": "restaurant"
-      }
+      },
+      "website": "https://otisseafood.com/"
     },
     {
       "id": "acme",
@@ -377,7 +394,8 @@
         "checked": "2026-11-09",
         "checkedFrom": "other site"
       },
-      "lore": "Home of the 15 Dozen Club."
+      "lore": "Home of the 15 Dozen Club.",
+      "website": "https://www.acmeoyster.com/"
     },
     {
       "id": "felix",
@@ -447,7 +465,10 @@
         "checkedFrom": "restaurant"
       },
       "phone": "(504) 522-4440",
-      "website": "https://felixs.com/"
+      "website": "https://felixs.com/",
+      "pages": [
+        "https://felixs.com/french-quarter-menu"
+      ]
     },
     {
       "id": "felix-lakefront",
@@ -519,8 +540,11 @@
         "checkedFrom": "restaurant"
       },
       "phone": "(504) 304-4125",
-      "website": "https://felixs.com/locations/",
-      "hhUnposted": "2–5 pm (days not posted) · raw $9 half dozen · chargrilled $15"
+      "website": "https://felixs.com/",
+      "hhUnposted": "2–5 pm (days not posted) · raw $9 half dozen · chargrilled $15",
+      "pages": [
+        "https://felixs.com/?p=5013"
+      ]
     },
     {
       "id": "mr-eds",
@@ -593,7 +617,7 @@
         "checkedFrom": "restaurant"
       },
       "phone": "(504) 309-4848",
-      "website": "https://mredsrestaurants.com/",
+      "website": "https://mredsrestaurants.com/oyster-bar",
       "hhUnposted": "Discounted oysters",
       "lore": "Crawfish-topped Oysters Rockefeller."
     },
@@ -629,7 +653,11 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.mrbnola.com/menu"
-      }
+      },
+      "website": "https://www.mrbnola.com/",
+      "pages": [
+        "https://www.mrbnola.com/menu"
+      ]
     },
     {
       "id": "fives",
@@ -667,7 +695,8 @@
       "verified": "2026-11-08",
       "menu": {
         "url": "https://fives.bar/"
-      }
+      },
+      "website": "https://www.fives.bar/"
     },
     {
       "id": "red-fish",
@@ -746,7 +775,12 @@
         "checked": "2026-11-09",
         "checkedFrom": "restaurant"
       },
-      "lore": "Created the BBQ oyster, late '90s."
+      "lore": "Created the BBQ oyster, late '90s.",
+      "website": "https://www.redfishgrill.com/",
+      "pages": [
+        "https://redfishgrill.com/menus/happy-hour",
+        "https://redfishgrill.com/the-oyster-bar"
+      ]
     },
     {
       "id": "creole-cookery",
@@ -821,7 +855,8 @@
         "checked": "2026-11-09",
         "checkedFrom": "other site"
       },
-      "lore": "House-named Oysters Toulouse."
+      "lore": "House-named Oysters Toulouse.",
+      "website": "https://neworleanscreolecookery.com/"
     },
     {
       "id": "apothecary",
@@ -862,7 +897,8 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.opentable.ie/r/apothecary-new-orleans"
-      }
+      },
+      "website": "https://vampireapothecary.com/"
     },
     {
       "id": "royal-house",
@@ -897,7 +933,11 @@
       "menu": {
         "url": "http://www.royalhouserestaurant.com/"
       },
-      "lore": "Raw oysters served on saltines."
+      "lore": "Raw oysters served on saltines.",
+      "website": "https://royalhouserestaurant.com/",
+      "pages": [
+        "https://royalhouserestaurant.com/menu/lunch-dinner-menu"
+      ]
     },
     {
       "id": "oceana",
@@ -971,7 +1011,8 @@
         ],
         "checked": "2026-11-09",
         "checkedFrom": "other site"
-      }
+      },
+      "website": "https://www.oceanagrill.com/"
     },
     {
       "id": "dragos",
@@ -1014,7 +1055,11 @@
         },
         "url": "https://www.dragosrestaurant.com/hilton-riverside-new-orleans-menu"
       },
-      "lore": "Invented charbroiled oysters, 1993."
+      "lore": "Invented charbroiled oysters, 1993.",
+      "website": "https://www.dragosrestaurant.com/",
+      "pages": [
+        "https://www.dragosrestaurant.com/hilton-riverside-new-orleans-menu"
+      ]
     },
     {
       "id": "chemin",
@@ -1047,7 +1092,8 @@
       "verified": "2026-11-09",
       "menu": {
         "url": "https://www.opentable.com.au/r/chemin-a-la-mer-new-orleans"
-      }
+      },
+      "website": "https://www.cheminalamer.com/"
     },
     {
       "id": "trenasse",
@@ -1089,7 +1135,8 @@
       "geocoded": "census",
       "menu": {
         "url": "https://opentable.com/r/trenasse-new-orleans"
-      }
+      },
+      "website": "https://trenasse.com/"
     },
     {
       "id": "peche",
@@ -1177,7 +1224,8 @@
         ],
         "checked": "2026-11-09",
         "checkedFrom": "other site"
-      }
+      },
+      "website": "https://sidecarnola.com/"
     },
     {
       "id": "marias",
@@ -1306,7 +1354,8 @@
         ],
         "checked": "2026-11-09",
         "checkedFrom": "other site"
-      }
+      },
+      "website": "https://basinneworleans.com/"
     },
     {
       "id": "boil",
@@ -1365,7 +1414,8 @@
         ],
         "checked": "2026-11-09",
         "checkedFrom": "restaurant"
-      }
+      },
+      "website": "https://www.boilseafoodhouse.com/"
     },
     {
       "id": "casamento",
@@ -1393,8 +1443,11 @@
         "url": "https://www.theinfatuation.com/new-orleans/reviews/casamentos"
       },
       "phone": "(504) 895-9761",
-      "website": "http://www.casamentosrestaurant.com/",
-      "lore": "Oyster loaf on thick toasted bread."
+      "website": "https://casamentosrestaurant.com/",
+      "lore": "Oyster loaf on thick toasted bread.",
+      "pages": [
+        "https://casamentosrestaurant.com/menu/"
+      ]
     },
     {
       "id": "superior",
@@ -1430,9 +1483,13 @@
         "url": "https://superiorseafoodnola.com/"
       },
       "phone": "(504) 293-3474",
-      "website": "https://www.superiorseafoodnola.com/",
+      "website": "https://superiorseafoodnola.com/",
       "hhUnposted": "Raw dozen $15",
-      "lore": "Bacon-wrapped \"angels on horseback\" oysters."
+      "lore": "Bacon-wrapped \"angels on horseback\" oysters.",
+      "pages": [
+        "https://superiorseafoodnola.com/dinner/",
+        "https://superiorseafoodnola.com/bar-menu/"
+      ]
     },
     {
       "id": "pascal",
@@ -1506,7 +1563,8 @@
         "checked": "2026-11-09",
         "checkedFrom": "restaurant"
       },
-      "lore": "Oyster bar open since 1913."
+      "lore": "Oyster bar open since 1913.",
+      "website": "https://www.pascalsmanale.com/"
     },
     {
       "id": "pigeon-whale",
@@ -1551,7 +1609,12 @@
         },
         "url": "https://www.opentable.es/r/pigeon-and-whale-new-orleans"
       },
-      "lore": "Oysters topped with ceviche."
+      "lore": "Oysters topped with ceviche.",
+      "website": "https://www.pigeonandwhalenola.com/",
+      "pages": [
+        "https://www.pigeonandwhalenola.com/new-orleans-uptown-pigeon-and-whale-happy-hour-menu",
+        "https://www.pigeonandwhalenola.com/new-orleans-uptown-pigeon-and-whale-food-menu"
+      ]
     },
     {
       "id": "cooter",
@@ -1606,7 +1669,8 @@
         ],
         "checked": "2026-11-09",
         "checkedFrom": "restaurant"
-      }
+      },
+      "website": "https://www.cooterbrowns.com/"
     },
     {
       "id": "salted-pearl",
@@ -1659,7 +1723,7 @@
         "checkedFrom": "other site"
       },
       "phone": "(504) 267-0388",
-      "website": "https://www.strochmarket.com/",
+      "website": "https://thesaltedpearl.com/",
       "lore": "Sells oysters by the sack."
     },
     {
@@ -1699,7 +1763,8 @@
       "geocoded": "census",
       "menu": {
         "url": "https://www.finedininglovers.com/restaurants/porgys-seafood-market"
-      }
+      },
+      "website": "https://porgysseafood.com/"
     },
     {
       "id": "monday",
@@ -1750,7 +1815,8 @@
         ],
         "checked": "2026-11-09",
         "checkedFrom": "restaurant"
-      }
+      },
+      "website": "https://mondaynola.com/"
     },
     {
       "id": "neyows",
@@ -1784,7 +1850,8 @@
       "menu": {
         "url": "https://www.eatokra.com/businesses/neyow-s-creole-cafe"
       },
-      "lore": "Sells about 40,000 oysters weekly."
+      "lore": "Sells about 40,000 oysters weekly.",
+      "website": "http://www.neworleans.neyows.com/"
     },
     {
       "id": "blue-crab",
@@ -1820,8 +1887,11 @@
         "url": "http://www.thebluecrabnola.com/"
       },
       "phone": "(504) 284-2898",
-      "website": "http://www.thebluecrabnola.com/",
-      "hhUnposted": "$1 raw · $1.50 chargrilled"
+      "website": "https://www.thebluecrabnola.com/",
+      "hhUnposted": "$1 raw · $1.50 chargrilled",
+      "pages": [
+        "https://www.thebluecrabnola.com/new-orleans-the-blue-crab-restaurant-and-oyster-bar-food-menu"
+      ]
     },
     {
       "id": "revolution",
@@ -1875,7 +1945,11 @@
       "lat": 29.95537,
       "lng": -90.06815,
       "geocoded": "census",
-      "lore": "Oysters farmed by Houma Nation members."
+      "lore": "Oysters farmed by Houma Nation members.",
+      "pages": [
+        "https://revolutionnola.com/menus/",
+        "https://revolutionnola.com/happy-hour-menu"
+      ]
     },
     {
       "id": "antoines",
@@ -1911,7 +1985,12 @@
       "lat": 29.95655,
       "lng": -90.06624,
       "geocoded": "census",
-      "lore": "Invented Oysters Rockefeller, 1899."
+      "lore": "Invented Oysters Rockefeller, 1899.",
+      "pages": [
+        "https://antoines.com/menus/dinner-menu/",
+        "https://antoines.com/hermes-bar/bar-bites/",
+        "https://antoines.com/hermes-bar/happy-hour/"
+      ]
     },
     {
       "id": "arnauds",
@@ -1964,7 +2043,10 @@
       "lat": 29.95564,
       "lng": -90.06853,
       "geocoded": "census",
-      "lore": "Five baked oyster styles, one plate."
+      "lore": "Five baked oyster styles, one plate.",
+      "pages": [
+        "https://www.arnaudsrestaurant.com/menus/appetizers/"
+      ]
     },
     {
       "id": "holywater",
@@ -2130,7 +2212,10 @@
       "lat": 29.95498,
       "lng": -90.06941,
       "geocoded": "census",
-      "lore": "Signature barbecue oysters, oven-broiled."
+      "lore": "Signature barbecue oysters, oven-broiled.",
+      "pages": [
+        "https://blog.deanies.com/french-quarter/"
+      ]
     },
     {
       "id": "bon-temps",
@@ -2157,7 +2242,10 @@
       "lat": 29.92045,
       "lng": -90.10616,
       "geocoded": "census",
-      "lore": "Free oysters every Friday."
+      "lore": "Free oysters every Friday.",
+      "pages": [
+        "https://lbtrnola.com/new-orleans-le-bon-temps-roule-about"
+      ]
     },
     {
       "id": "mosquito",
@@ -2188,10 +2276,13 @@
       "menu": {
         "url": "https://mosquitosupperclub.squarespace.com"
       },
-      "website": "https://mosquitosupperclub.squarespace.com",
+      "website": "https://mosquitosupperclub.squarespace.com/",
       "lat": 29.92993,
       "lng": -90.09659,
-      "geocoded": "census"
+      "geocoded": "census",
+      "pages": [
+        "https://mosquitosupperclub.squarespace.com/menu-1"
+      ]
     },
     {
       "id": "saffron",
@@ -2223,11 +2314,14 @@
         "url": "https://www.timeout.com/new-orleans/restaurants/saffron-nola"
       },
       "phone": "(504) 323-2626",
-      "website": "https://saffronnola.com/",
+      "website": "https://www.saffronnola.com/",
       "lat": 29.92099,
       "lng": -90.0983,
       "geocoded": "census",
-      "lore": "Oysters roasted with curry leaves."
+      "lore": "Oysters roasted with curry leaves.",
+      "pages": [
+        "https://www.saffronnola.com/menus"
+      ]
     },
     {
       "id": "clancys",
@@ -2264,7 +2358,8 @@
       "lore": "Fried oysters with Brie.",
       "lat": 29.91906,
       "lng": -90.12505,
-      "geocoded": "census"
+      "geocoded": "census",
+      "website": "https://www.clancysneworleans.com/"
     },
     {
       "id": "galatoires",
@@ -2302,7 +2397,10 @@
       "website": "https://www.galatoires.com/",
       "lat": 29.95482,
       "lng": -90.06905,
-      "geocoded": "census"
+      "geocoded": "census",
+      "pages": [
+        "https://www.galatoires.com/menus/dining-room"
+      ]
     },
     {
       "id": "coterie",
@@ -2346,7 +2444,8 @@
       },
       "lat": 29.95227,
       "lng": -90.06679,
-      "geocoded": "census"
+      "geocoded": "census",
+      "website": "https://www.coterienola.com/"
     }
   ],
   "checks": {
