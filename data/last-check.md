@@ -1,4 +1,4 @@
-# Daily restaurant check: 2026-11-12
+# Daily restaurant check: 2026-11-13
 
 Read each restaurant's own website with GitHub Models (openai/gpt-4.1-mini). 46 checked: 0 changed, 0 confirmed, 6 couldn't be read, 40 waiting on the AI reader.
 
