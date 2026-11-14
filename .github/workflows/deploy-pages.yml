@@ -27,6 +27,17 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Check
         run: pnpm test && pnpm typecheck
+      # Browser tests: click-through, accessibility and opening hours, on a local build.
+      # Any failure stops the publish.
+      - name: Browser tests
+        run: |
+          pnpm build
+          pip install playwright==1.* >/dev/null
+          python -m playwright install --with-deps chromium >/dev/null
+          (pnpm preview --port 4173 --strictPort &) ; sleep 4
+          python tests/e2e.py http://localhost:4173/
+          python tests/accessibility.py http://localhost:4173/
+          python tests/hours.py http://localhost:4173/
       - name: Build for https://<you>.github.io/<repo>/
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
