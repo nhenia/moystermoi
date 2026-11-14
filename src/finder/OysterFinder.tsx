@@ -36,7 +36,9 @@ import {
   saveOrigin,
   searchPlaces,
 } from "./location"
+import { Splash } from "./Splash"
 import "./finder.css"
+import "./splash.css"
 import "./topo.css"
 
 const venues = deals.venues as Venue[]
@@ -281,11 +283,13 @@ export default function OysterFinder() {
   )
 
   return (
+    <>
+    <Splash />
     <section className="mf" data-theme={theme} id="finder" aria-labelledby="mf-title">
       <span className="mf-defs" dangerouslySetInnerHTML={{ __html: roughFilterSvg }} />
 
       <header className="mf-head">
-        <p className="mf-logo">
+        <h1 className="mf-logo" id="mf-title">
           <span className="mf-sr">Clutched</span>
           <button
             type="button"
@@ -295,7 +299,7 @@ export default function OysterFinder() {
             dangerouslySetInnerHTML={{ __html: LOGO_O }}
           />
           <span aria-hidden="true">Clutched</span>
-        </p>
+        </h1>
         <button type="button" className="mf-theme" onClick={toggleTheme} aria-pressed={theme === "dark"}>
           <span aria-hidden="true">{theme === "dark" ? "☾" : "☀"}</span>
           <span className="mf-theme-word">Dark</span>
@@ -303,20 +307,6 @@ export default function OysterFinder() {
 
         <div className="mf-plate-wrap">
           <div className="mf-plate" dangerouslySetInnerHTML={{ __html: plate }} />
-          <picture className="mf-cutout">
-            <source srcSet={`${import.meta.env.BASE_URL}art/pearl-table.webp`} type="image/webp" />
-            <img
-              src={`${import.meta.env.BASE_URL}art/pearl-table.jpg`}
-              alt="Oysters on the half shell with lemon, strings of pearls and a coupe of champagne on velvet"
-              width={512}
-              height={286}
-              decoding="async"
-            />
-          </picture>
-          <h1 id="mf-title" className="mf-title">
-            <span>Oysters near me</span>
-            <small>New Orleans</small>
-          </h1>
         </div>
 
         <div className="mf-origin" aria-live="polite">
@@ -430,6 +420,7 @@ export default function OysterFinder() {
         {toast}
       </p>
     </section>
+    </>
   )
 }
 

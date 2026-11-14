@@ -17,6 +17,7 @@
   "dependencies": {
     "@fontsource/atkinson-hyperlegible": "^5.3.0",
     "@fontsource/bodoni-moda": "^5.3.0",
+    "@fontsource/jacquard-24": "^5.3.0",
     "@fontsource/unifrakturmaguntia": "^5.3.0",
     "leaflet": "^1.9.4",
     "react": "^19.0.0",

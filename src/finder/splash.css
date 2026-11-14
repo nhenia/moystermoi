@@ -1,0 +1,240 @@
+/* CLUTCHED — opening screen.
+   --cl-display is the brand display face. Swap it here when the final font file lands;
+   the header logo uses the same variable. */
+
+:root {
+  --cl-display: 'Jacquard 24', 'UnifrakturMaguntia', serif;
+  --cl-pink: #ff2e93;
+  --cl-cyan: #00d7ff;
+  --cl-pearl: #fff7ea;
+}
+
+html.cl-splash-on,
+html.cl-splash-on body {
+  overflow: hidden;
+}
+
+.cl-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #0b0708;
+  cursor: pointer;
+  clip-path: circle(150% at 50% 50%);
+  transition: clip-path 520ms cubic-bezier(0.7, 0, 0.2, 1), transform 520ms cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+.cl-splash.is-leaving {
+  clip-path: circle(0% at 50% 46%);
+  transform: scale(1.06);
+}
+
+.cl-splash-film {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% 40%;
+  filter: contrast(1.08) saturate(1.1);
+  animation: cl-film 4.8s ease-out both;
+}
+
+/* darken toward the middle-bottom so the word always reads, whatever frame is up */
+.cl-splash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 70% at 50% 62%, rgb(11 7 8 / 0.62), rgb(11 7 8 / 0.15) 70%),
+    linear-gradient(to bottom, rgb(11 7 8 / 0) 55%, rgb(11 7 8 / 0.7));
+}
+
+/* risograph halftone over the film */
+.cl-splash-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  background: radial-gradient(#000 0.9px, transparent 1.3px) 0 0 / 4px 4px;
+}
+
+.cl-splash-type {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0 4vw;
+  margin-top: 18vh;
+  pointer-events: none;
+}
+
+.cl-splash-word {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  font-family: var(--cl-display);
+  font-weight: 400;
+  font-size: clamp(5rem, 31vw, 22rem);
+  line-height: 0.8;
+  letter-spacing: -0.01em;
+  color: var(--cl-pearl);
+  transform: scaleY(1.18);
+  transform-origin: 50% 100%;
+}
+
+.cl-splash-word span {
+  position: relative;
+  display: inline-block;
+  animation:
+    cl-drop 760ms cubic-bezier(0.2, 1.5, 0.4, 1) calc(120ms + var(--i) * 70ms) both,
+    cl-wobble 2.6s ease-in-out calc(1.1s + var(--i) * 90ms) infinite;
+}
+
+/* off-register pink and cyan plates behind each letter */
+.cl-splash-word span::before,
+.cl-splash-word span::after {
+  content: attr(data-ch);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  mix-blend-mode: screen;
+  animation: cl-register 1.9s steps(2, jump-none) calc(900ms + var(--i) * 40ms) infinite;
+}
+
+.cl-splash-word span::before {
+  color: var(--cl-pink);
+  transform: translate(-0.05em, 0.035em);
+}
+
+.cl-splash-word span::after {
+  color: var(--cl-cyan);
+  transform: translate(0.045em, -0.03em);
+  animation-direction: reverse;
+}
+
+/* every other letter dips, so the word sags like a strand of pearls */
+.cl-splash-word span:nth-child(even) {
+  top: 0.05em;
+}
+
+.cl-splash-sub {
+  margin: 0.4em 0 0;
+  padding: 0.3em 0.9em 0.35em;
+  background: var(--cl-pink);
+  color: #0b0708;
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.15rem, 4.6vw, 1.9rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: rotate(-2.5deg);
+  box-shadow: 4px 4px 0 var(--cl-cyan);
+  animation: cl-slap 420ms cubic-bezier(0.2, 1.6, 0.4, 1) 860ms both;
+}
+
+.cl-splash-enter {
+  position: absolute;
+  z-index: 3;
+  right: 16px;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  min-width: 96px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 2px solid var(--cl-pearl);
+  border-radius: 999px;
+  background: rgb(11 7 8 / 0.55);
+  color: var(--cl-pearl);
+  font: 700 1.05rem 'Atkinson Hyperlegible', system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  animation: cl-slap 300ms ease-out 1.4s both;
+}
+
+.cl-splash-enter:focus-visible {
+  outline: 3px solid var(--cl-pink);
+  outline-offset: 3px;
+}
+
+@keyframes cl-film {
+  from {
+    transform: scale(1.14);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes cl-drop {
+  0% {
+    transform: translateY(-1.2em) rotate(-14deg) scale(1.5);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes cl-wobble {
+  0%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  50% {
+    transform: rotate(calc((var(--i) - 3.5) * 0.9deg)) translateY(-0.025em);
+  }
+}
+
+@keyframes cl-register {
+  0% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0.03em -0.02em;
+  }
+  100% {
+    translate: -0.02em 0.025em;
+  }
+}
+
+@keyframes cl-slap {
+  from {
+    transform: rotate(-12deg) scale(1.8);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(-2.5deg) scale(1);
+    opacity: 1;
+  }
+}
+
+.cl-splash-enter {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cl-splash,
+  .cl-splash-film,
+  .cl-splash-word span,
+  .cl-splash-word span::before,
+  .cl-splash-word span::after,
+  .cl-splash-sub,
+  .cl-splash-enter {
+    animation: none !important;
+    transition: none !important;
+  }
+}
