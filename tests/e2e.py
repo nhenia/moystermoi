@@ -58,7 +58,7 @@ with sync_playwright() as p:
     check("MRB BAR" in page.locator(".mf").inner_text().upper(), "MRB is listed")
     total = page.locator(".mf-pick").count() + page.locator(".mf-row").count()
     check(total == VENUES, f"near mode lists every spot ({total})")
-    check("OYSTERS" in page.locator("h1#mf-title").inner_text().upper(), "page heading says Oysters near me")
+    check("CLUTCHED" in page.locator("h1#mf-title").inner_text().upper(), "page heading is the Clutched logo")
     check(page.locator(".mf-plate .mf-topo").is_visible(), "Plate I (the shell map) is on screen")
     check(page.locator(".mf-topo .t-pearl").count() == MAPPED, "every spot is a pearl on the shell map")
     check(page.locator("video").count() == 0, "no video on the page")

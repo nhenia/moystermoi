@@ -14,6 +14,9 @@ importers:
       '@fontsource/bodoni-moda':
         specifier: ^5.3.0
         version: 5.3.0
+      '@fontsource/jacquard-24':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@fontsource/unifrakturmaguntia':
         specifier: ^5.3.0
         version: 5.3.0
@@ -65,6 +68,9 @@ packages:
 
   '@fontsource/bodoni-moda@5.3.0':
     resolution: {integrity: sha512-Wt2XBCHivYxkTP3ydq/Ax+7VshwsOh/6ayA5om2t+yClCkGwLPj2Mi6OnyMANjyLcqDUWs4rlOHnc8SBLf6/pA==}
+
+  '@fontsource/jacquard-24@5.3.0':
+    resolution: {integrity: sha512-oCWI8QHMueJt2HcdBbQPOUZ3ghLC1xZk8lG1cMYJN3Ds3pghVlVQrTdKJ+v1V6Otihtj4Iov20IfUJTg7HBdXQ==}
 
   '@fontsource/unifrakturmaguntia@5.3.0':
     resolution: {integrity: sha512-z8NGOUeAu0T534Z8tEyuNbuUZsUiRoQKzg3gRB5sb2o2DipxEqmYQqHdlwxsbN0gpwhgcClKrCuB/AhVeY2UOQ==}
@@ -477,6 +483,8 @@ snapshots:
   '@fontsource/atkinson-hyperlegible@5.3.0': {}
 
   '@fontsource/bodoni-moda@5.3.0': {}
+
+  '@fontsource/jacquard-24@5.3.0': {}
 
   '@fontsource/unifrakturmaguntia@5.3.0': {}
 

@@ -1,6 +1,6 @@
 // Clutched offline cache: network first, fall back to the last copy we saw.
 // Bump VERSION to force phones to drop old caches after a big change.
-const VERSION = "clutched-v5"
+const VERSION = "clutched-v6"
 const BASE = new URL(self.registration.scope).pathname
 const SHELL = ["", "manifest.webmanifest", "favicon.svg", "icon-192.png"].map((p) => BASE + p)
 

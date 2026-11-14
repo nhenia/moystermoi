@@ -177,9 +177,10 @@
 .mf-logo {
   display: flex;
   align-items: flex-end;
-  font-family: 'Bodoni Moda', Didot, Georgia, serif;
-  font-weight: 800;
-  font-size: clamp(2.3rem, 11vw, 4rem);
+  margin: 0;
+  font-family: var(--cl-display);
+  font-weight: 400;
+  font-size: clamp(2.8rem, 14vw, 5rem);
   line-height: 1;
   letter-spacing: -0.02em;
 }
@@ -250,26 +251,6 @@
   justify-self: end;
   width: min(78%, 400px);
   margin: 26px 0 0;
-}
-
-/* The pearl-table photo: a cut-out pasted over the plate's lower-left, slightly crooked. */
-.mf-cutout {
-  grid-area: 1 / 1;
-  align-self: end;
-  justify-self: start;
-  z-index: 1;
-  width: min(54%, 300px);
-  margin: 0 0 6px 2px;
-  transform: rotate(-3deg);
-  border: 3px solid var(--ink);
-  background: var(--ink);
-  box-shadow: 5px 5px 0 var(--ink);
-}
-
-.mf-cutout img {
-  display: block;
-  width: 100%;
-  height: auto;
 }
 
 /* the title sits in the empty corner beside the narrow hinge */
@@ -1150,12 +1131,6 @@ a.mf-link {
   .mf-plate {
     width: min(52%, 480px);
     margin-right: 4%;
-  }
-
-  .mf-cutout {
-    width: min(34%, 400px);
-    margin: 0 0 40px 26%;
-    transform: rotate(-4deg);
   }
 
   .mf-plate-wrap .mf-title {
