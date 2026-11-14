@@ -411,6 +411,7 @@ export default function OysterFinder() {
             Instagram @_nu_n9
           </a>
           <a href="mailto:jenapoian@gmail.com">jenapoian@gmail.com</a>
+          <a href={`${import.meta.env.BASE_URL}privacy.html`}>Privacy</a>
         </p>
       </footer>
 
