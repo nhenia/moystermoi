@@ -43,7 +43,7 @@ function hourForms(t) {
   return [String(h), String(h % 12 === 0 ? 12 : h % 12)]
 }
 
-function timesInQuote(times, quote) {
+export function timesInQuote(times, quote) {
   const q = normalize(quote)
   return times.every((t) => hourForms(t).some((h) => new RegExp(`(^|[^0-9])${h}([^0-9]|$)`).test(q)))
 }
@@ -224,3 +224,32 @@ export function isNineInNewOrleans(cron, now = new Date()) {
 
 /** Oldest verified date across venues: "everything has been checked since". */
 export const oldestVerified = (venues) => venues.map((v) => v.verified).filter(Boolean).sort()[0]
+
+/**
+ * No-AI check: are the prices and happy-hour times we show still printed on the restaurant's own pages?
+ * Returns what was looked for, what was missing, and whether everything was found.
+ * A venue with nothing checkable (no posted numbers) is never "confirmed".
+ * @param {object} venue  a venue from src/deals.json
+ * @param {{url: string, text: string}[]} pages
+ */
+export function stillPosted(venue, pages) {
+  const text = pages.map((p) => p.text).join("\n")
+  const claims = []
+  const num = (label, n) => n != null && claims.push({ label, ok: numberInQuote(n, text) })
+  num("happy hour price", venue.price)
+  if (venue.start && venue.end) claims.push({ label: "happy hour times", ok: timesInQuote([venue.start, venue.end], text) })
+  const raw = venue.menu?.raw ?? {}
+  num("raw each", raw.each)
+  num("raw half dozen", raw.half)
+  num("raw dozen", raw.dozen)
+  num("chargrilled half dozen", venue.menu?.chargrilled?.half)
+  num("chargrilled dozen", venue.menu?.chargrilled?.dozen)
+  const missing = claims.filter((c) => !c.ok).map((c) => c.label)
+  return { checked: claims.length, missing, confirmed: claims.length > 0 && missing.length === 0 }
+}
+
+/** The run counts as a verification only when it read most restaurants' own sites. */
+export function verificationStamp(today, total, sitesRead, confirmed) {
+  if (!total || sitesRead / total < 0.5) return null
+  return { date: today, sitesRead, pricesConfirmed: confirmed, total }
+}

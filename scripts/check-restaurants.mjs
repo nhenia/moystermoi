@@ -17,7 +17,7 @@ import crypto from "node:crypto"
 import { fileURLToPath } from "node:url"
 import { readSite, launch, launchHttp1 } from "./restaurant-check/pages.mjs"
 import { extract, provider, textBudget } from "./restaurant-check/ai.mjs"
-import { verifyExtraction, applyResult, relevantText, oldestVerified } from "./restaurant-check/lib.mjs"
+import { verifyExtraction, applyResult, relevantText, oldestVerified, stillPosted, verificationStamp } from "./restaurant-check/lib.mjs"
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const dataFile = path.join(root, "src", "deals.json")
@@ -33,6 +33,7 @@ const data = JSON.parse(await fs.readFile(dataFile, "utf8"))
 const state = JSON.parse(await fs.readFile(stateFile, "utf8").catch(() => "{}"))
 const venues = data.venues.filter((v) => !only.length || only.includes(v.id))
 
+const posted = { read: 0, confirmed: [], missing: [] }
 const report = { changed: [], confirmed: [], unchanged: [], couldNotRead: [], rejected: [], needsHuman: [], aiSkipped: [] }
 let aiDown = null
 const browser = await launch()
@@ -49,6 +50,13 @@ async function checkVenue(venue) {
     report.couldNotRead.push({ venue, why: site.problems.join("; ") || "no readable text on its site" })
     return venue
   }
+  // Free, no-AI check: the numbers we show are still printed on the restaurant's own pages.
+  posted.read++
+  const still = stillPosted(venue, site.pages.map((p) => ({ url: p.url, text: p.text })))
+  if (still.confirmed) posted.confirmed.push(venue)
+  else if (still.missing.length) posted.missing.push({ venue, missing: still.missing })
+  if (still.confirmed) venue = { ...venue, verified: today }
+
   const hash = crypto.createHash("sha256").update(pages.map((p) => p.url + "\n" + p.text).join("\n")).digest("hex").slice(0, 16)
   const prev = state[venue.id]
 
@@ -125,6 +133,9 @@ console.log("")
 
 data.venues = data.venues.map((v) => results.get(v.id) ?? v)
 data.updated = oldestVerified(data.venues) ?? data.updated
+// The freshness stamp the site shows. Only a full run that read most restaurant sites counts.
+const stamp = only.length ? null : verificationStamp(today, venues.length, posted.read, posted.confirmed.length)
+if (stamp) data.checks = { ...data.checks, verified: stamp }
 
 const line = (v) => `**${v.name}**`
 const md = [
@@ -132,6 +143,11 @@ const md = [
   "",
   `Read each restaurant's own website with ${provider()}. ${venues.length} checked: ${report.changed.length} changed, ${report.confirmed.length + report.unchanged.length} confirmed, ${report.couldNotRead.length} couldn't be read${report.aiSkipped.length ? `, ${report.aiSkipped.length} waiting on the AI reader` : ""}.`,
   "",
+  `**Freshness check (no AI):** read ${posted.read} of ${venues.length} restaurant sites; prices and happy-hour times still printed word for word at ${posted.confirmed.length}.${stamp ? ` Site now says "Verified ${today}".` : " Not enough sites read, so the site's verified date was NOT moved."}`,
+  "",
+  ...(posted.missing.length
+    ? ["<details><summary>Shown prices or times no longer found on the restaurant's page (check these)</summary>", "", ...posted.missing.map(({ venue, missing }) => `- ${venue.name}: ${missing.join(", ")}`), "", "</details>", ""]
+    : []),
   ...(aiDown
     ? [
         "## ⚠️ The AI reader isn't working, so prices weren't updated",

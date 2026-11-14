@@ -124,7 +124,8 @@ test("cheap: every price you can get today, happy hour or menu, cheapest first",
   // Monday 10am: Basin's 75¢ Monday special (from 11:30) is today's cheapest oyster
   const mon = rank(enrich(venues, DEFAULT_ORIGIN, at(1, 10)), "cheap")
   assert.equal(mon[0].venue.id, "basin")
-  const priced = mon.filter((r) => r.price.perOyster != null && mon.indexOf(r) < mon.findIndex((x) => x.price.perOyster == null))
+  // Real (posted) prices, cheapest first; ~estimates follow them.
+  const priced = mon.filter((r) => r.price.kind !== "estimate" && r.price.perOyster != null && mon.indexOf(r) < mon.findIndex((x) => x.price.perOyster == null || x.price.kind === "estimate"))
   for (let i = 1; i < priced.length; i++) assert.ok(priced[i - 1].price.perOyster! <= priced[i].price.perOyster!)
   // Tuesday: Basin's special is days away, so it shows its regular menu price instead
   const tue = enrich(venues, DEFAULT_ORIGIN, at(2, 15, 30)).find((r) => r.venue.id === "basin")!
@@ -132,17 +133,19 @@ test("cheap: every price you can get today, happy hour or menu, cheapest first",
   assert.equal(tue.price.text, "$18 a dozen")
 })
 
-test("price tags: happy hour, menu, market price, see menu", () => {
+test("price tags: happy hour, menu, ~estimate", () => {
   const clock = at(2, 16, 10)
   const all = enrich(venues, DEFAULT_ORIGIN, clock)
   const by = (id: string) => all.find((r) => r.venue.id === id)!.price
   assert.deepEqual([by("desire").kind, by("desire").text], ["happy", "$1.50 each"])
-  assert.deepEqual([by("acme").kind, by("acme").text], ["market", "Market price"]) // its menu lists raw and chargrilled at market price
+  // Acme lists raw at market price, so it gets the town's typical dozen, marked ~
+  assert.equal(by("acme").kind, "estimate")
+  assert.match(by("acme").text, /^~\$\d+ a dozen$/)
   assert.deepEqual([by("pigeon-whale").kind, by("pigeon-whale").text], ["happy", "$2 each"])
   const wedMorning = enrich(venues, DEFAULT_ORIGIN, at(3, 9)).find((r) => r.venue.id === "bourbon-house")!.price
   assert.equal(wedMorning.kind, "happy") // Bourbon House happy hour is later today (2–5 pm)
   const sat = enrich(venues, DEFAULT_ORIGIN, at(6, 20)) // Saturday 8 pm, after happy hours
-  assert.equal(sat.find((r) => r.venue.id === "bourbon-house")!.price.text, "Market price")
+  assert.match(sat.find((r) => r.venue.id === "bourbon-house")!.price.text, /^~\$\d+ a dozen$/)
   assert.equal(sat.find((r) => r.venue.id === "desire")!.price.text, "$22 a dozen")
   assert.equal(sat.find((r) => r.venue.id === "luke")!.price.text, "from $2.75 each")
   for (const v of venues) assert.ok(v.menu?.url?.startsWith("http"), `${v.id} needs a menu link`)
@@ -315,4 +318,50 @@ test("hours-unknown places sit with closed ones: never in the top three, ranked 
   assert.equal(notOpenNow(unknownNear), true)
   assert.equal(notOpenNow(closedMid), true)
   assert.equal(notOpenNow(openFar), false)
+})
+
+// ---- price estimates (~) and the freshness guarantee ----
+import { priceModel, priceTag, freshness } from "./logic.ts"
+
+test("every place without a posted per-oyster price gets a ~estimate or a real dish price, never a bare 'See menu'", () => {
+  const venues = data.venues as Venue[]
+  const model = priceModel(venues)
+  assert.ok(model.rawDozen! > 15 && model.rawDozen! < 35, `typical raw dozen ${model.rawDozen}`)
+  for (const v of venues) {
+    const tag = priceTag(v, { state: "none" } as never, model)
+    assert.notEqual(tag.kind, "none", `${v.name} still says See menu`)
+    if (tag.kind === "estimate") assert.match(tag.text, /^~\$\d+ /, v.name)
+    if (tag.kind === "menu") assert.doesNotMatch(tag.text, /~/, `${v.name}: real prices never get ~`)
+  }
+})
+
+test("a raw bar with no posted price is estimated at the town's typical dozen, marked ~ and est.", () => {
+  const venues = data.venues as Venue[]
+  const model = priceModel(venues)
+  const seaworthy = venues.find((v) => v.id === "seaworthy")!
+  const tag = priceTag(seaworthy, { state: "none" } as never, model)
+  assert.equal(tag.kind, "estimate")
+  assert.equal(tag.text, `~$${Math.round(model.rawDozen!)} a dozen`)
+})
+
+test("in Cheapest, real posted prices rank ahead of ~estimates", () => {
+  const ranked = rankAll(enrich(data.venues as Venue[], DEFAULT_ORIGIN, nolaClock(new Date("2026-11-11T19:00:00Z"))), "cheap")
+  const kinds = ranked.map((r) => r.price.kind).filter((k) => k === "menu" || k === "happy" || k === "estimate")
+  const firstEstimate = kinds.indexOf("estimate")
+  const lastReal = Math.max(kinds.lastIndexOf("menu"), kinds.lastIndexOf("happy"))
+  // Only places open today are ordered strictly; check the real-before-estimate rule among them.
+  const openToday = ranked.filter((r) => !(r.open.state === "opens" && r.open.dayOffset > 0)).filter((r) => r.price.perOyster != null)
+  const seen = openToday.map((r) => (r.price.kind === "estimate" ? 1 : 0))
+  assert.deepEqual(seen, [...seen].sort(), "an estimate came before a real price")
+  assert.ok(firstEstimate >= 0 && lastReal >= 0)
+})
+
+test("freshness: verified Thursday is fresh through Monday; a missed Monday check shows as late", () => {
+  const thu = { date: "2026-11-12" }
+  const f = freshness(thu, new Date("2026-11-16T15:00:00Z")) // Monday 9am NOLA, before the run
+  assert.equal(f.state, "fresh")
+  assert.equal(f.state === "fresh" && f.label, "Thu, Nov 12")
+  const late = freshness(thu, new Date("2026-11-17T18:00:00Z")) // Tuesday: Monday's check never landed
+  assert.equal(late.state, "late")
+  assert.equal(freshness(undefined, new Date()).state, "never")
 })

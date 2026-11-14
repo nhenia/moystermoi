@@ -14,6 +14,7 @@ import {
   freshen,
   windows,
   daysSince,
+  freshness,
   drawOyster,
   enrich,
   formatDays,
@@ -329,6 +330,7 @@ export default function OysterFinder() {
         </div>
         {locateError && <p className="mf-alert">{locateMessage[locateError]}</p>}
         {searchOpen && <AddressSearch onPick={chooseOrigin} />}
+        <Verified now={now} />
       </header>
 
       <button type="button" className={`mf-hh${live.length ? " is-live" : ""}`} onClick={() => choose("happy")}>
@@ -553,7 +555,25 @@ function PriceTag({ r }: { r: Ranked }) {
     <span className={`mf-price mf-price-${p.kind}`}>
       {p.text}
       {p.kind === "happy" && <small> happy hour</small>}
+      {p.kind === "estimate" && <small> est.</small>}
     </span>
+  )
+}
+
+/** Freshness guarantee: the date the restaurant sites were last read, promised every Monday & Thursday. */
+function Verified({ now }: { now: Date }) {
+  const f = freshness((deals.checks as { verified?: { date: string } } | undefined)?.verified, now)
+  if (f.state === "never")
+    return <p className="mf-verified is-late">Freshness check pending. Call ahead to confirm prices.</p>
+  return (
+    <p className={`mf-verified${f.state === "late" ? " is-late" : ""}`}>
+      <b>✓ Verified {f.label}</b>
+      <span>
+        {f.state === "late"
+          ? ` · ${f.days} days ago, check is late. Call ahead.`
+          : " · prices & hours rechecked every Monday & Thursday"}
+      </span>
+    </p>
   )
 }
 
@@ -735,7 +755,12 @@ function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: bool
               {v.menu.checkedFrom === "other site" ? " (from a menu site, not the restaurant's own)" : ""}
             </p>
           )}
-          {!menuPrice && !v.menu?.market && !(v.price != null && v.start) && <p>Prices not posted online.</p>}
+          {r.price.kind === "estimate" && (
+            <p className="mf-sheet-est">
+              About {r.price.text.replace("~", "")} (estimate, {r.price.basis}). Not posted online, so call to confirm.
+            </p>
+          )}
+          {!menuPrice && !v.menu?.market && !(v.price != null && v.start) && r.price.kind !== "estimate" && <p>Prices not posted online.</p>}
           {v.menu?.url && (
             <a className="mf-link" href={v.menu.url} target="_blank" rel="noreferrer">
               See menu ↗
