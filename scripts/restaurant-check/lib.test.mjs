@@ -142,6 +142,16 @@ test("hours must be 7 valid days backed by the quote", () => {
   assert.equal(bad.result.hours, null)
 })
 
+test("split days (lunch, then dinner) are accepted only when every time is on the page", () => {
+  const page = { url: "https://x.com", text: "Thursday, Friday and Saturday 11 a.m. to 2 p.m. for lunch and 5:30 p.m. to 9 p.m. for dinner Sunday 4:30 p.m. till 8:30 p.m." }
+  const split = "11:00-14:00,17:30-21:00"
+  const good = verifyExtraction({ ...none, hours: { days: ["16:30-20:30", "closed", "closed", "closed", split, split, split], quote: page.text, url: page.url } }, [page])
+  assert.deepEqual(good.result.hours, ["16:30-20:30", "closed", "closed", "closed", split, split, split])
+  const invented = "11:00-14:00,17:30-22:00" // 10 pm isn't on the page
+  const bad = verifyExtraction({ ...none, hours: { days: ["16:30-20:30", "closed", "closed", "closed", invented, split, split], quote: page.text, url: page.url } }, [page])
+  assert.equal(bad.result.hours, null)
+})
+
 test("runs at 9am New Orleans time in both summer and winter", () => {
   // Winter (CST, UTC-6): 15:00 UTC is 9am
   assert.ok(isNineInNewOrleans("0 15 * * *", new Date("2026-12-01T15:05:00Z")))

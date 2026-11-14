@@ -56,7 +56,7 @@ export const EXTRACTION_SCHEMA = {
     },
     hours: nul({
       type: "object",
-      description: "Opening hours for THIS location, Sunday first, 7 entries of \"HH:MM-HH:MM\" (24-hour) or \"closed\".",
+      description: "Opening hours for THIS location, Sunday first, 7 entries of \"HH:MM-HH:MM\" (24-hour), several windows joined by commas when the day is split (\"11:00-14:00,17:30-21:00\"), or \"closed\".",
       properties: { days: { type: "array", items: { type: "string" } }, quote, url },
       required: ["days", "quote", "url"],
       additionalProperties: false,

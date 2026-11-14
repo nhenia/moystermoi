@@ -19,10 +19,15 @@ export type Venue = {
   source: string
   /**
    * When oysters are served, Sunday first (index 0) to Saturday (6).
-   * Each day is "HH:MM-HH:MM" (an end at or before the start runs past midnight),
-   * "closed", or null when the hours aren't published. Omit the field if no hours are known.
+   * Each day is "HH:MM-HH:MM" (an end at or before the start runs past midnight), several of
+   * those joined by commas for split days ("11:00-14:00,17:30-21:00"), "00:00-24:00" for open
+   * all day, "closed", or null when the hours aren't published. Omit the field if no hours are known.
    */
   hours?: (string | null)[] | null
+  /** Where the hours came from (the restaurant's own page whenever it posts them). */
+  hoursSource?: string
+  /** Set by estimateHours(): days whose hours were copied from another day. Never in deals.json. */
+  hoursEstimated?: number[]
   /** Date this venue was last checked against its source (YYYY-MM-DD). */
   verified?: string
   /** Regular (non-happy-hour) oyster prices, when the restaurant posts them. */
@@ -77,8 +82,8 @@ export type HappyHour =
   | { state: "none" }
 
 export type OpenStatus =
-  | { state: "open"; until: string; closesIn: number }
-  | { state: "opens"; at: string; dayOffset: number; day: number }
+  | { state: "open"; until: string; closesIn: number; allDay?: boolean; estimated?: boolean }
+  | { state: "opens"; at: string; dayOffset: number; day: number; estimated?: boolean }
   | { state: "unknown" }
 
 export type Ranked = {
@@ -149,30 +154,68 @@ export function happyHour(venue: Venue, clock: NolaClock): HappyHour {
   return { state: "none" }
 }
 
+/** The windows in one day's entry: "11:00-14:00,17:30-21:00" -> [["11:00","14:00"],["17:30","21:00"]]. */
+export const windows = (entry: string): [string, string][] =>
+  entry.split(",").map((w) => w.trim().split("-") as [string, string])
+
+const ALL_DAY = "00:00-24:00"
+
+/**
+ * Fill in days whose hours aren't published (null) by copying the nearest earlier day that's open,
+ * or failing that the nearest later one. Days marked "closed" stay closed and are never copied.
+ * Copied days are listed in hoursEstimated so the app can say they're estimates.
+ */
+export function estimateHours(venue: Venue): Venue {
+  const hours = venue.hours
+  if (!hours || hours.length !== 7 || !hours.includes(null)) return venue
+  const isOpen = (h: string | null | undefined): h is string => h != null && h !== "closed"
+  if (!hours.some(isOpen)) return venue
+  const filled = [...hours]
+  const estimated: number[] = []
+  for (let d = 0; d < 7; d++) {
+    if (hours[d] != null) continue
+    let pick: string | undefined
+    for (let back = 1; back < 7 && !pick; back++) if (isOpen(hours[(d - back + 7) % 7])) pick = hours[(d - back + 7) % 7]!
+    for (let fwd = 1; fwd < 7 && !pick; fwd++) if (isOpen(hours[(d + fwd) % 7])) pick = hours[(d + fwd) % 7]!
+    if (pick) {
+      filled[d] = pick
+      estimated.push(d)
+    }
+  }
+  return { ...venue, hours: filled, hoursEstimated: estimated }
+}
+
 /** Is the venue serving oysters right now, and if not, when next? Unknown hours stay unknown. */
 export function openStatus(venue: Venue, clock: NolaClock): OpenStatus {
   const hours = venue.hours
   if (!hours || hours.length !== 7) return { state: "unknown" }
+  const est = (day: number) => (venue.hoursEstimated?.includes(day) ? { estimated: true } : {})
   const today = hours[clock.day]
   if (today && today !== "closed") {
-    const [s, e] = span(...(today.split("-") as [string, string]))
-    if (clock.minutes >= s && clock.minutes < e)
-      return { state: "open", until: today.split("-")[1], closesIn: e - clock.minutes }
+    if (today === ALL_DAY) return { state: "open", until: "24:00", closesIn: 1440 - clock.minutes, allDay: true, ...est(clock.day) }
+    for (const [a, b] of windows(today)) {
+      const [s, e] = span(a, b)
+      if (clock.minutes >= s && clock.minutes < e) return { state: "open", until: b, closesIn: e - clock.minutes, ...est(clock.day) }
+    }
   }
   const prev = hours[yesterday(clock.day)]
-  if (prev && prev !== "closed") {
-    const [, e] = span(...(prev.split("-") as [string, string]))
-    if (e > 1440 && clock.minutes < e - 1440)
-      return { state: "open", until: prev.split("-")[1], closesIn: e - 1440 - clock.minutes }
+  if (prev && prev !== "closed" && prev !== ALL_DAY) {
+    for (const [a, b] of windows(prev)) {
+      const [, e] = span(a, b)
+      if (e > 1440 && clock.minutes < e - 1440)
+        return { state: "open", until: b, closesIn: e - 1440 - clock.minutes, ...est(yesterday(clock.day)) }
+    }
   }
   for (let offset = 0; offset <= 7; offset++) {
     const day = (clock.day + offset) % 7
     const entry = hours[day]
     if (entry == null) return { state: "unknown" }
     if (entry === "closed") continue
-    const [s] = span(...(entry.split("-") as [string, string]))
-    if (offset === 0 && s <= clock.minutes) continue
-    return { state: "opens", at: entry.split("-")[0], dayOffset: offset, day }
+    for (const [a, b] of windows(entry)) {
+      const [s] = span(a, b)
+      if (offset === 0 && s <= clock.minutes) continue
+      return { state: "opens", at: a, dayOffset: offset, day, ...est(day) }
+    }
   }
   return { state: "unknown" }
 }
@@ -334,12 +377,15 @@ export function formatHappyHour(hh: HappyHour): string {
 
 export function formatOpen(open: OpenStatus): string {
   switch (open.state) {
-    case "open":
+    case "open": {
+      const est = open.estimated ? " (est.)" : ""
+      if (open.allDay) return `Open now · 24 hours${est}`
       return open.closesIn <= 45
-        ? `Open now · closes at ${formatTime(open.until)} (${open.closesIn} min)`
-        : `Open now · until ${formatTime(open.until)}`
+        ? `Open now · closes at ${formatTime(open.until)} (${open.closesIn} min)${est}`
+        : `Open now · until ${formatTime(open.until)}${est}`
+    }
     case "opens":
-      return `Closed now · opens ${open.dayOffset === 0 ? "" : open.dayOffset === 1 ? "tomorrow " : `${DAY_NAMES[open.day]} `}${formatTime(open.at)}`
+      return `Closed now · opens ${open.dayOffset === 0 ? "" : open.dayOffset === 1 ? "tomorrow " : `${DAY_NAMES[open.day]} `}${formatTime(open.at)}${open.estimated ? " (est.)" : ""}`
     default:
       return "Hours not listed"
   }

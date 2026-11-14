@@ -34,7 +34,8 @@ export function numberInQuote(n, quote) {
 }
 
 const TIME = /^\d{2}:\d{2}$/
-const HOURS = /^\d{2}:\d{2}-\d{2}:\d{2}$/
+// one window "HH:MM-HH:MM", or several joined by commas for split days (lunch, then dinner)
+const HOURS = /^\d{2}:\d{2}-\d{2}:\d{2}(,\d{2}:\d{2}-\d{2}:\d{2})*$/
 
 /** "16:00" → hour digits a page would print ("4", "16"). */
 function hourForms(t) {
@@ -113,7 +114,7 @@ export function verifyExtraction(x, pages) {
 
   if (Array.isArray(x.hours?.days) && x.hours.days.length === 7) {
     const valid = x.hours.days.every((h) => h === "closed" || HOURS.test(h ?? ""))
-    const times = x.hours.days.filter((h) => h && h !== "closed").flatMap((h) => h.split("-"))
+    const times = x.hours.days.filter((h) => h && h !== "closed").flatMap((h) => h.split(/[,-]/))
     if (!valid) rejected.push("hours: not 7 valid days")
     else if (ok("hours", x.hours.quote, x.hours.url, timesInQuote([...new Set(times)], x.hours.quote))) out.hours = x.hours.days
   }

@@ -88,7 +88,8 @@ with sync_playwright() as p:
     # missing hours or happy-hour times: a phone number and website instead
     c=b.new_context(viewport={"width":390,"height":844},geolocation={"latitude":29.9547,"longitude":-90.0697},permissions=["geolocation"]); pg=c.new_page()
     pg.goto(URL); pg.wait_for_selector(".mf-pick")
-    for name, phone in [("Bourbon House","522-0111"),("Superior","293-3474"),("Blue Crab","284-2898"),("Mr. Ed","309-4848"),("Felix's Lakefront","304-4125")]:
+    # (Bourbon House left this list once its Fri–Sat hours were found on its own site.)
+    for name, phone in [("Superior","293-3474"),("Blue Crab","284-2898"),("Mr. Ed","309-4848"),("Felix's Lakefront","304-4125")]:
         pg.locator(".mf-card-main", has_text=name).first.click(); pg.wait_for_selector(".mf-sheet h2")
         call=pg.locator(".mf-sheet a[href^='tel:']").first
         ok=call.count()==1 and phone in call.inner_text() and pg.locator(".mf-sheet a", has_text="Website").count()>=1
