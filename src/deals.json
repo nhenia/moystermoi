@@ -2505,7 +2505,6 @@
     "ranAt": "2026-11-14",
     "brokenLinks": [
       "seaworthy",
-      "desire",
       "dragos",
       "peche",
       "antoines",
@@ -2514,8 +2513,8 @@
     ],
     "verified": {
       "date": "2026-11-14",
-      "sitesRead": 40,
-      "pricesConfirmed": 18,
+      "sitesRead": 42,
+      "pricesConfirmed": 17,
       "total": 46
     }
   }
