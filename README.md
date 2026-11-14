@@ -107,7 +107,7 @@ It never touches prices, deals or times. Those are updated by the daily restaura
 
 ## Going live
 
-Live at **https://nhenia.github.io/moystermoi/**. Every change saved to `main` is tested and republished automatically (`.github/workflows/deploy-pages.yml`).
+Live at **https://nhenia.github.io/clutched/**. Every change saved to `main` is tested and republished automatically (`.github/workflows/deploy-pages.yml`).
 
 If the site ever stops updating: repo **Settings → Pages → Source** should say **GitHub Actions**.
 

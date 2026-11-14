@@ -61,7 +61,7 @@ Fetch and rebase on `origin/main` first; the link robot may have committed in th
 - **Any Changed item or removal**: create branch `data/check-<YYYY-MM-DD>`, commit, push, open a
   pull request titled `Oyster deal changes <date>`. `gh pr create` does not work in these sessions
   (GitHub's GraphQL API is blocked); open it through the REST API instead:
-  `gh api repos/nhenia/moystermoi/pulls -f title="..." -f head="data/check-<date>" -f base=main -F body=@body.md`.
+  `gh api repos/nhenia/clutched/pulls -f title="..." -f head="data/check-<date>" -f base=main -F body=@body.md`.
   Body, in plain words for a non-developer:
   a table of each change (Restaurant | Was | Now | Proof link), then confirmations, then the call
   list. Nhen approves by merging.

@@ -49,7 +49,7 @@ const MODES: { value: Mode; label: string }[] = [
   { value: "map", label: "Map" },
 ]
 
-const SAVED_KEY = "moyster-saved"
+const SAVED_KEY = "clutched-saved"
 
 function readSaved(): Set<string> {
   try {
@@ -59,7 +59,7 @@ function readSaved(): Set<string> {
   }
 }
 
-const THEME_KEY = "moyster-theme"
+const THEME_KEY = "clutched-theme"
 type Theme = "light" | "dark"
 
 function readTheme(): Theme {

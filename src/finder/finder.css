@@ -179,7 +179,7 @@
   align-items: flex-end;
   font-family: 'Bodoni Moda', Didot, Georgia, serif;
   font-weight: 800;
-  font-size: clamp(3rem, 13vw, 4rem);
+  font-size: clamp(2.3rem, 11vw, 4rem);
   line-height: 1;
   letter-spacing: -0.02em;
 }
