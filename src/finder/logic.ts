@@ -271,8 +271,11 @@ export function enrich(venues: Venue[], origin: Coordinates, clock: NolaClock): 
 const byMiles = (a: Ranked, b: Ranked) =>
   (a.miles ?? Infinity) - (b.miles ?? Infinity) || a.venue.name.localeCompare(b.venue.name)
 
-/** Open now first, then unknown hours, then closed. Every mode lists every venue. */
-const openRank = (r: Ranked) => (r.open.state === "open" || r.hh.state === "now" ? 0 : r.open.state === "unknown" ? 1 : 2)
+/** Open now first, then closed (with a known opening time), then unknown hours. Every mode lists every venue. */
+const openRank = (r: Ranked) => (r.open.state === "open" || r.hh.state === "now" ? 0 : r.open.state === "opens" ? 1 : 2)
+
+/** Not confirmed open right now: closed, or hours unknown. A live happy hour counts as open. */
+export const notOpenNow = (r: Ranked) => r.open.state !== "open" && r.hh.state !== "now"
 
 export const appliesToday = (hh: HappyHour) => hh.state === "now" || hh.state === "later"
 
@@ -309,9 +312,10 @@ export function rank(list: Ranked[], mode: Mode): Ranked[] {
   }
 }
 
-/** The three picks: the top of the ranking, skipping places that are closed (unless their happy hour starts later today). */
+/** The three picks: the top of the ranking, skipping places that are closed or whose hours are unknown
+ *  (unless their happy hour starts later today). */
 export function pickThree(ranked: Ranked[]): Ranked[] {
-  return ranked.filter((r) => r.open.state !== "opens" || r.hh.state === "later").slice(0, 3)
+  return ranked.filter((r) => !notOpenNow(r) || r.hh.state === "later").slice(0, 3)
 }
 
 // ---------- Formatting ----------

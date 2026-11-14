@@ -4,6 +4,7 @@ import assert from "node:assert/strict"
 import data from "../deals.json" with { type: "json" }
 import {
   type Venue,
+  type Ranked,
   DEFAULT_ORIGIN,
   daysSince,
   enrich,
@@ -18,6 +19,9 @@ import {
   nolaClock,
   openStatus,
   estimateHours,
+  notOpenNow,
+  pickThree as pick3,
+  rank as rankAll,
   formatOpen,
   perOyster,
   pickThree,
@@ -297,4 +301,18 @@ test("every venue has hours for all seven days (real data)", () => {
   assert.deepEqual(gaps, [])
   const bad = venues.flatMap((v) => (v.hours ?? []).filter((h) => h && h !== "closed" && !/^\d{2}:\d{2}-\d{2}:\d{2}(,\d{2}:\d{2}-\d{2}:\d{2})*$/.test(h)).map((h) => `${v.name}: ${h}`))
   assert.deepEqual(bad, [])
+})
+
+test("hours-unknown places sit with closed ones: never in the top three, ranked below open and closed", () => {
+  const mk = (id: string, open: Ranked["open"], miles: number) =>
+    ({ venue: { ...base, id, name: id }, open, hh: { state: "none" }, miles, walk: null, price: { perOyster: null } }) as unknown as Ranked
+  const unknownNear = mk("unknown-near", { state: "unknown" }, 0.1)
+  const closedMid = mk("closed-mid", { state: "opens", at: "17:00", dayOffset: 0, day: 1 }, 0.5)
+  const openFar = mk("open-far", { state: "open", until: "22:00", closesIn: 300 }, 2)
+  const order = rankAll([unknownNear, closedMid, openFar], "near").map((r) => r.venue.id)
+  assert.deepEqual(order, ["open-far", "closed-mid", "unknown-near"])
+  assert.deepEqual(pick3(rankAll([unknownNear, closedMid, openFar], "near")).map((r) => r.venue.id), ["open-far"])
+  assert.equal(notOpenNow(unknownNear), true)
+  assert.equal(notOpenNow(closedMid), true)
+  assert.equal(notOpenNow(openFar), false)
 })

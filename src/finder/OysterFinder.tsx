@@ -10,6 +10,7 @@ import {
   type Venue,
   STALE_AFTER_DAYS,
   estimateHours,
+  notOpenNow,
   freshen,
   windows,
   daysSince,
@@ -95,7 +96,8 @@ function useMinuteClock() {
   return now
 }
 
-const isClosed = (r: Ranked) => r.open.state === "opens" && r.hh.state !== "now"
+// Closed now and hours-unknown places both sit in the "Closed now" section.
+const isClosed = notOpenNow
 
 /** A small engraving for each restaurant: an open half shell or a closed oyster, chosen per venue. */
 const thumb = (id: string, live: boolean) =>
