@@ -1,1 +1,32 @@
-{}
+{
+  "superior": {
+    "hash": "07aa8a8a2c1e3ccf",
+    "checked": "2026-11-14",
+    "posted": false
+  },
+  "seaworthy": {
+    "hash": "3c502ca3d9ff99c5",
+    "checked": "2026-11-14",
+    "posted": true
+  },
+  "blue-crab": {
+    "hash": "fc627381f1a33d73",
+    "checked": "2026-11-14",
+    "posted": false
+  },
+  "dragos": {
+    "hash": "6d267906ec7941be",
+    "checked": "2026-11-14",
+    "posted": false
+  },
+  "antoines": {
+    "hash": "64db3622b2e9bedd",
+    "checked": "2026-11-14",
+    "posted": false
+  },
+  "holywater": {
+    "hash": "37b849b7923551a0",
+    "checked": "2026-11-14",
+    "posted": false
+  }
+}
