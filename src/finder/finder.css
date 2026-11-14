@@ -607,6 +607,13 @@ a.mf-link {
   font-size: 1.05rem;
 }
 
+.mf-price-estimate,
+.mf-price-dish {
+  background: none;
+  color: var(--ink);
+  border: 2px dashed var(--ink);
+}
+
 .mf-price-none::after {
   content: ' ›';
 }
@@ -731,6 +738,30 @@ a.mf-link {
   border: 2px solid var(--ink);
   background: var(--paper);
   font-weight: 700;
+}
+
+/* ---------- Freshness guarantee ---------- */
+.mf-verified {
+  margin: 10px 0 0;
+  padding: 6px 10px;
+  display: inline-block;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.mf-verified b {
+  font-weight: 800;
+}
+
+.mf-verified.is-late {
+  border-style: dashed;
+}
+
+.mf-sheet-est {
+  font-style: italic;
 }
 
 /* ---------- Footer: contact ---------- */

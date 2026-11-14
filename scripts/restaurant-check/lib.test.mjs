@@ -167,3 +167,20 @@ test("page text is trimmed to the parts that can hold prices and hours", () => {
   assert.ok(t.length < 200)
   assert.equal(oldestVerified([{ verified: "2026-11-10" }, { verified: "2026-11-02" }]), "2026-11-02")
 })
+
+import { stillPosted, verificationStamp } from "./lib.mjs"
+
+test("still-posted check confirms only when every shown price and time is on the restaurant's page", () => {
+  const venue = { price: 1, start: "16:00", end: "18:30", menu: { raw: { dozen: 24 } } }
+  const page = [{ url: "x", text: "Happy hour Tuesday-Thursday 4:00 - 6:30 pm. $1 oysters. Raw oysters dozen $24" }]
+  assert.deepEqual(stillPosted(venue, page), { checked: 3, missing: [], confirmed: true })
+  const changed = stillPosted({ ...venue, menu: { raw: { dozen: 22 } } }, page)
+  assert.equal(changed.confirmed, false)
+  assert.deepEqual(changed.missing, ["raw dozen"])
+  assert.equal(stillPosted({ menu: {} }, page).confirmed, false, "nothing to check is never 'confirmed'")
+})
+
+test("the site's verified date only moves when most restaurant sites were actually read", () => {
+  assert.deepEqual(verificationStamp("2026-11-16", 46, 40, 9), { date: "2026-11-16", sitesRead: 40, pricesConfirmed: 9, total: 46 })
+  assert.equal(verificationStamp("2026-11-16", 46, 10, 9), null)
+})

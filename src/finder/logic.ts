@@ -68,6 +68,8 @@ export type PriceTag =
   | { kind: "happy"; text: string; perOyster: number | null }
   | { kind: "menu"; text: string; perOyster: number }
   | { kind: "market"; text: string; perOyster: null }
+  | { kind: "dish"; text: string; perOyster: null }
+  | { kind: "estimate"; text: string; perOyster: number | null; basis: string }
   | { kind: "none"; text: string; perOyster: null }
 
 export type Coordinates = { lat: number; lng: number }
@@ -253,6 +255,7 @@ export const hasCoords = (v: Venue): v is Venue & { lat: number; lng: number } =
   typeof v.lat === "number" && typeof v.lng === "number" && Number.isFinite(v.lat) && Number.isFinite(v.lng)
 
 export function enrich(venues: Venue[], origin: Coordinates, clock: NolaClock): Ranked[] {
+  const model = priceModel(venues)
   return venues.map((venue) => {
     const miles = hasCoords(venue) ? milesBetween(origin, venue) : null
     const hh = happyHour(venue, clock)
@@ -263,7 +266,7 @@ export function enrich(venues: Venue[], origin: Coordinates, clock: NolaClock): 
       hh,
       open: openStatus(venue, clock),
       perOyster: perOyster(venue),
-      price: priceTag(venue, hh),
+      price: priceTag(venue, hh, model),
     }
   })
 }
@@ -288,7 +291,11 @@ const happyRank = (r: Ranked) => {
 
 /** Cheapest mode: any price you can actually get today (happy hour or menu), cheapest first; then the rest. */
 const cheapRank = (r: Ranked) =>
-  r.price.perOyster == null || (r.open.state === "opens" && r.open.dayOffset > 0 && r.hh.state !== "later") ? 2 : 0
+  r.price.perOyster == null || (r.open.state === "opens" && r.open.dayOffset > 0 && r.hh.state !== "later")
+    ? 2
+    : r.price.kind === "estimate"
+      ? 1
+      : 0
 
 export function rank(list: Ranked[], mode: Mode): Ranked[] {
   const items = [...list]
@@ -504,13 +511,68 @@ export function formatMenuPrice(menu?: Menu): string | null {
   return null
 }
 
-export function priceTag(venue: Venue, hh: HappyHour): PriceTag {
+const median = (xs: number[]) => {
+  const v = [...xs].sort((a, b) => a - b)
+  return v.length ? (v.length % 2 ? v[(v.length - 1) / 2] : (v[v.length / 2 - 1] + v[v.length / 2]) / 2) : null
+}
+const dollars = (s: string) => {
+  const m = /\$\s?(\d+(?:\.\d{2})?)/.exec(s)
+  return m ? Number(m[1]) : null
+}
+const PLATE = /fried|roast|grill|charbroil|brochette|rockefeller|bienville|baked|platter|plate/i
+const NOT_PLATE = /po.?boy|loaf|sandwich|shooter|bun|happy hour|add-on|tower|plateau/i
+
+/** Typical New Orleans prices, worked out from the places that post real ones. Used for ~estimates. */
+export type PriceModel = { rawDozen: number | null; grillDozen: number | null; plate: number | null; rawCount: number }
+export function priceModel(venues: Venue[]): PriceModel {
+  const raw = venues.map((v) => v.menu?.raw?.dozen ?? (v.menu?.raw?.half != null ? v.menu.raw.half * 2 : null)).filter((n): n is number => n != null)
+  const grill = venues.map((v) => v.menu?.chargrilled?.dozen ?? null).filter((n): n is number => n != null)
+  const plates = venues.flatMap((v) => (v.menu?.items ?? []).filter((i) => PLATE.test(i.name) && !NOT_PLATE.test(i.name)).map((i) => dollars(i.price))).filter((n): n is number => n != null)
+  return { rawDozen: median(raw), grillDozen: median(grill), plate: median(plates), rawCount: raw.length }
+}
+
+/** The cheapest priced oyster dish on the venue's own menu list (real, not an estimate). */
+function cheapestDish(venue: Venue) {
+  const prices = (venue.menu?.items ?? []).filter((i) => !/happy hour/i.test(i.name)).map((i) => dollars(i.price)).filter((n): n is number => n != null && n >= 5)
+  return prices.length ? Math.min(...prices) : null
+}
+
+export function priceTag(venue: Venue, hh: HappyHour, model?: PriceModel): PriceTag {
   if ((hh.state === "now" || hh.state === "later") && venue.price != null) {
     const text = formatPrice(venue)!.replace(" ea", " each").replace(" / 6", " for 6").replace(" / 12", " a dozen")
     return { kind: "happy", text, perOyster: perOyster(venue) }
   }
   const per = menuPerOyster(venue.menu)
   if (per != null) return { kind: "menu", text: formatMenuPrice(venue.menu)!, perOyster: per }
-  if (venue.menu?.market) return { kind: "market", text: "Market price", perOyster: null }
+  if (!model) {
+    if (venue.menu?.market) return { kind: "market", text: "Market price", perOyster: null }
+    return { kind: "none", text: "See menu", perOyster: null }
+  }
+  // No posted per-oyster price: estimate from what similar dishes cost around town, marked with ~.
+  const serves = venue.kind ?? []
+  const round = (n: number) => `$${Math.round(n)}`
+  const basis = `typical of ${model.rawCount} New Orleans oyster bars that post prices`
+  if (serves.includes("raw") && model.rawDozen != null)
+    return { kind: "estimate", text: `~${round(model.rawDozen)} a dozen`, perOyster: model.rawDozen / 12, basis }
+  const dish = cheapestDish(venue)
+  if (dish != null) return { kind: "dish", text: `dishes from ${money(dish)}`, perOyster: null }
+  if (serves.includes("chargrilled") && model.grillDozen != null)
+    return { kind: "estimate", text: `~${round(model.grillDozen)} a dozen chargrilled`, perOyster: model.grillDozen / 12, basis }
+  if (model.plate != null) return { kind: "estimate", text: `~${round(model.plate)} a plate`, perOyster: null, basis }
   return { kind: "none", text: "See menu", perOyster: null }
+}
+
+/** The Monday & Thursday freshness guarantee. Longest gap between two check days is Thu→Mon: 4 days. */
+export const VERIFY_EVERY_DAYS = 4
+export type Freshness =
+  | { state: "fresh"; label: string; date: string }
+  | { state: "late"; label: string; date: string; days: number }
+  | { state: "never" }
+export function freshness(verified: { date: string } | undefined, now: Date): Freshness {
+  if (!verified?.date) return { state: "never" }
+  const label = new Intl.DateTimeFormat("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" }).format(
+    new Date(`${verified.date}T12:00:00Z`),
+  )
+  const days = daysSince(verified.date, now)
+  return days > VERIFY_EVERY_DAYS ? { state: "late", label, date: verified.date, days } : { state: "fresh", label, date: verified.date }
 }
