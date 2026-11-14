@@ -1,4 +1,4 @@
-# Moyster — build log
+# Clutched (formerly Moyster) — build log
 
 Goal: a tourist finds an oyster spot in under 60 seconds.
 

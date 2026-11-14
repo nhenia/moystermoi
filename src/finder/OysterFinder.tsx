@@ -286,8 +286,7 @@ export default function OysterFinder() {
 
       <header className="mf-head">
         <p className="mf-logo">
-          <span className="mf-sr">Moyster</span>
-          <span aria-hidden="true">M</span>
+          <span className="mf-sr">Clutched</span>
           <button
             type="button"
             className={`mf-logo-o${shucking ? " is-shucking" : ""}`}
@@ -295,7 +294,7 @@ export default function OysterFinder() {
             aria-label="Surprise me"
             dangerouslySetInnerHTML={{ __html: LOGO_O }}
           />
-          <span aria-hidden="true">yster</span>
+          <span aria-hidden="true">Clutched</span>
         </p>
         <button type="button" className="mf-theme" onClick={toggleTheme} aria-pressed={theme === "dark"}>
           <span aria-hidden="true">{theme === "dark" ? "☾" : "☀"}</span>
