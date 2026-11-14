@@ -303,6 +303,16 @@ export default function OysterFinder() {
 
         <div className="mf-plate-wrap">
           <div className="mf-plate" dangerouslySetInnerHTML={{ __html: plate }} />
+          <picture className="mf-cutout">
+            <source srcSet={`${import.meta.env.BASE_URL}art/pearl-table.webp`} type="image/webp" />
+            <img
+              src={`${import.meta.env.BASE_URL}art/pearl-table.jpg`}
+              alt="Oysters on the half shell with lemon, strings of pearls and a coupe of champagne on velvet"
+              width={512}
+              height={286}
+              decoding="async"
+            />
+          </picture>
           <h1 id="mf-title" className="mf-title">
             <span>Oysters near me</span>
             <small>New Orleans</small>
