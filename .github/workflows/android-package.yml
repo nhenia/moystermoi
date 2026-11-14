@@ -1,0 +1,56 @@
+name: Android package
+# Builds the Google Play package (.aab) for Clutched: an Android shell that opens the live site
+# full-screen. The package is built UNSIGNED: it is signed on a private computer with the upload key,
+# which never goes in this public repo. Run by hand: Actions → Android package → Run workflow,
+# or automatically when android/ or this file changes.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "android/**"
+      - "scripts/android/**"
+      - ".github/workflows/android-package.yml"
+
+permissions:
+  contents: write # publish the unsigned build as a release file
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Generate the Android project
+        run: |
+          mkdir -p /tmp/bw && cd /tmp/bw && npm init -y >/dev/null && npm i --silent @bubblewrap/core@1.27.0
+          NODE_PATH=/tmp/bw/node_modules node "$GITHUB_WORKSPACE/scripts/android/generate.cjs" /tmp/twa
+      - name: Build (unsigned)
+        working-directory: /tmp/twa
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon bundleRelease
+          mkdir -p "$GITHUB_WORKSPACE/out"
+          cp app/build/outputs/bundle/release/app-release.aab "$GITHUB_WORKSPACE/out/clutched-unsigned.aab"
+          ls -la "$GITHUB_WORKSPACE/out"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clutched-unsigned-aab
+          path: out/clutched-unsigned.aab
+      - name: Publish as a release file
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/android/play-package'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v=$(node -p "require('./android/twa-manifest.json').appVersionCode")
+          tag="android-build-$v"
+          gh release delete "$tag" --yes --cleanup-tag 2>/dev/null || true
+          gh release create "$tag" out/clutched-unsigned.aab --prerelease --target "$GITHUB_SHA" \
+            --title "Android build $v (unsigned)" --notes "Unsigned Google Play package. Sign with the upload key before uploading."
