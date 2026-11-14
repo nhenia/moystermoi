@@ -99,7 +99,7 @@ const md = [
   "",
   `Read each restaurant's own website (no AI). ${venues.length} restaurants: ${posted.read} sites read, ${report.couldNotRead.length} couldn't be read.`,
   "",
-  `**Prices:** every price and happy-hour time we show is still printed word for word at ${posted.confirmed.length} places.${stamp ? ` The site now says "Verified ${today}".` : " Not enough sites were read, so the site's verified date was NOT moved."}`,
+  `**Prices:** every price and happy-hour time we show is still printed word for word at ${posted.confirmed.length} places.${stamp ? ` The site now says "Verified ${today}".` : only.length ? " (Partial run: the site's verified date only moves on a full run.)" : " Not enough sites were read, so the site's verified date was NOT moved."}`,
   "",
   `**Hours:** opening and closing times all found on the page at ${report.hoursOk.length} places.`,
   "",
