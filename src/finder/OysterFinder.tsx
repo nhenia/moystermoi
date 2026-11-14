@@ -571,7 +571,7 @@ function Verified({ now }: { now: Date }) {
       <span>
         {f.state === "late"
           ? ` · ${f.days} days ago, check is late. Call ahead.`
-          : " · prices & hours rechecked every Monday & Thursday"}
+          : " · prices rechecked every Monday & Thursday"}
       </span>
     </p>
   )
