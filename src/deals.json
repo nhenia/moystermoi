@@ -36,7 +36,7 @@
       ],
       "note": "Happy hour in the bar areas only. Specialty oysters $2.",
       "source": "https://www.bourbonhouse.com/menu/happy-hour/",
-      "verified": "2026-11-09",
+      "verified": "2026-11-14",
       "menu": {
         "market": true,
         "url": "https://bourbonhouse.com/menu/dinner-menu",
@@ -109,7 +109,7 @@
       ],
       "note": "Chef's dozen $26. Raw oysters $2.75–$4 each depending on the oyster.",
       "source": "https://lukeneworleans.com/",
-      "verified": "2026-11-09",
+      "verified": "2026-11-14",
       "menu": {
         "raw": {
           "each": 2.75
@@ -189,7 +189,7 @@
       ],
       "note": "",
       "source": "https://es.acehotel.com/new-orleans/eat-drink/seaworthy/",
-      "verified": "2026-11-08",
+      "verified": "2026-11-14",
       "menu": {
         "url": "https://es.acehotel.com/new-orleans/eat-drink/seaworthy/"
       },
@@ -232,7 +232,7 @@
       ],
       "note": "",
       "source": "https://www.sonesta.com/royal-sonesta/la/new-orleans/royal-sonesta-new-orleans/desire-oyster-bar",
-      "verified": "2026-11-09",
+      "verified": "2026-11-14",
       "menu": {
         "raw": {
           "half": 14,
@@ -497,7 +497,7 @@
       ],
       "note": "",
       "source": "https://felixs.com/locations/",
-      "verified": "2026-11-08",
+      "verified": "2026-11-14",
       "lat": 30.02297,
       "lng": -90.11353,
       "geocoded": "census",
@@ -693,7 +693,7 @@
       ],
       "note": "Chef's select oysters.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08",
+      "verified": "2026-11-14",
       "menu": {
         "url": "https://fives.bar/"
       },
@@ -892,7 +892,7 @@
       ],
       "note": "With a drink.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08",
+      "verified": "2026-11-14",
       "lat": 29.95806,
       "lng": -90.06476,
       "geocoded": "census",
@@ -966,7 +966,7 @@
       ],
       "note": "",
       "source": "https://neworleansrestaurants.com/oceana_grill",
-      "verified": "2026-11-09",
+      "verified": "2026-11-14",
       "lat": 29.95594,
       "lng": -90.06714,
       "geocoded": "census",
@@ -1130,7 +1130,7 @@
       ],
       "note": "Chargrilled $13 half dozen.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08",
+      "verified": "2026-11-14",
       "lat": 29.95016,
       "lng": -90.07028,
       "geocoded": "census",
@@ -1211,7 +1211,7 @@
       ],
       "note": "",
       "source": "https://www.restaurantji.com/la/new-orleans/sidecar-patio-and-oyster-bar-",
-      "verified": "2026-11-09",
+      "verified": "2026-11-14",
       "menu": {
         "url": "https://usmenuguide.com/places/united-states/louisiana/new-orleans/sidecar-nola-patio-oyster-bar-new-orleans/",
         "items": [
@@ -1266,7 +1266,7 @@
       ],
       "note": "",
       "source": "https://www.opentable.com.mx/r/marias-oyster-bar-new-orleans",
-      "verified": "2026-11-08",
+      "verified": "2026-11-14",
       "menu": {
         "url": "https://www.opentable.com.mx/r/marias-oyster-bar-new-orleans",
         "items": [
@@ -1531,7 +1531,7 @@
       ],
       "note": "",
       "source": "https://www.opentable.com/pascals-manale?lang=en",
-      "verified": "2026-11-09",
+      "verified": "2026-11-14",
       "menu": {
         "url": "https://www.toasttab.com/local/order/pascal-s-manale-1838-napoleon-ave",
         "raw": {
@@ -1614,7 +1614,7 @@
       ],
       "note": "Topped with ceviche. Shucker's dozen (6 kinds) $24.",
       "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-08",
+      "verified": "2026-11-14",
       "menu": {
         "raw": {
           "dozen": 24
@@ -1658,7 +1658,7 @@
       ],
       "note": "Tuesdays.",
       "source": "https://www.cooterbrowns.com/",
-      "verified": "2026-11-09",
+      "verified": "2026-11-14",
       "menu": {
         "url": "https://www.toasttab.com/local/order/cooterbrowns/r-ed63f8f9-13ab-47bd-9108-48de193fb00b/item-small-house-salad_69f39eee-0184-4e12-b70e-fa26ba4b7fbc",
         "items": [
@@ -1940,7 +1940,7 @@
       ],
       "note": "Happy hour in Bar R'evolution only. Dining room opens at 5 pm.",
       "source": "https://revolutionnola.com/?p=852",
-      "verified": "2026-11-09",
+      "verified": "2026-11-14",
       "menu": {
         "market": true,
         "url": "https://revolutionnola.com/happy-hour-menu",
@@ -2123,7 +2123,7 @@
       ],
       "note": "Rockefeller $21 half dozen. Gallier's Special $34 dozen.",
       "source": "https://galliernola.com/seafood-oysters/best-oysters-new-orleans/",
-      "verified": "2026-11-09",
+      "verified": "2026-11-14",
       "menu": {
         "raw": {
           "half": 16,
@@ -2195,7 +2195,7 @@
       ],
       "note": "Happy hour excludes holidays. No reservations.",
       "source": "https://blog.deanies.com/french-quarter/",
-      "verified": "2026-11-09",
+      "verified": "2026-11-14",
       "menu": {
         "url": "https://places.singleplatform.com/deanies-seafood-restaurant-in-the-french-quarter/menu",
         "market": true,
