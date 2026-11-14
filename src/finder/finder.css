@@ -781,7 +781,7 @@ a.mf-link {
 
 .mf-map {
   position: relative;
-  height: 300px;
+  height: 240px;
   border: 2px solid var(--ink);
   overflow: hidden;
   background: var(--silver);
@@ -789,7 +789,32 @@ a.mf-link {
 }
 
 .mf-map.is-expanded {
-  height: min(68vh, 640px);
+  height: min(52vh, 460px);
+}
+
+/* one finger scrolls the page while the map is locked; two-finger pinch still zooms */
+.mf-map.is-locked .leaflet-container {
+  touch-action: pan-y pinch-zoom;
+}
+
+.mf-map-move {
+  position: absolute;
+  z-index: 403;
+  top: 10px;
+  left: 10px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 700 0.95rem 'Atkinson Hyperlegible', system-ui, sans-serif;
+  box-shadow: 2px 3px 0 var(--ink);
+}
+
+.mf-map-move[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .mf-map-canvas {
@@ -831,6 +856,14 @@ a.mf-link {
   background: var(--paper);
   font-size: 1rem; /* 16px floor for older eyes */
   font-weight: 700;
+}
+
+/* on touch screens the Move map button owns the top-left corner */
+.mf-map.is-locked .mf-map-count,
+.mf-map.is-locked .mf-map-note,
+.mf-map:has(.mf-map-move) .mf-map-count,
+.mf-map:has(.mf-map-move) .mf-map-note {
+  top: 62px;
 }
 
 .mf-map-legend > span {
@@ -1196,7 +1229,7 @@ a.mf-link {
 
   .mf-map,
   .mf-map.is-expanded {
-    height: min(84vh, 760px);
+    height: min(60vh, 540px);
   }
 
   .mf-fab {
