@@ -10,7 +10,7 @@ export default class FinderBoundary extends Component<{ children: ReactNode }, {
   }
 
   componentDidCatch(error: unknown) {
-    console.error("Moyster finder crashed:", error)
+    console.error("Clutched finder crashed:", error)
   }
 
   render() {

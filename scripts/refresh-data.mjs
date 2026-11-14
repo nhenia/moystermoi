@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Moyster data refresh — run by .github/workflows/refresh-data.yml (weekly + on data edits),
+// Clutched data refresh — run by .github/workflows/refresh-data.yml (weekly + on data edits),
 // or locally with:  pnpm refresh-data
 //
 // What it does (and deliberately does NOT do):
@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url"
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const file = path.join(root, "src", "deals.json")
-const UA = "Moyster/1.0 (oyster finder; weekly data refresh)"
+const UA = "Clutched/1.0 (oyster finder; weekly data refresh)"
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 // Rough box around Orleans Parish; anything outside is rejected as a bad geocode.
@@ -102,7 +102,7 @@ data.checks = {
 await fs.writeFile(file, `${JSON.stringify(data, null, 2)}\n`)
 
 const lines = [
-  "## Moyster data refresh",
+  "## Clutched data refresh",
   `- Prices last verified by a person: **${data.updated}**`,
   `- Newly mapped: ${report.geocoded.length ? report.geocoded.join(", ") : "none"}`,
   `- Could not map: ${report.unresolved.length ? report.unresolved.join(", ") : "none"}`,

@@ -4,7 +4,7 @@ import { DEFAULT_ORIGIN } from "./logic"
 
 export type Origin = Coordinates & { label: string; source: "device" | "address" | "default" }
 
-const SESSION_KEY = "moyster-origin"
+const SESSION_KEY = "clutched-origin"
 
 export const defaultOrigin = (): Origin => ({ ...DEFAULT_ORIGIN, source: "default" })
 

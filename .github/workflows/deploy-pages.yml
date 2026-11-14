@@ -1,4 +1,4 @@
-name: Deploy MOYSTER to GitHub Pages
+name: Deploy CLUTCHED to GitHub Pages
 on:
   push:
     branches: [main]

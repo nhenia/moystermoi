@@ -5,7 +5,7 @@
 import { chromium } from "playwright"
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs"
 
-const UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36 MoysterBot/1.0 (+https://github.com/nhenia/moystermoi)"
+const UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36 ClutchedBot/1.0 (+https://github.com/nhenia/clutched)"
 const LINK_WORDS = /menu|oyster|happy|raw.?bar|dinner|lunch|food|drink|special|hours|location|visit|about|contact/i
 const SKIP = /instagram|facebook|twitter|tiktok|youtube|opentable|resy|tock|toasttab|doordash|ubereats|grubhub|google\.|yelp|tripadvisor|mailto:|tel:|giftcard|gift-card|careers|jobs|privacy|cookie|wp-login|\.(jpg|jpeg|png|gif|webp|svg|mp4)(\?|$)/i
 const MAX_PAGES = 8

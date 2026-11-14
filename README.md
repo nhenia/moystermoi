@@ -8,7 +8,7 @@ Users should be able to find oysters without having to understand restaurant cat
 
 2. Happy Hour as a discovery advantage.
 
-Happy Hour should be prominent, but it should not turn Moyster into a generic drinking app. The oyster experience remains the primary identity.
+Happy Hour should be prominent, but it should not turn Clutched into a generic drinking app. The oyster experience remains the primary identity.
 
 3. Freshness as a feature.
 
@@ -23,7 +23,7 @@ Make it possible to compare:
 - Deal days and time windows.
 5. A distinctive visual identity.
 
-Moyster should not look like Yelp with a shell icon. Its experimental, editorial visual language is part of its differentiation. The interface should feel like a specialized discovery instrument rather than a restaurant database.
+Clutched should not look like Yelp with a shell icon. Its experimental, editorial visual language is part of its differentiation. The interface should feel like a specialized discovery instrument rather than a restaurant database.
 
 Plate I look: New Orleans drawn as an oyster shell in a naturalist's engraving style. Growth rings double as contour lines, the Mississippi crescent cuts across the lip, Lake Pontchartrain is hatched water at the hinge, and every oyster bar sits on it as a pearl at its real position. Bodoni logotype whose "o" is that oyster. Light (ink on pearl paper) and dark (white-line scratchboard) modes. Nothing loops.
 
@@ -107,7 +107,7 @@ It never touches prices, deals or times. Those are updated by the daily restaura
 
 ## Going live
 
-Live at **https://nhenia.github.io/moystermoi/**. Every change saved to `main` is tested and republished automatically (`.github/workflows/deploy-pages.yml`).
+Live at **https://nhenia.github.io/clutched/**. Every change saved to `main` is tested and republished automatically (`.github/workflows/deploy-pages.yml`).
 
 If the site ever stops updating: repo **Settings → Pages → Source** should say **GitHub Actions**.
 
