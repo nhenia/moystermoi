@@ -80,19 +80,17 @@ Happy hours change quietly, so nothing is trusted forever:
 
 ### Daily restaurant check (automatic, 9am)
 
-`.github/workflows/daily-restaurant-check.yml` runs **every day at 9am New Orleans time** (summer and winter). For each restaurant it:
+`.github/workflows/daily-restaurant-check.yml` runs **every day at 9am New Orleans time** (summer and winter). It uses **no AI and no API keys**. For each restaurant it:
 
 1. opens the restaurant's **own website** (`website`, plus any `pages` listed) in a headless browser, follows its menu, happy hour and oyster links, and reads menu PDFs;
-2. if those pages haven't changed since the last good read, re-confirms the data for free and moves on;
-3. otherwise has an AI model read the pages for oyster dishes and prices, the oyster happy hour, hours and address, **each with the exact words it read them from**;
-4. keeps a value **only if those exact words are on the restaurant's page**: anything it can't prove is thrown out and listed;
-5. saves the changes to `deals.json`, re-maps any new address, runs the data checks, and republishes the site.
+2. checks that every **price and happy-hour time** we show is still printed there, word for word. If all are, the restaurant gets today's `verified` date;
+3. checks the **opening and closing times** the same way;
+4. notes which restaurants' pages **changed** since the last run;
+5. moves the site's **"Verified" freshness date** (shown under "You are here") when it read at least half the sites, then republishes. The site promises a check every Monday and Thursday; the daily run covers that, and if it ever lapses for more than 4 days the site says so and tells visitors to call ahead.
 
-**What it never does:** use review sites or blogs, solve bot checks, delete a restaurant, or delete a happy hour just because a page doesn't mention it. A "we're closing" notice goes on the report for you to decide.
+**What it never does:** change a price on its own, use review sites or blogs, solve bot checks, or delete a restaurant. Anything that no longer matches is listed for a person to fix in `src/deals.json`.
 
-**The report:** each run's page on GitHub (Actions → Daily restaurant check) and the file `data/last-check.md` list what changed (Was / Now / Proof link), what couldn't be read and why (site down, bot check, menu only a photo), and what was confirmed.
-
-**Which AI reads the pages:** Claude, using an Anthropic API key saved as a repository secret named `ANTHROPIC_API_KEY` (Settings → Secrets and variables → Actions → New repository secret). Without the key, the check still reads every site but changes nothing, and the report says the key is missing. (It would fall back to GitHub's free AI models, but in November 2026 they only answered "OK" on this account.) Most days few menus change, and unchanged pages are confirmed without asking the AI at all.
+**The report:** each run's page on GitHub (Actions → Daily restaurant check) and the file `data/last-check.md` list prices no longer found on a restaurant's page, pages that changed, sites that couldn't be read, and hours that didn't match.
 
 **Run it now / for one restaurant:** Actions → Daily restaurant check → Run workflow. Optionally type restaurant ids (e.g. `dragos blue-crab`) or tick "Report only".
 
@@ -121,7 +119,7 @@ pnpm typecheck
 pnpm build && pnpm preview --port 4173
 python3 tests/e2e.py     # browser tests at phone + desktop sizes (needs Python Playwright)
 pnpm refresh-data        # run the data robot locally (needs internet)
-pnpm check-restaurants -- --dry-run dragos   # read one restaurant's site and print the report (needs internet + ANTHROPIC_API_KEY)
+pnpm check-restaurants -- --dry-run dragos   # read one restaurant's site and print the report (needs internet)
 pnpm test:robot          # the daily check's safety rules and page reader
 ```
 

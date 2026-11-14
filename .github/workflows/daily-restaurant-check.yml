@@ -1,7 +1,8 @@
 name: Daily restaurant check
-# Every day at 9am New Orleans time, reads each restaurant's OWN website and updates src/deals.json:
-# oyster dishes and prices, happy hour, hours and address. A value is only saved when its exact
-# wording is on the restaurant's page. The site redeploys itself after a change.
+# Every day at 9am New Orleans time, reads each restaurant's OWN website (no AI, no API keys) and
+# checks that the prices, happy-hour times and hours we show are still printed there word for word.
+# Confirmed places get today's "verified" date, and the site's freshness stamp moves forward.
+# Anything that no longer matches is listed in the report for a person to fix. The site redeploys after.
 # The run's report (what changed, with proof links) is on the run page and in data/last-check.md.
 
 on:
@@ -30,7 +31,6 @@ on:
 permissions:
   contents: write # save updated data
   actions: write # redeploy the site
-  models: read # free GitHub Models, used when no ANTHROPIC_API_KEY secret is set
 
 concurrency:
   group: daily-restaurant-check
@@ -86,8 +86,6 @@ jobs:
         if: steps.gate.outputs.run == 'true'
         id: check
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GITHUB_TOKEN: ${{ github.token }}
           DRY: ${{ (github.ref != 'refs/heads/main' || inputs.dry_run) && '--dry-run' || '' }}
           # A code change triggers a quick trial on six sample restaurants; the 9am run checks them all.
           VENUES: ${{ github.event_name == 'push' && 'dragos blue-crab superior antoines holywater seaworthy' || inputs.venues }}
