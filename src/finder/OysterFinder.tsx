@@ -9,7 +9,9 @@ import {
   type Ranked,
   type Venue,
   STALE_AFTER_DAYS,
+  estimateHours,
   freshen,
+  windows,
   daysSince,
   drawOyster,
   enrich,
@@ -165,7 +167,7 @@ export default function OysterFinder() {
 
   const clock = useMemo(() => nolaClock(now), [now])
   const enriched = useMemo(
-    () => enrich(venues.map((v) => freshen(v, now)), origin, clock),
+    () => enrich(venues.map((v) => estimateHours(freshen(v, now))), origin, clock),
     [origin, clock, now],
   )
   const ranked = useMemo(() => rank(enriched, mode), [enriched, mode])
@@ -630,14 +632,21 @@ function Row({ r, n, ...p }: CardProps & { n: number }) {
   )
 }
 
-/** Mon–Thu 11am–10pm / Fri–Sat 11am–11pm / Sun closed — consecutive days with the same hours merge. */
-function weekHours(hours: Venue["hours"]) {
+/** Mon–Thu 11am–10pm / Fri–Sat 11am–11pm / Sun closed — consecutive days with the same hours merge.
+ *  Split days read "11 am–2 pm, 5:30–9 pm"; copied (estimated) days say so. */
+function weekHours(v: Venue) {
+  const hours = v.hours
   if (!hours) return []
   const order = [1, 2, 3, 4, 5, 6, 0]
-  const label = (h: string | null) => (h == null ? "call to check" : h === "closed" ? "closed" : formatRange(...(h.split("-") as [string, string])))
+  const label = (h: string | null, d: number) => {
+    if (h == null) return "call to check"
+    if (h === "closed") return "closed"
+    const text = h === "00:00-24:00" ? "open 24 hours" : windows(h).map(([a, b]) => formatRange(a, b)).join(", ")
+    return v.hoursEstimated?.includes(d) ? `${text} (estimated)` : text
+  }
   const rows: { days: number[]; text: string }[] = []
   for (const d of order) {
-    const text = label(hours[d])
+    const text = label(hours[d], d)
     const last = rows[rows.length - 1]
     if (last && last.text === text) last.days.push(d)
     else rows.push({ days: [d], text })
@@ -651,7 +660,7 @@ function weekHours(hours: Venue["hours"]) {
 /** The restaurant card. A shell lid lifts off it as it opens. */
 function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: boolean; onClose: () => void; onShare: () => void; onSave: () => void }) {
   const v = r.venue
-  const hours = weekHours(v.hours)
+  const hours = weekHours(v)
   const menuPrice = formatMenuPrice(v.menu)
   const grill = v.menu?.chargrilled
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -745,7 +754,7 @@ function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: bool
           ) : (
             <p>Not posted online.</p>
           )}
-          {(hours.length === 0 || v.hours?.some((h) => h == null)) && <Contact v={v} />}
+          {(hours.length === 0 || v.hours?.some((h) => h == null) || (v.hoursEstimated?.length ?? 0) > 0) && <Contact v={v} />}
         </div>
         {v.note && <p className="mf-sheet-note">{v.note}</p>}
 

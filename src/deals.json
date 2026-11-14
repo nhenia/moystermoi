@@ -26,13 +26,13 @@
       "start": "14:00",
       "end": "17:00",
       "hours": [
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00",
         "11:00-22:00",
-        "11:00-21:00",
-        "11:00-21:00",
-        "11:00-21:00",
-        "11:00-21:00",
-        null,
-        null
+        "11:00-22:00"
       ],
       "note": "Happy hour in the bar areas only. Specialty oysters $2.",
       "source": "https://www.bourbonhouse.com/menu/happy-hour/",
@@ -71,7 +71,8 @@
       "pages": [
         "https://bourbonhouse.com/menu/dinner-menu",
         "https://www.bourbonhouse.com/menu/happy-hour/"
-      ]
+      ],
+      "hoursSource": "https://www.bourbonhouse.com/location/bourbon-house/"
     },
     {
       "id": "luke",
@@ -1157,13 +1158,13 @@
       "start": null,
       "end": null,
       "hours": [
-        null,
         "11:00-22:00",
         "11:00-22:00",
         "11:00-22:00",
-        "11:00-23:00",
-        "11:00-23:00",
-        "17:00-23:00"
+        "11:00-22:00",
+        "11:00-22:00",
+        "11:00-22:00",
+        "11:00-22:00"
       ],
       "note": "",
       "source": "https://www.opentable.com/peche-seafood-grill?rid=105748",
@@ -1173,7 +1174,8 @@
       },
       "phone": "(504) 522-1744",
       "website": "https://www.pecherestaurant.com/",
-      "lore": "Different shucking knife per shell shape."
+      "lore": "Different shucking knife per shell shape.",
+      "hoursSource": "https://www.pecherestaurant.com/"
     },
     {
       "id": "sidecar",
@@ -1255,7 +1257,7 @@
       "end": "18:00",
       "hours": [
         "11:30-21:00",
-        null,
+        "11:30-21:00",
         "11:30-21:00",
         "11:30-21:00",
         "11:30-21:00",
@@ -1290,7 +1292,8 @@
       },
       "phone": "(504) 350-4075",
       "website": "https://www.mariasoysterbar.com/",
-      "lore": "Chili-butter roasted oysters; oyster banh mi."
+      "lore": "Chili-butter roasted oysters; oyster banh mi.",
+      "hoursSource": "https://www.mariasoysterbar.com/contact-us"
     },
     {
       "id": "basin",
@@ -1432,7 +1435,15 @@
       "days": [],
       "start": null,
       "end": null,
-      "hours": null,
+      "hours": [
+        "16:30-20:30",
+        "closed",
+        "closed",
+        "closed",
+        "11:00-14:00,17:30-21:00",
+        "11:00-14:00,17:30-21:00",
+        "11:00-14:00,17:30-21:00"
+      ],
       "note": "Open in oyster season only (closed in summer).",
       "source": "https://www.theinfatuation.com/new-orleans/reviews/casamentos",
       "verified": "2026-11-08",
@@ -1447,7 +1458,8 @@
       "lore": "Oyster loaf on thick toasted bread.",
       "pages": [
         "https://casamentosrestaurant.com/menu/"
-      ]
+      ],
+      "hoursSource": "https://casamentosrestaurant.com/"
     },
     {
       "id": "superior",
@@ -2245,7 +2257,17 @@
       "lore": "Free oysters every Friday.",
       "pages": [
         "https://lbtrnola.com/new-orleans-le-bon-temps-roule-about"
-      ]
+      ],
+      "hours": [
+        "00:00-24:00",
+        "00:00-24:00",
+        "00:00-24:00",
+        "00:00-24:00",
+        "00:00-24:00",
+        "00:00-24:00",
+        "00:00-24:00"
+      ],
+      "hoursSource": "https://lbtrnola.com/new-orleans-le-bon-temps-roule-about"
     },
     {
       "id": "mosquito",
@@ -2299,13 +2321,13 @@
       "start": null,
       "end": null,
       "hours": [
-        null,
-        null,
-        "17:00-21:00",
-        "17:00-21:00",
-        "17:00-21:00",
-        null,
-        null
+        "closed",
+        "closed",
+        "17:00-21:15",
+        "17:00-21:15",
+        "17:00-21:15",
+        "17:00-21:45",
+        "17:00-21:45"
       ],
       "note": "",
       "source": "https://www.timeout.com/new-orleans/restaurants/saffron-nola",
@@ -2321,7 +2343,8 @@
       "lore": "Oysters roasted with curry leaves.",
       "pages": [
         "https://www.saffronnola.com/menus"
-      ]
+      ],
+      "hoursSource": "https://www.opentable.com/r/saffron-nola-new-orleans"
     },
     {
       "id": "clancys",
@@ -2359,7 +2382,17 @@
       "lat": 29.91906,
       "lng": -90.12505,
       "geocoded": "census",
-      "website": "https://www.clancysneworleans.com/"
+      "website": "https://www.clancysneworleans.com/",
+      "hours": [
+        "closed",
+        "closed",
+        "17:00-22:00",
+        "17:00-22:00",
+        "11:00-14:00,17:00-22:00",
+        "11:00-14:00,17:00-22:00",
+        "17:00-22:00"
+      ],
+      "hoursSource": "https://www.clancysneworleans.com/contact-us"
     },
     {
       "id": "galatoires",
@@ -2400,7 +2433,17 @@
       "geocoded": "census",
       "pages": [
         "https://www.galatoires.com/menus/dining-room"
-      ]
+      ],
+      "hours": [
+        "12:00-21:00",
+        "closed",
+        "11:30-21:00",
+        "11:30-21:00",
+        "11:30-21:00",
+        "11:30-21:00",
+        "11:30-21:00"
+      ],
+      "hoursSource": "https://www.galatoires.com/faq"
     },
     {
       "id": "coterie",
@@ -2445,7 +2488,17 @@
       "lat": 29.95227,
       "lng": -90.06679,
       "geocoded": "census",
-      "website": "https://www.coterienola.com/"
+      "website": "https://www.coterienola.com/",
+      "hours": [
+        "08:00-21:00",
+        "08:00-21:00",
+        "08:00-21:00",
+        "08:00-21:00",
+        "08:00-21:00",
+        "08:00-21:00",
+        "08:00-21:00"
+      ],
+      "hoursSource": "https://coterienola.com/location-hours"
     }
   ],
   "checks": {

@@ -21,7 +21,7 @@ def check(cond, msg):
     if not cond:
         fails.append(msg)
 
-TIME = re.compile(r"\d{1,2}(:\d{2})?\s?(am|pm)|noon|midnight|closed", re.I)
+TIME = re.compile(r"\d{1,2}(:\d{2})?\s?(am|pm)|noon|midnight|closed|24 hours", re.I)
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 with sync_playwright() as p:
@@ -77,6 +77,17 @@ with sync_playwright() as p:
     check(not missing, f"every card has an Hours section {missing[:5]}")
     check(not blank, f"cards with hours show times; cards without say so {blank[:5]}")
     check(not wrong_days, f"every day we have hours for is listed {wrong_days[:5]}")
+    # split days show both sittings; open-all-day reads as 24 hours
+    def card_hours(name):
+        page.locator(".mf-card", has=page.locator(".mf-name", has_text=name)).first.locator(".mf-card-main").click()
+        page.wait_for_selector(".mf-sheet")
+        t = page.locator(".mf-sheet .mf-sheet-box", has=page.locator("h3", has_text=re.compile("^Hours$"))).first.inner_text()
+        page.keyboard.press("Escape"); page.wait_for_timeout(120)
+        return t
+    cas = card_hours("Casamento")
+    check("2\u00a0pm, 5:30" in cas or "2 pm, 5:30" in cas, f"split day shows lunch and dinner ({cas!r})")
+    lbt = card_hours("Le Bon Temps")
+    check("24 hours" in lbt, f"open-all-day reads as 24 hours ({lbt!r})")
     b.close()
 
 print("\nFAILURES:", len(fails) if fails else "none")

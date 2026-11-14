@@ -17,6 +17,8 @@ import {
   milesBetween,
   nolaClock,
   openStatus,
+  estimateHours,
+  formatOpen,
   perOyster,
   pickThree,
   rank,
@@ -181,7 +183,8 @@ test("data file is well formed (no invented fields, valid times and coordinates)
     if (v.price != null) assert.ok(v.start && v.deal, `${v.id} has a price but no happy hour window`)
     if (v.hours != null) {
       assert.equal(v.hours.length, 7, `${v.id} hours must list 7 days`)
-      for (const h of v.hours) assert.ok(h == null || h === "closed" || /^\d{2}:\d{2}-\d{2}:\d{2}$/.test(h), `${v.id} bad hours ${h}`)
+      for (const h of v.hours) assert.ok(h == null || h === "closed" || /^\d{2}:\d{2}-\d{2}:\d{2}(,\d{2}:\d{2}-\d{2}:\d{2})*$/.test(h), `${v.id} bad hours ${h}`)
+      assert.ok(!("hoursEstimated" in v), `${v.id}: estimates are worked out in the app, never stored`)
     }
     if (v.lore != null) assert.ok(v.lore.split(/\s+/).length < 7, `${v.id} notable fact must be under 7 words`)
     if (v.lat != null) assert.ok(v.lat > 29.8 && v.lat < 30.2 && v.lng! < -89.8 && v.lng! > -90.3, `${v.id} coordinates outside New Orleans`)
@@ -246,4 +249,52 @@ test("stale happy hours turn into 'call to confirm' instead of showing as live",
 
 test("every venue has a verified date", () => {
   for (const v of venues) assert.match(v.verified ?? "", /^\d{4}-\d{2}-\d{2}$/, v.id)
+})
+
+test("split days: open at lunch, closed between, open at dinner, next window named", () => {
+  const split = { ...base, hours: ["closed", "closed", "closed", "closed", "11:00-14:00,17:30-21:00", "11:00-14:00,17:30-21:00", "closed"] }
+  assert.deepEqual(openStatus(split, at(4, 12)), { state: "open", until: "14:00", closesIn: 120 })
+  assert.deepEqual(openStatus(split, at(4, 15)), { state: "opens", at: "17:30", dayOffset: 0, day: 4 })
+  assert.deepEqual(openStatus(split, at(4, 18)), { state: "open", until: "21:00", closesIn: 180 })
+  assert.deepEqual(openStatus(split, at(4, 22)), { state: "opens", at: "11:00", dayOffset: 1, day: 5 })
+})
+
+test("open 24 hours reads as 24 hours, at any time", () => {
+  const always = { ...base, hours: Array(7).fill("00:00-24:00") }
+  for (const h of [0, 3, 12, 23]) {
+    const o = openStatus(always, at(6, h))
+    assert.equal(o.state, "open")
+    assert.match(formatOpen(o), /24 hours/)
+  }
+})
+
+test("unknown days copy the nearest earlier open day; closed days are never filled or copied", () => {
+  const v = estimateHours({ ...base, hours: ["11:00-22:00", "11:00-21:00", "closed", "11:00-21:00", "11:00-21:00", null, null] })
+  assert.deepEqual(v.hours, ["11:00-22:00", "11:00-21:00", "closed", "11:00-21:00", "11:00-21:00", "11:00-21:00", "11:00-21:00"])
+  assert.deepEqual(v.hoursEstimated, [5, 6])
+  // Sunday unknown, nothing open before it in the week wraps back to Saturday's hours
+  const w = estimateHours({ ...base, hours: [null, "closed", "17:00-21:00", "17:00-21:00", "17:00-21:00", "17:00-22:00", "17:00-22:00"] })
+  assert.equal(w.hours![0], "17:00-22:00")
+  assert.equal(w.hours![1], "closed")
+  assert.deepEqual(w.hoursEstimated, [0])
+})
+
+test("estimated days are labelled as estimates", () => {
+  const v = estimateHours({ ...base, hours: ["11:00-21:00", "11:00-21:00", "11:00-21:00", "11:00-21:00", "11:00-21:00", null, null] })
+  assert.match(formatOpen(openStatus(v, at(5, 12))), /\(est\.\)/)
+  assert.doesNotMatch(formatOpen(openStatus(v, at(2, 12))), /est/)
+})
+
+test("nothing to copy from: hours stay unknown", () => {
+  const none = estimateHours({ ...base, hours: [null, "closed", null, "closed", null, null, "closed"] })
+  assert.equal(openStatus(none, at(0, 12)).state, "unknown")
+  assert.equal(estimateHours({ ...base, hours: null }).hours, null)
+})
+
+test("every venue has hours for all seven days (real data)", () => {
+  const venues = (data as { venues: Venue[] }).venues
+  const gaps = venues.filter((v) => !v.hours || v.hours.length !== 7 || v.hours.includes(null)).map((v) => v.name)
+  assert.deepEqual(gaps, [])
+  const bad = venues.flatMap((v) => (v.hours ?? []).filter((h) => h && h !== "closed" && !/^\d{2}:\d{2}-\d{2}:\d{2}(,\d{2}:\d{2}-\d{2}:\d{2})*$/.test(h)).map((h) => `${v.name}: ${h}`))
+  assert.deepEqual(bad, [])
 })
