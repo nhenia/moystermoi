@@ -33,6 +33,12 @@ export default function OysterMap({ items, origin, selectedId, onSelect, expande
   const userMoved = useRef(false)
   const [tilesFailed, setTilesFailed] = useState(false)
   const [view, setView] = useState(0) // bumps on zoom/move so clusters recompute
+  // Touch screens: one finger over the map scrolls the PAGE, not the map. Pinch still zooms and
+  // tapping an oyster still opens it; "Move map" turns on one-finger dragging. In Map view
+  // (expanded) the visitor chose the map on purpose, so dragging is on there.
+  const coarse = typeof window !== "undefined" && !!window.matchMedia?.("(pointer: coarse)").matches
+  const [unlocked, setUnlocked] = useState(false)
+  const locked = coarse && !expanded && !unlocked
 
   const mapped = items.filter((r) => hasCoords(r.venue))
   const unmappedCount = items.length - mapped.length
@@ -40,7 +46,8 @@ export default function OysterMap({ items, origin, selectedId, onSelect, expande
   // Create the map once.
   useEffect(() => {
     if (!el.current || map.current) return
-    const m = L.map(el.current, { zoomControl: false, attributionControl: true, tap: false } as L.MapOptions)
+    // scrollWheelZoom off: the mouse wheel scrolls the page, the +/− buttons zoom the map.
+    const m = L.map(el.current, { zoomControl: false, attributionControl: true, tap: false, scrollWheelZoom: false } as L.MapOptions)
     m.setView([origin.lat, origin.lng], 15)
     m.zoomControl = L.control.zoom({ position: "bottomright" }).addTo(m)
     let errors = 0
@@ -197,8 +204,20 @@ export default function OysterMap({ items, origin, selectedId, onSelect, expande
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items, selectedId, view])
 
+  useEffect(() => {
+    const m = map.current
+    if (!m) return
+    if (locked) m.dragging.disable()
+    else m.dragging.enable()
+  }, [locked])
+
+  // leaving Map view locks it again
+  useEffect(() => {
+    if (!expanded) setUnlocked(false)
+  }, [expanded])
+
   return (
-    <div className={`mf-map${expanded ? " is-expanded" : ""}`}>
+    <div className={`mf-map${expanded ? " is-expanded" : ""}${locked ? " is-locked" : ""}`}>
       <div ref={el} className="mf-map-canvas" role="region" aria-label="Map of oyster spots" />
       <div className="mf-map-riso" aria-hidden="true" />
       <p className="mf-map-legend" aria-hidden="true">
@@ -209,6 +228,11 @@ export default function OysterMap({ items, origin, selectedId, onSelect, expande
         <span className="is-closed" dangerouslySetInnerHTML={{ __html: halfShell() }} />
         Closed now
       </p>
+      {coarse && !expanded && (
+        <button type="button" className="mf-map-move" aria-pressed={unlocked} onClick={() => setUnlocked((u) => !u)}>
+          {unlocked ? "Done" : "Move map"}
+        </button>
+      )}
       {tilesFailed && <p className="mf-map-note">Street map didn't load.</p>}
       {unmappedCount > 0 && <p className="mf-map-count">{unmappedCount} not on map yet</p>}
     </div>
