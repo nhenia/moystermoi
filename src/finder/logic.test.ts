@@ -365,3 +365,9 @@ test("freshness: verified Thursday is fresh through Monday; a missed Monday chec
   assert.equal(late.state, "late")
   assert.equal(freshness(undefined, new Date()).state, "never")
 })
+
+import { readFileSync } from "node:fs"
+test("the address/link refresh never wipes the restaurant check's verified stamp", () => {
+  const src = readFileSync(new URL("../../scripts/refresh-data.mjs", import.meta.url), "utf8")
+  assert.match(src, /data\.checks = \{\s*(\/\/.*\s*)?\.\.\.data\.checks/, "refresh-data.mjs must keep existing checks")
+})

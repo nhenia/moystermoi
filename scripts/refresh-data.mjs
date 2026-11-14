@@ -94,7 +94,9 @@ for (const venue of data.venues) {
 const linkResults = await Promise.all(data.venues.map(async (v) => [v, await linkWorks(v.source)]))
 for (const [venue, ok] of linkResults) if (!ok) report.brokenLinks.push(venue.id)
 
+// Keep other checks' results (the restaurant check's "verified" stamp lives here too).
 data.checks = {
+  ...data.checks,
   ranAt: new Date().toISOString().slice(0, 10),
   brokenLinks: report.brokenLinks,
 }
