@@ -252,6 +252,26 @@
   margin: 26px 0 0;
 }
 
+/* The pearl-table photo: a cut-out pasted over the plate's lower-left, slightly crooked. */
+.mf-cutout {
+  grid-area: 1 / 1;
+  align-self: end;
+  justify-self: start;
+  z-index: 1;
+  width: min(54%, 300px);
+  margin: 0 0 6px 2px;
+  transform: rotate(-3deg);
+  border: 3px solid var(--ink);
+  background: var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.mf-cutout img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* the title sits in the empty corner beside the narrow hinge */
 .mf-plate-wrap .mf-title {
   grid-area: 1 / 1;
@@ -1130,6 +1150,12 @@ a.mf-link {
   .mf-plate {
     width: min(52%, 480px);
     margin-right: 4%;
+  }
+
+  .mf-cutout {
+    width: min(34%, 400px);
+    margin: 0 0 40px 26%;
+    transform: rotate(-4deg);
   }
 
   .mf-plate-wrap .mf-title {
