@@ -2,22 +2,22 @@
 // Daily restaurant check — run by .github/workflows/daily-restaurant-check.yml at 9am New Orleans time,
 // or by hand:  node scripts/check-restaurants.mjs [venue-id ...]   (add --dry-run to change nothing)
 //
-// For every restaurant in src/deals.json it:
+// No AI, no API keys. For every restaurant in src/deals.json it:
 //   1. reads the restaurant's OWN website (menus, happy hour pages, menu PDFs) in a headless browser;
-//   2. skips the AI step if those pages haven't changed since the last good read (free, and re-confirms the data);
-//   3. otherwise asks an AI model to pull out oyster dishes + prices, happy hour, hours and address,
-//      each with the exact words it read them from;
-//   4. keeps a value only if those exact words are on the restaurant's page (see restaurant-check/lib.mjs);
-//   5. updates src/deals.json and writes a plain-language report to data/last-check.md.
-// It never removes a restaurant: "closing" notices are reported for a human to act on.
+//   2. checks that the prices, happy-hour times and opening hours we show are still printed there,
+//      word for word (see restaurant-check/lib.mjs);
+//   3. stamps a restaurant "verified today" only when every price and time we show was found;
+//   4. notes which restaurants' pages changed since the last run, so a person knows where to look;
+//   5. writes a plain-language report to data/last-check.md and the site-wide "Verified" date.
+// It never changes a price or removes a restaurant on its own: anything that no longer matches is
+// listed in the report for a person to fix.
 
 import fs from "node:fs/promises"
 import path from "node:path"
 import crypto from "node:crypto"
 import { fileURLToPath } from "node:url"
 import { readSite, launch, launchHttp1 } from "./restaurant-check/pages.mjs"
-import { extract, provider, textBudget } from "./restaurant-check/ai.mjs"
-import { verifyExtraction, applyResult, relevantText, oldestVerified, stillPosted, verificationStamp } from "./restaurant-check/lib.mjs"
+import { relevantText, oldestVerified, stillPosted, hoursPosted, verificationStamp } from "./restaurant-check/lib.mjs"
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const dataFile = path.join(root, "src", "deals.json")
@@ -34,8 +34,7 @@ const state = JSON.parse(await fs.readFile(stateFile, "utf8").catch(() => "{}"))
 const venues = data.venues.filter((v) => !only.length || only.includes(v.id))
 
 const posted = { read: 0, confirmed: [], missing: [] }
-const report = { changed: [], confirmed: [], unchanged: [], couldNotRead: [], rejected: [], needsHuman: [], aiSkipped: [] }
-let aiDown = null
+const report = { couldNotRead: [], pageChanged: [], hoursMissing: [], hoursOk: [] }
 const browser = await launch()
 let http1 = null
 
@@ -45,69 +44,26 @@ async function checkVenue(venue) {
     http1 ??= await launchHttp1()
     site = await readSite(http1, venue)
   }
-  const pages = site.pages.map((p) => ({ url: p.url, text: relevantText(p.text, 20000) })).filter((p) => p.text.length > 40)
+  const pages = site.pages.map((p) => ({ url: p.url, text: p.text })).filter((p) => p.text.length > 40)
   if (!pages.length) {
     report.couldNotRead.push({ venue, why: site.problems.join("; ") || "no readable text on its site" })
     return venue
   }
-  // Free, no-AI check: the numbers we show are still printed on the restaurant's own pages.
   posted.read++
-  const still = stillPosted(venue, site.pages.map((p) => ({ url: p.url, text: p.text })))
+  const still = stillPosted(venue, pages)
   if (still.confirmed) posted.confirmed.push(venue)
   else if (still.missing.length) posted.missing.push({ venue, missing: still.missing })
-  if (still.confirmed) venue = { ...venue, verified: today }
 
-  const hash = crypto.createHash("sha256").update(pages.map((p) => p.url + "\n" + p.text).join("\n")).digest("hex").slice(0, 16)
+  const hours = hoursPosted(venue, pages)
+  if (hours?.confirmed) report.hoursOk.push(venue)
+  else if (hours) report.hoursMissing.push({ venue, missing: hours.missing })
+
+  const hash = crypto.createHash("sha256").update(pages.map((p) => p.url + "\n" + relevantText(p.text, 20000)).join("\n")).digest("hex").slice(0, 16)
   const prev = state[venue.id]
+  if (prev?.hash && prev.hash !== hash) report.pageChanged.push({ venue, url: pages[0].url })
+  state[venue.id] = { hash, checked: today, posted: still.confirmed }
 
-  // Same pages as last time: nothing to re-read, and what we read then still holds.
-  if (prev?.hash === hash && prev.ok) {
-    state[venue.id] = { ...prev, checked: today }
-    if (prev.confirmed) {
-      report.unchanged.push(venue)
-      return { ...venue, verified: today }
-    }
-    report.unchanged.push(venue)
-    return venue
-  }
-
-  // Fit the request: split the budget across pages, most useful (most prices) first.
-  const budget = textBudget()
-  const ranked = [...pages].sort((a, b) => (b.text.match(/\$|\d+\.\d{2}/g)?.length ?? 0) - (a.text.match(/\$|\d+\.\d{2}/g)?.length ?? 0))
-  const share = Math.floor(budget / ranked.length)
-  const sent = ranked.map((p) => ({ url: p.url, text: p.text.slice(0, Math.max(share, 2000)) }))
-  let used = 0
-  const fitted = sent.filter((p) => (used += p.text.length) <= budget)
-  const fewPrices = fitted.reduce((n, p) => n + (p.text.match(/\$\s?\d/g)?.length ?? 0), 0) < 3
-
-  if (aiDown) {
-    report.aiSkipped.push(venue)
-    return venue
-  }
-  let answer
-  try {
-    answer = await extract(venue, fitted)
-  } catch (e) {
-    // The AI service itself isn't working (no key, bad key, service off): stop asking, say so once.
-    if (/unreadable reply|fetch failed|\b40[13]\b|ANTHROPIC_API_KEY/.test(e.message)) {
-      aiDown = e.message
-      report.aiSkipped.push(venue)
-    } else report.couldNotRead.push({ venue, why: `AI reader failed: ${e.message}` })
-    return venue
-  }
-  const { result, rejected } = verifyExtraction(answer, fitted)
-  if (rejected.length) report.rejected.push({ venue, rejected })
-
-  const { venue: updated, changes, confirmed, needsHuman } = applyResult(venue, result, today, fitted[0].url)
-  if (needsHuman) report.needsHuman.push({ venue, why: needsHuman })
-  if (changes.length) report.changed.push({ venue, changes })
-  else if (confirmed) report.confirmed.push(venue)
-  else if (fewPrices && site.images.length)
-    report.couldNotRead.push({ venue, why: `its menu looks like a photo, which can't be checked word for word: ${site.images[0]}` })
-  else report.couldNotRead.push({ venue, why: "its pages didn't show oyster prices or a happy hour the reader could prove" })
-
-  state[venue.id] = { hash, checked: today, ok: true, confirmed }
-  return updated
+  return still.confirmed ? { ...venue, verified: today } : venue
 }
 
 // A few at a time: polite to restaurant sites and within free AI rate limits.
@@ -141,35 +97,21 @@ const line = (v) => `**${v.name}**`
 const md = [
   `# Daily restaurant check: ${today}`,
   "",
-  `Read each restaurant's own website with ${provider()}. ${venues.length} checked: ${report.changed.length} changed, ${report.confirmed.length + report.unchanged.length} confirmed, ${report.couldNotRead.length} couldn't be read${report.aiSkipped.length ? `, ${report.aiSkipped.length} waiting on the AI reader` : ""}.`,
+  `Read each restaurant's own website (no AI). ${venues.length} restaurants: ${posted.read} sites read, ${report.couldNotRead.length} couldn't be read.`,
   "",
-  `**Freshness check (no AI):** read ${posted.read} of ${venues.length} restaurant sites; prices and happy-hour times still printed word for word at ${posted.confirmed.length}.${stamp ? ` Site now says "Verified ${today}".` : " Not enough sites read, so the site's verified date was NOT moved."}`,
+  `**Prices:** every price and happy-hour time we show is still printed word for word at ${posted.confirmed.length} places.${stamp ? ` The site now says "Verified ${today}".` : only.length ? " (Partial run: the site's verified date only moves on a full run.)" : " Not enough sites were read, so the site's verified date was NOT moved."}`,
+  "",
+  `**Hours:** opening and closing times all found on the page at ${report.hoursOk.length} places.`,
   "",
   ...(posted.missing.length
-    ? ["<details><summary>Shown prices or times no longer found on the restaurant's page (check these)</summary>", "", ...posted.missing.map(({ venue, missing }) => `- ${venue.name}: ${missing.join(", ")}`), "", "</details>", ""]
+    ? ["## Prices or happy-hour times no longer on the restaurant's page", "", "Check these and update src/deals.json:", "", ...posted.missing.map(({ venue, missing }) => `- ${line(venue)}: ${missing.join(", ")}`), ""]
     : []),
-  ...(aiDown
-    ? [
-        "## ⚠️ The AI reader isn't working, so prices weren't updated",
-        "",
-        process.env.ANTHROPIC_API_KEY
-          ? `Claude refused the request (${aiDown.slice(0, 200)}). Check the ANTHROPIC_API_KEY secret is a valid, funded key.`
-          : "No `ANTHROPIC_API_KEY` secret is set, and GitHub's free AI models aren't available on this account. Add the key: repository Settings → Secrets and variables → Actions → New repository secret → name `ANTHROPIC_API_KEY`.",
-        "",
-        `Restaurant sites read fine and were left untouched: ${report.aiSkipped.map((v) => v.name).sort().join(" · ")}`,
-        "",
-      ]
+  ...(report.pageChanged.length
+    ? ["## Pages that changed since the last check", "", ...report.pageChanged.map(({ venue, url }) => `- ${line(venue)}: [page](${url})`), ""]
     : []),
-  ...(report.changed.length
-    ? ["## Changed", "", "| Restaurant | What | Was | Now | Proof |", "|---|---|---|---|---|", ...report.changed.flatMap(({ venue, changes }) => changes.map((c) => `| ${venue.name} | ${c.field} | ${String(c.was).slice(0, 160)} | ${String(c.now).slice(0, 160)} | ${c.proof ? `[page](${c.proof})` : ""} |`)), ""]
-    : []),
-  ...(report.needsHuman.length ? ["## Needs you", "", ...report.needsHuman.map(({ venue, why }) => `- ${line(venue)} ${why}`), ""] : []),
   ...(report.couldNotRead.length ? ["## Couldn't read (data left as it was)", "", ...report.couldNotRead.map(({ venue, why }) => `- ${line(venue)}: ${why}`), ""] : []),
-  ...(report.confirmed.length || report.unchanged.length
-    ? ["## Confirmed, no change", "", [...report.confirmed, ...report.unchanged].map((v) => v.name).sort().join(" · "), ""]
-    : []),
-  ...(report.rejected.length
-    ? ["<details><summary>Values thrown out because their wording wasn't on the restaurant's page</summary>", "", ...report.rejected.map(({ venue, rejected }) => `- ${venue.name}: ${rejected.join("; ")}`), "", "</details>", ""]
+  ...(report.hoursMissing.length
+    ? ["<details><summary>Hours we show that weren't found on the page (often just written differently)</summary>", "", ...report.hoursMissing.map(({ venue, missing }) => `- ${venue.name}: ${missing.join(", ")}`), "", "</details>", ""]
     : []),
 ].join("\n")
 
@@ -182,5 +124,5 @@ if (!dryRun) {
   await fs.writeFile(reportFile, md + "\n")
 }
 // One line for the commit message.
-const summary = `data: daily check ${today} · ${report.changed.length} changed · ${report.confirmed.length + report.unchanged.length} confirmed · ${report.couldNotRead.length} unread`
-if (process.env.GITHUB_OUTPUT) await fs.appendFile(process.env.GITHUB_OUTPUT, `summary=${summary}\nchanged=${report.changed.length}\n`)
+const summary = `data: daily check ${today} · ${posted.confirmed.length} prices confirmed · ${posted.missing.length} to look at · ${report.couldNotRead.length} unread`
+if (process.env.GITHUB_OUTPUT) await fs.appendFile(process.env.GITHUB_OUTPUT, `summary=${summary}\nchanged=${posted.missing.length}\n`)

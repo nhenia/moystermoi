@@ -184,3 +184,14 @@ test("the site's verified date only moves when most restaurant sites were actual
   assert.deepEqual(verificationStamp("2026-11-16", 46, 40, 9), { date: "2026-11-16", sitesRead: 40, pricesConfirmed: 9, total: 46 })
   assert.equal(verificationStamp("2026-11-16", 46, 10, 9), null)
 })
+
+import { hoursPosted } from "./lib.mjs"
+
+test("hours check: every opening and closing time we show must be on the page", () => {
+  const venue = { hours: ["closed", "11:00-22:00", "11:00-22:00", "11:00-22:00", "11:00-14:00,17:30-21:00", "11:00-23:00", "00:00-24:00"] }
+  const page = [{ url: "x", text: "Mon-Thu 11am - 10pm. Fri lunch 11am-2pm, dinner 5:30pm-9pm. Sat 11am-11pm" }]
+  assert.deepEqual(hoursPosted(venue, page), { checked: 6, missing: [], confirmed: true })
+  const off = hoursPosted(venue, [{ url: "x", text: "Mon-Thu 11am - 9pm" }])
+  assert.equal(off.confirmed, false)
+  assert.equal(hoursPosted({ hours: [null, "closed"] }, page), null, "nothing to check")
+})

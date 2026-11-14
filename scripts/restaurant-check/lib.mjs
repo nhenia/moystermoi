@@ -51,7 +51,7 @@ export function timesInQuote(times, quote) {
 /**
  * Check the AI reader's answer against the pages it was given. Returns only the parts whose quote
  * is on the page they cite, plus a list of what was thrown out and why.
- * @param {object} x  the AI answer (see EXTRACTION_SCHEMA in ai.mjs)
+ * @param {object} x  values read from a page, each with the quote it came from
  * @param {{url: string, text: string}[]} pages
  */
 export function verifyExtraction(x, pages) {
@@ -252,4 +252,16 @@ export function stillPosted(venue, pages) {
 export function verificationStamp(today, total, sitesRead, confirmed) {
   if (!total || sitesRead / total < 0.5) return null
   return { date: today, sitesRead, pricesConfirmed: confirmed, total }
+}
+
+/**
+ * No-AI hours check: are all the opening and closing times we show printed on the restaurant's page?
+ * Returns null when the venue has no hours to check.
+ */
+export function hoursPosted(venue, pages) {
+  const times = [...new Set((venue.hours ?? []).filter((d) => d && d !== "closed" && d !== "00:00-24:00").flatMap((d) => d.split(/[,-]/)))]
+  if (!times.length) return null
+  const text = pages.map((p) => p.text).join("\n")
+  const missing = times.filter((t) => !timesInQuote([t], text))
+  return { checked: times.length, missing, confirmed: missing.length === 0 }
 }
