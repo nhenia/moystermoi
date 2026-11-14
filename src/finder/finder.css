@@ -733,6 +733,45 @@ a.mf-link {
   font-weight: 700;
 }
 
+/* ---------- Footer: contact ---------- */
+
+.mf-foot {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 20px 0 96px; /* clears the floating Map button on phones */
+  border-top: 4px solid var(--ink);
+}
+
+.mf-foot p {
+  margin: 0;
+}
+
+.mf-foot-name {
+  font-family: var(--cl-display);
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+.mf-foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+}
+
+.mf-foot-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+}
+
 /* ---------- Map ---------- */
 
 .mf-map-anchor {

@@ -3,13 +3,15 @@ import { useEffect, useRef, useState } from "react"
 // The opening screen: Nhen's oyster film full-bleed, "Clutched" huge on top, "New Orleans Pearls" under it.
 // It never stands between a tourist and a restaurant for long:
 //  - tap anywhere (or the Enter button) to go straight in;
-//  - it leaves on its own after a few seconds;
+//  - it plays the whole film once (10s), then leaves on its own;
+//  - if the film can't play (slow network, blocked autoplay), it leaves after a few seconds instead;
 //  - it only plays once per visit (sessionStorage), so going back to the app doesn't replay it;
 //  - with "reduce motion" on, it shows a still and leaves quickly.
 // Automated browsers skip it so the test suites can reach the finder; add ?splash to the URL to force it.
 
 const SEEN_KEY = "clutched-splash"
-const STAY_MS = 4800
+const NO_FILM_MS = 4800 // film never started
+const SAFETY_MS = 12000 // film started but never reported its end
 const STAY_REDUCED_MS = 1600
 const LETTERS = "Clutched".split("")
 
@@ -31,6 +33,7 @@ export function Splash() {
   const [show, setShow] = useState(shouldShow)
   const [leaving, setLeaving] = useState(false)
   const enterRef = useRef<HTMLButtonElement>(null)
+  const playingRef = useRef(false)
   const base = import.meta.env.BASE_URL
   const still = reducedMotion()
 
@@ -48,7 +51,11 @@ export function Splash() {
   useEffect(() => {
     if (!show) return
     enterRef.current?.focus({ preventScroll: true })
-    const t = window.setTimeout(leave, still ? STAY_REDUCED_MS : STAY_MS)
+    // the film's own "ended" event normally closes the screen; these timers only catch failures
+    const t = window.setTimeout(() => {
+      if (still || !playingRef.current) leave()
+    }, still ? STAY_REDUCED_MS : NO_FILM_MS)
+    const safety = still ? 0 : window.setTimeout(leave, SAFETY_MS)
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" || e.key === "Enter" || e.key === " ") leave()
     }
@@ -56,6 +63,7 @@ export function Splash() {
     document.documentElement.classList.add("cl-splash-on")
     return () => {
       window.clearTimeout(t)
+      window.clearTimeout(safety)
       window.removeEventListener("keydown", onKey)
       document.documentElement.classList.remove("cl-splash-on")
     }
@@ -76,7 +84,8 @@ export function Splash() {
           autoPlay
           muted
           playsInline
-          loop
+          onPlaying={() => (playingRef.current = true)}
+          onEnded={leave}
           preload="auto"
           aria-hidden="true"
         />

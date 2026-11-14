@@ -398,6 +398,16 @@ export default function OysterFinder() {
 
       {stale && <p className="mf-fresh">Last checked {age} days ago. Call ahead.</p>}
 
+      <footer className="mf-foot">
+        <p className="mf-foot-name">Clutched</p>
+        <p className="mf-foot-links">
+          <a href="https://www.instagram.com/_nu_n9/" target="_blank" rel="noreferrer">
+            Instagram @_nu_n9
+          </a>
+          <a href="mailto:jenapoian@gmail.com">jenapoian@gmail.com</a>
+        </p>
+      </footer>
+
       {mode !== "map" && !detail && (
         <button type="button" className="mf-fab" onClick={() => choose("map")}>
           <span aria-hidden="true" dangerouslySetInnerHTML={{ __html: halfShell() }} />
