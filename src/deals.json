@@ -1044,7 +1044,7 @@
       ],
       "note": "Inside the Hilton Riverside. Salty Coast raw oysters $3 each. Shuckee Duckee ($39.95): fried duck, oysters, cream sauce. Raw oysters dine-in only.",
       "source": "https://www.dragosrestaurant.com/hilton-riverside-new-orleans-menu",
-      "verified": "2026-11-09",
+      "verified": "2026-11-14",
       "menu": {
         "raw": {
           "half": 15.95,
@@ -2510,6 +2510,12 @@
       "antoines",
       "deanies",
       "coterie"
-    ]
+    ],
+    "verified": {
+      "date": "2026-11-14",
+      "sitesRead": 40,
+      "pricesConfirmed": 18,
+      "total": 46
+    }
   }
 }
