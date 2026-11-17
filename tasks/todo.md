@@ -44,15 +44,22 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [x] Card line "Gives its shells back to rebuild Louisiana's reefs" with a link to the program
 - [x] New Orleans Creole Cookery: CRCL lists 510 Toulouse; confirmed 508 Toulouse is right (Nhen, 2026-11-17)
 - [ ] Acme: only the Metairie branch is on CRCL's list. Ask if the Iberville St location recycles
-- [ ] Add Seawitch to the restaurant list, with its specialty (notable fact under 7 words)
+- [x] Added Seawitch ($1 raw M–F 3–6, from its OpenTable offer; specialty: The Mother Shucker, a 28-oyster feast)
 
 ## Open
 - [ ] Rescan 2026-11-09 added 9 spots (R'evolution, Antoine's, Arnaud's, Holywater, Gallier's, Deanie's, Le Bon Temps Roulé, Mosquito Supper Club, Saffron). Check their hours by phone; Arnaud's hours come from a 2022 page
-- [ ] Maria's: Big Easy Magazine (Jan 2025) lists a daily 4–6 pm $1.50 oyster happy hour; the data has none. Confirm and add
+- [x] Maria's: confirmed on mariasoysterbar.com/happy-hour: $1.50 Wild Gulf oysters daily 4–6 (2026-11-17)
 - [ ] Found but not added (couldn't confirm current oysters or hours): Grand Isle, Lilette, Frankie & Johnny's, Bud Rip's oyster pop-up, The Bell (fried oyster loaf only), Domilise's and Mahony's (oyster po-boys)
 - [x] Drago's: checked by hand 2026-11-09 against dragosrestaurant.com Hilton Riverside menu; added raw + chargrilled prices, Salty Coast $3 each and Shuckee Duckee (oysters inside a duck dish) in the note
 - [ ] Unconfirmed, worth a call: Bourbon House, Royal House, Casamento's and St. Roch Market hours; Superior, Blue Crab, Mr. Ed's and Felix's Lakefront happy-hour times; Chemin à la Mer oyster hour
 - [ ] Five radically distinct visual designs (current build is design #1: night-print risograph)
+
+## 2026-11-17 — Reddit r/NewOrleans oyster thread
+- [x] Confirmed on own sites: Pascal's Manale $1 oysters 3–6 (happenings page), St. Roch/Salted Pearl $1 M–F 3–5, Basin 75¢ Mondays all day, Sidecar half-off Shucker's Dozen M–F 4–6, Pigeon & Whale $2 daily 4–6
+- [x] Basin hours corrected from its location page (Tue/Wed closed there; its menu page says 3–9, so call to confirm)
+- [x] Added from the thread, marked "from locals" until confirmed: Poseidon ($1 raw / $1.50 chargrilled 4–7), New Orleans Marriott lobby ($15 dozen Thu–Sat 3–8); Fives changed to the thread's half-off Mon & Thu 1–6
+- [ ] Call: Poseidon (days, hours), Marriott lobby bar (still running? which bar?), Fives (thread vs. Where Y'at disagree), Basin Tue/Wed
+- [ ] Not added (no price or time anywhere): Daisy Dukes St. Charles, Bud Rip's Friday pop-up
 
 ## Lessons
 - CRCL's live list puts a restaurant's second address on a new line with no "&"; a summary of the page showed "&". The branch trial run caught it: always trial a scraper on the real page.

@@ -691,16 +691,14 @@
       "lat": 29.95814,
       "lng": -90.06278,
       "geocoded": "census",
-      "price": 8,
-      "unit": "half-dozen",
-      "deal": "$8 half dozen",
+      "price": null,
+      "unit": "variable",
+      "deal": "Half-off oysters",
       "days": [
         1,
-        2,
-        3,
         4
       ],
-      "start": "15:00",
+      "start": "13:00",
       "end": "18:00",
       "hours": [
         "11:00-22:00",
@@ -711,9 +709,9 @@
         "11:00-22:00",
         "11:00-22:00"
       ],
-      "note": "Chef's select oysters.",
-      "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-16",
+      "note": "From locals; not yet confirmed by Fives.",
+      "source": "https://www.reddit.com/r/NewOrleans/comments/1xvmut1/",
+      "verified": "2026-11-17",
       "menu": {
         "url": "https://fives.bar/"
       },
@@ -1230,7 +1228,7 @@
       "geocoded": "census",
       "price": null,
       "unit": "variable",
-      "deal": "Half-price oysters by the dozen",
+      "deal": "Half-off Shucker's Dozen",
       "days": [
         1,
         2,
@@ -1249,9 +1247,9 @@
         "16:00-22:00",
         "11:00-22:00"
       ],
-      "note": "",
-      "source": "https://www.restaurantji.com/la/new-orleans/sidecar-patio-and-oyster-bar-",
-      "verified": "2026-11-16",
+      "note": "Rusty Nail shares the patio; order oysters at Sidecar's bar.",
+      "source": "https://sidecarnola.com/new-orleans-sidecar-patio-and-oyster-bar-happy-hours-specials",
+      "verified": "2026-11-17",
       "menu": {
         "url": "https://usmenuguide.com/places/united-states/louisiana/new-orleans/sidecar-nola-patio-oyster-bar-new-orleans/",
         "items": [
@@ -1286,9 +1284,9 @@
       "lat": 29.94543,
       "lng": -90.06735,
       "geocoded": "census",
-      "price": null,
-      "unit": "variable",
-      "deal": "Happy hour (oyster prices not posted)",
+      "price": 1.5,
+      "unit": "each",
+      "deal": "$1.50 Wild Gulf oysters",
       "days": [
         0,
         1,
@@ -1310,35 +1308,31 @@
         "11:30-22:00"
       ],
       "note": "",
-      "source": "https://www.opentable.com.mx/r/marias-oyster-bar-new-orleans",
-      "verified": "2026-11-16",
+      "source": "https://www.mariasoysterbar.com/happy-hour",
+      "verified": "2026-11-17",
       "menu": {
-        "url": "https://www.opentable.com.mx/r/marias-oyster-bar-new-orleans",
+        "url": "https://www.mariasoysterbar.com/menus",
         "items": [
           {
-            "name": "Wild Louisiana oysters",
-            "price": "Not listed"
+            "name": "Wild Gulf oysters",
+            "price": "$13 for 6 / $25 for 12"
           },
           {
-            "name": "Chili butter roasted, Tabasco mash butter",
-            "price": "$22"
-          },
-          {
-            "name": "Fried oyster salad",
-            "price": "$19"
-          },
-          {
-            "name": "Seafood plateau with wild & specialty oysters",
-            "price": "$68"
+            "name": "Barataria Beauties, Murder Points, Brightsides",
+            "price": "$3 each"
           }
         ],
-        "checked": "2026-11-09",
-        "checkedFrom": "other site"
+        "checked": "2026-11-17",
+        "checkedFrom": "restaurant"
       },
       "phone": "(504) 350-4075",
       "website": "https://www.mariasoysterbar.com/",
       "lore": "Chili-butter roasted oysters; oyster banh mi.",
-      "hoursSource": "https://www.mariasoysterbar.com/contact-us"
+      "hoursSource": "https://www.mariasoysterbar.com/contact-us",
+      "pages": [
+        "https://www.mariasoysterbar.com/happy-hour",
+        "https://www.mariasoysterbar.com/menus"
+      ]
     },
     {
       "id": "basin",
@@ -1358,20 +1352,20 @@
       "days": [
         1
       ],
-      "start": "11:30",
+      "start": "11:00",
       "end": "21:00",
       "hours": [
-        "11:30-21:00",
-        "11:30-21:00",
-        "11:30-21:00",
-        "11:30-21:00",
-        "11:30-21:00",
-        "11:30-22:00",
-        "11:30-22:00"
+        "11:00-21:00",
+        "11:00-21:00",
+        "closed",
+        "closed",
+        "15:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00"
       ],
-      "note": "Mondays, with any menu item.",
-      "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-09",
+      "note": "Mondays all day, with any menu item.",
+      "source": "https://www.basinneworleans.com/location",
+      "verified": "2026-11-17",
       "menu": {
         "raw": {
           "half": 10,
@@ -1403,7 +1397,8 @@
         "checked": "2026-11-09",
         "checkedFrom": "other site"
       },
-      "website": "https://basinneworleans.com/"
+      "website": "https://basinneworleans.com/",
+      "hoursSource": "https://www.basinneworleans.com/location"
     },
     {
       "id": "boil",
@@ -1569,12 +1564,18 @@
       "lat": 29.92889,
       "lng": -90.10253,
       "geocoded": "census",
-      "price": null,
-      "unit": "variable",
-      "deal": "",
-      "days": [],
-      "start": null,
-      "end": null,
+      "price": 1,
+      "unit": "each",
+      "deal": "$1 oysters",
+      "days": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "start": "15:00",
+      "end": "18:00",
       "hours": [
         "15:00-21:00",
         "16:00-21:00",
@@ -1584,9 +1585,9 @@
         "11:00-22:00",
         "15:00-22:00"
       ],
-      "note": "",
-      "source": "https://www.opentable.com/pascals-manale?lang=en",
-      "verified": "2026-11-16",
+      "note": "Mondays the doors open at 4 pm.",
+      "source": "https://www.pascalsmanale.com/happenings",
+      "verified": "2026-11-17",
       "menu": {
         "url": "https://www.toasttab.com/local/order/pascal-s-manale-1838-napoleon-ave",
         "raw": {
@@ -1636,7 +1637,10 @@
         "via": "CRCL",
         "source": "https://crcl.org/osrp-restaurants",
         "checked": "2026-11-17"
-      }
+      },
+      "pages": [
+        "https://www.pascalsmanale.com/happenings"
+      ]
     },
     {
       "id": "pigeon-whale",
@@ -1673,8 +1677,8 @@
         "16:00-23:00"
       ],
       "note": "Topped with ceviche. Shucker's dozen (6 kinds) $24.",
-      "source": "https://www.whereyat.com/oyster-happy-hours-new-orleans",
-      "verified": "2026-11-16",
+      "source": "https://www.pigeonandwhalenola.com/new-orleans-uptown-pigeon-and-whale-happy-hour-menu",
+      "verified": "2026-11-17",
       "menu": {
         "raw": {
           "dozen": 24
@@ -1787,8 +1791,8 @@
         "11:00-22:00"
       ],
       "note": "",
-      "source": "https://www.strochmarket.com/news/happy-hour-guide",
-      "verified": "2026-11-09",
+      "source": "https://www.strochmarket.com/happenings",
+      "verified": "2026-11-17",
       "menu": {
         "url": "https://www.strochmarket.com/news/happy-hour-guide",
         "items": [
@@ -2589,6 +2593,149 @@
         "08:00-21:00"
       ],
       "hoursSource": "https://coterienola.com/location-hours"
+    },
+    {
+      "id": "seawitch",
+      "name": "Seawitch Restaurant & Oyster Bar",
+      "area": "Garden District",
+      "address": "1628 St Charles Ave, New Orleans, LA",
+      "kind": [
+        "raw",
+        "chargrilled"
+      ],
+      "price": 1,
+      "unit": "each",
+      "deal": "$1 raw oysters",
+      "days": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "start": "15:00",
+      "end": "18:00",
+      "hours": [
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-21:00",
+        "11:00-22:00",
+        "11:00-22:00"
+      ],
+      "hoursSource": "https://seawitch-nola.com/visit-new-orleans",
+      "note": "",
+      "source": "https://www.opentable.com/r/seawitch-new-orleans-1",
+      "verified": "2026-11-17",
+      "menu": {
+        "url": "https://seawitch-nola.com/food-menu",
+        "items": [
+          {
+            "name": "Local raw oysters",
+            "price": "$16 for 6 / $26 for 12"
+          },
+          {
+            "name": "Sip & Shuck: a dozen with a bottle of sparkling",
+            "price": "$45 raw / $55 chargrilled"
+          },
+          {
+            "name": "The Mother Shucker (28 oysters, six ways)",
+            "price": "$85"
+          }
+        ],
+        "checked": "2026-11-17",
+        "checkedFrom": "restaurant"
+      },
+      "phone": "(504) 264-7600",
+      "website": "https://seawitch-nola.com/",
+      "lore": "The Mother Shucker: a 28-oyster feast.",
+      "pages": [
+        "https://seawitch-nola.com/food-menu",
+        "https://seawitch-nola.com/specials"
+      ]
+    },
+    {
+      "id": "poseidon",
+      "name": "Poseidon Oyster & Sushi Bar",
+      "area": "Garden District",
+      "address": "2100 St Charles Ave, New Orleans, LA",
+      "kind": [
+        "raw",
+        "chargrilled"
+      ],
+      "price": 1,
+      "unit": "each",
+      "deal": "$1 raw, $1.50 chargrilled",
+      "days": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "start": "16:00",
+      "end": "19:00",
+      "note": "From locals; days not posted, call first. Hours partly estimated.",
+      "source": "https://www.reddit.com/r/NewOrleans/comments/1xvmut1/",
+      "verified": "2026-11-17",
+      "phone": "(504) 509-6675",
+      "hours": [
+        "16:00-00:30",
+        "16:00-00:30",
+        "16:00-00:30",
+        "16:00-00:30",
+        "16:00-00:30",
+        "16:00-00:30",
+        "16:00-00:30"
+      ],
+      "hoursSource": "https://foodle.pro/restaurants/new-orleans/poseidon-oyster-sushi-bar",
+      "menu": {
+        "url": "https://www.ubereats.com/store/poseidon-oyster-sushi-bar/qyJBYSA5RsSTLjM8LzdVHQ",
+        "checked": "2026-11-17",
+        "checkedFrom": "other site"
+      }
+    },
+    {
+      "id": "marriott-canal",
+      "name": "New Orleans Marriott lobby bar",
+      "area": "CBD",
+      "address": "555 Canal St, New Orleans, LA",
+      "kind": [
+        "raw"
+      ],
+      "price": 15,
+      "unit": "dozen",
+      "deal": "$15 a dozen",
+      "days": [
+        4,
+        5,
+        6
+      ],
+      "start": "15:00",
+      "end": "20:00",
+      "note": "Smaller, non-Gulf oysters. From locals; not yet confirmed by the hotel.",
+      "source": "https://www.reddit.com/r/NewOrleans/comments/1xvmut1/",
+      "verified": "2026-11-17",
+      "phone": "(504) 581-1000",
+      "website": "https://www.marriott.com/en-us/hotels/msyla-new-orleans-marriott/overview/",
+      "hours": [
+        "closed",
+        "closed",
+        "closed",
+        "closed",
+        "15:00-20:00",
+        "15:00-20:00",
+        "15:00-20:00"
+      ],
+      "hoursSource": "https://www.reddit.com/r/NewOrleans/comments/1xvmut1/",
+      "menu": {
+        "url": "https://www.marriott.com/en-us/hotels/msyla-new-orleans-marriott/dining/",
+        "checked": "2026-11-17",
+        "checkedFrom": "other site"
+      }
     }
   ],
   "checks": {
