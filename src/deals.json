@@ -2660,7 +2660,10 @@
       "pages": [
         "https://seawitch-nola.com/food-menu",
         "https://seawitch-nola.com/specials"
-      ]
+      ],
+      "lat": 29.93806,
+      "lng": -90.07602,
+      "geocoded": "census"
     },
     {
       "id": "poseidon",
@@ -2703,7 +2706,10 @@
         "url": "https://www.ubereats.com/store/poseidon-oyster-sushi-bar/qyJBYSA5RsSTLjM8LzdVHQ",
         "checked": "2026-11-17",
         "checkedFrom": "other site"
-      }
+      },
+      "lat": 29.93456,
+      "lng": -90.07959,
+      "geocoded": "census"
     },
     {
       "id": "marriott-canal",
@@ -2742,18 +2748,24 @@
         "url": "https://www.marriott.com/en-us/hotels/msyla-new-orleans-marriott/dining/",
         "checked": "2026-11-17",
         "checkedFrom": "other site"
-      }
+      },
+      "lat": 29.95244,
+      "lng": -90.06764,
+      "geocoded": "census"
     }
   ],
   "checks": {
     "ranAt": "2026-11-17",
     "brokenLinks": [
       "seaworthy",
+      "fives",
       "dragos",
       "peche",
       "antoines",
       "deanies",
-      "coterie"
+      "coterie",
+      "poseidon",
+      "marriott-canal"
     ],
     "verified": {
       "date": "2026-11-16",
