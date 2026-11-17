@@ -1518,12 +1518,20 @@
       "lat": 29.9264,
       "lng": -90.10122,
       "geocoded": "census",
-      "price": null,
-      "unit": "variable",
-      "deal": "",
-      "days": [],
-      "start": null,
-      "end": null,
+      "price": 1.5,
+      "unit": "each",
+      "deal": "$1.50 raw oysters",
+      "days": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "start": "16:00",
+      "end": "18:30",
       "hours": [
         "10:00-21:30",
         "11:00-21:30",
@@ -1533,15 +1541,14 @@
         "11:00-22:00",
         "11:00-22:00"
       ],
-      "note": "",
-      "source": "https://opentable.com/superior-seafood",
-      "verified": "2026-11-08",
+      "note": "Happy hour price from Nhen; the site posts the times only.",
+      "source": "https://superiorseafoodnola.com/about/",
+      "verified": "2026-11-17",
       "menu": {
         "url": "https://superiorseafoodnola.com/"
       },
       "phone": "(504) 293-3474",
       "website": "https://superiorseafoodnola.com/",
-      "hhUnposted": "Raw dozen $15",
       "lore": "Bacon-wrapped \"angels on horseback\" oysters.",
       "pages": [
         "https://superiorseafoodnola.com/dinner/",
