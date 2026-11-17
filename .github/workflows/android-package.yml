@@ -1,8 +1,12 @@
 name: Android package
-# Builds the Google Play package (.aab) for Clutched: an Android shell that opens the live site
-# full-screen. The package is built UNSIGNED: it is signed on a private computer with the upload key,
-# which never goes in this public repo. Run by hand: Actions → Android package → Run workflow,
-# or automatically when android/ or this file changes.
+# Builds Clutched for Android: a shell that opens the live site full-screen, so restaurant data and
+# design updates reach the app without a new download.
+#  1. clutched-unsigned.aab: the Google Play package. Built UNSIGNED: it is signed on a private computer
+#     with the upload key, which never goes in this public repo.
+#  2. Clutched.apk: a download-and-install file for any Android phone (no Play Store). Signed with a
+#     throwaway key made fresh for each build, so no secret is ever stored. Rebuilding is rarely needed
+#     (the content is live); a rebuilt APK has a new key, so uninstall the old one before installing it.
+# Run by hand: Actions → Android package → Run workflow, or automatically when android/ or this file changes.
 
 on:
   workflow_dispatch:
@@ -36,14 +40,26 @@ jobs:
         working-directory: /tmp/twa
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon bundleRelease
+          ./gradlew --no-daemon bundleRelease assembleRelease
           mkdir -p "$GITHUB_WORKSPACE/out"
           cp app/build/outputs/bundle/release/app-release.aab "$GITHUB_WORKSPACE/out/clutched-unsigned.aab"
+          ls -la app/build/outputs/apk/release/
+      - name: Sign the download APK (throwaway key)
+        working-directory: /tmp/twa
+        run: |
+          bt="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)"
+          pass="$(openssl rand -hex 16)"
+          keytool -genkeypair -keystore /tmp/dl.jks -alias clutched -keyalg RSA -keysize 2048 -validity 10000 \
+            -storepass "$pass" -keypass "$pass" -dname "CN=Clutched, O=Clutched, L=New Orleans, C=US"
+          "$bt/zipalign" -p -f 4 app/build/outputs/apk/release/app-release-unsigned.apk /tmp/aligned.apk
+          "$bt/apksigner" sign --ks /tmp/dl.jks --ks-pass "pass:$pass" --out "$GITHUB_WORKSPACE/out/Clutched.apk" /tmp/aligned.apk
+          "$bt/apksigner" verify --print-certs "$GITHUB_WORKSPACE/out/Clutched.apk"
+          rm -f /tmp/dl.jks
           ls -la "$GITHUB_WORKSPACE/out"
       - uses: actions/upload-artifact@v4
         with:
-          name: clutched-unsigned-aab
-          path: out/clutched-unsigned.aab
+          name: clutched-android
+          path: out/
       - name: Publish as a release file
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/android/play-package'
         env:
@@ -54,3 +70,12 @@ jobs:
           gh release delete "$tag" --yes --cleanup-tag 2>/dev/null || true
           gh release create "$tag" out/clutched-unsigned.aab --prerelease --target "$GITHUB_SHA" \
             --title "Android build $v (unsigned)" --notes "Unsigned Google Play package. Sign with the upload key before uploading."
+          # The phone download: one fixed link that always points at the newest APK.
+          gh release delete android-download --yes --cleanup-tag 2>/dev/null || true
+          gh release create android-download out/Clutched.apk --latest --target "$GITHUB_SHA" \
+            --title "Clutched for Android" --notes "$(cat <<'NOTES'
+          **Install on an Android phone:** open this page on the phone, tap **Clutched.apk**, then Open. If Android asks, allow your browser to install apps, then tap Install.
+
+          The app opens the live Clutched site full-screen, so new restaurants and prices show up without downloading again. If you ever install a newer Clutched.apk from here, uninstall the old one first.
+          NOTES
+          )"
