@@ -42,7 +42,7 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [x] "Oyster manners" fold-out above the footer: five one-line tips (tip the shucker, mix your own sauce, loosen with the fork, slurp juice and all, ask about the shells)
 - [x] Weekly shell-giving workflow: CRCL partner list matched by each restaurant's own address + own-site scan for charity mentions (report only); 18 of 46 restaurants marked from the list read 2026-11-17
 - [x] Card line "Gives its shells back to rebuild Louisiana's reefs" with a link to the program
-- [ ] New Orleans Creole Cookery: CRCL lists 510 Toulouse, we show 508. Confirm the address
+- [x] New Orleans Creole Cookery: CRCL lists 510 Toulouse; confirmed 508 Toulouse is right (Nhen, 2026-11-17)
 - [ ] Acme: only the Metairie branch is on CRCL's list. Ask if the Iberville St location recycles
 - [ ] Add Seawitch to the restaurant list, with its specialty (notable fact under 7 words)
 
