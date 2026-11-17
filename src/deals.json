@@ -72,7 +72,12 @@
         "https://bourbonhouse.com/menu/dinner-menu",
         "https://www.bourbonhouse.com/menu/happy-hour/"
       ],
-      "hoursSource": "https://www.bourbonhouse.com/location/bourbon-house/"
+      "hoursSource": "https://www.bourbonhouse.com/location/bourbon-house/",
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "luke",
@@ -197,7 +202,12 @@
       "website": "https://seaworthynola.com/",
       "pages": [
         "https://seaworthynola.com/menu/"
-      ]
+      ],
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "desire",
@@ -469,7 +479,12 @@
       "website": "https://felixs.com/",
       "pages": [
         "https://felixs.com/french-quarter-menu"
-      ]
+      ],
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "felix-lakefront",
@@ -545,7 +560,12 @@
       "hhUnposted": "2–5 pm (days not posted) · raw $9 half dozen · chargrilled $15",
       "pages": [
         "https://felixs.com/?p=5013"
-      ]
+      ],
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "mr-eds",
@@ -781,7 +801,12 @@
       "pages": [
         "https://redfishgrill.com/menus/happy-hour",
         "https://redfishgrill.com/the-oyster-bar"
-      ]
+      ],
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "creole-cookery",
@@ -857,7 +882,12 @@
         "checkedFrom": "other site"
       },
       "lore": "House-named Oysters Toulouse.",
-      "website": "https://neworleanscreolecookery.com/"
+      "website": "https://neworleanscreolecookery.com/",
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "apothecary",
@@ -1060,7 +1090,12 @@
       "website": "https://www.dragosrestaurant.com/",
       "pages": [
         "https://www.dragosrestaurant.com/hilton-riverside-new-orleans-menu"
-      ]
+      ],
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "chemin",
@@ -1175,7 +1210,12 @@
       "phone": "(504) 522-1744",
       "website": "https://www.pecherestaurant.com/",
       "lore": "Different shucking knife per shell shape.",
-      "hoursSource": "https://www.pecherestaurant.com/"
+      "hoursSource": "https://www.pecherestaurant.com/",
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "sidecar",
@@ -1227,7 +1267,12 @@
         "checked": "2026-11-09",
         "checkedFrom": "other site"
       },
-      "website": "https://sidecarnola.com/"
+      "website": "https://sidecarnola.com/",
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "marias",
@@ -1459,7 +1504,12 @@
       "pages": [
         "https://casamentosrestaurant.com/menu/"
       ],
-      "hoursSource": "https://casamentosrestaurant.com/"
+      "hoursSource": "https://casamentosrestaurant.com/",
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "superior",
@@ -1501,7 +1551,12 @@
       "pages": [
         "https://superiorseafoodnola.com/dinner/",
         "https://superiorseafoodnola.com/bar-menu/"
-      ]
+      ],
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "pascal",
@@ -1576,7 +1631,12 @@
         "checkedFrom": "restaurant"
       },
       "lore": "Oyster bar open since 1913.",
-      "website": "https://www.pascalsmanale.com/"
+      "website": "https://www.pascalsmanale.com/",
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "pigeon-whale",
@@ -1626,7 +1686,12 @@
       "pages": [
         "https://www.pigeonandwhalenola.com/new-orleans-uptown-pigeon-and-whale-happy-hour-menu",
         "https://www.pigeonandwhalenola.com/new-orleans-uptown-pigeon-and-whale-food-menu"
-      ]
+      ],
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "cooter",
@@ -1682,7 +1747,12 @@
         "checked": "2026-11-09",
         "checkedFrom": "restaurant"
       },
-      "website": "https://www.cooterbrowns.com/"
+      "website": "https://www.cooterbrowns.com/",
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "salted-pearl",
@@ -1736,7 +1806,12 @@
       },
       "phone": "(504) 267-0388",
       "website": "https://thesaltedpearl.com/",
-      "lore": "Sells oysters by the sack."
+      "lore": "Sells oysters by the sack.",
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "porgys",
@@ -1776,7 +1851,12 @@
       "menu": {
         "url": "https://www.finedininglovers.com/restaurants/porgys-seafood-market"
       },
-      "website": "https://porgysseafood.com/"
+      "website": "https://porgysseafood.com/",
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "monday",
@@ -1863,7 +1943,12 @@
         "url": "https://www.eatokra.com/businesses/neyow-s-creole-cafe"
       },
       "lore": "Sells about 40,000 oysters weekly.",
-      "website": "http://www.neworleans.neyows.com/"
+      "website": "http://www.neworleans.neyows.com/",
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "blue-crab",
@@ -2227,7 +2312,12 @@
       "lore": "Signature barbecue oysters, oven-broiled.",
       "pages": [
         "https://blog.deanies.com/french-quarter/"
-      ]
+      ],
+      "shells": {
+        "via": "CRCL",
+        "source": "https://crcl.org/osrp-restaurants",
+        "checked": "2026-11-17"
+      }
     },
     {
       "id": "bon-temps",

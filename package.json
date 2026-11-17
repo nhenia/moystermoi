@@ -12,7 +12,8 @@
     "refresh-data": "node scripts/refresh-data.mjs",
     "check-palettes": "node scripts/check-palettes.mjs",
     "check-restaurants": "node scripts/check-restaurants.mjs",
-    "test:robot": "node --test scripts/restaurant-check/lib.test.mjs scripts/restaurant-check/pages.test.mjs"
+    "test:robot": "node --test scripts/restaurant-check/lib.test.mjs scripts/restaurant-check/pages.test.mjs scripts/shell-check/lib.test.mjs",
+    "check-shells": "node scripts/check-shells.mjs"
   },
   "dependencies": {
     "@fontsource/atkinson-hyperlegible": "^5.3.0",

@@ -764,6 +764,47 @@ a.mf-link {
   font-style: italic;
 }
 
+/* ---------- Oyster manners: a short fold-out above the footer ---------- */
+
+.mf-manners {
+  grid-column: 1 / -1;
+  margin-top: 24px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+}
+
+.mf-manners summary {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 0 16px;
+  cursor: pointer;
+  font-family: 'Bodoni Moda', Didot, Georgia, serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 1.4rem;
+}
+
+.mf-manners summary::after {
+  content: '+';
+  margin-left: auto;
+  font-style: normal;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.mf-manners[open] summary::after {
+  content: '−';
+}
+
+.mf-manners ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0 16px 16px 36px;
+  font-size: 1.1rem;
+}
+
 /* ---------- Footer: contact ---------- */
 
 .mf-foot {
@@ -1170,6 +1211,14 @@ a.mf-link {
 
 .mf-sheet-note {
   color: var(--muted);
+}
+
+/* Shown only when the restaurant's own address is on CRCL's shell-recycling list. */
+.mf-sheet-shells {
+  display: grid;
+  justify-items: start;
+  padding-left: 0.75rem;
+  border-left: 4px dashed var(--ink);
 }
 
 .mf-sheet-actions {

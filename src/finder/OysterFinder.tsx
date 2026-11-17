@@ -404,6 +404,17 @@ export default function OysterFinder() {
 
       {stale && <p className="mf-fresh">Last checked {age} days ago. Call ahead.</p>}
 
+      <details className="mf-manners">
+        <summary>Oyster manners</summary>
+        <ul>
+          <li>Tip your shucker, right at the raw bar.</li>
+          <li>Mix your own sauce: ketchup, horseradish, hot sauce, lemon.</li>
+          <li>Loosen it with the little fork first.</li>
+          <li>Slurp it, juice and all. Chew once or twice.</li>
+          <li>Ask where today's oysters are from, and if the shells get recycled.</li>
+        </ul>
+      </details>
+
       <footer className="mf-foot">
         <p className="mf-foot-name">Clutched</p>
         <p className="mf-foot-links">
@@ -785,6 +796,14 @@ function Detail({ r, saved, onClose, onShare, onSave }: { r: Ranked; saved: bool
           {(hours.length === 0 || v.hours?.some((h) => h == null) || (v.hoursEstimated?.length ?? 0) > 0) && <Contact v={v} />}
         </div>
         {v.note && <p className="mf-sheet-note">{v.note}</p>}
+        {v.shells && (
+          <p className="mf-sheet-shells">
+            Gives its shells back to rebuild Louisiana's reefs.{" "}
+            <a className="mf-link" href={v.shells.source} target="_blank" rel="noreferrer">
+              Shell recycling program ↗
+            </a>
+          </p>
+        )}
 
         <a className="mf-btn mf-btn-primary mf-btn-wide" href={walkingDirections(v)} target="_blank" rel="noreferrer">
           Walk there →
