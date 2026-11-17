@@ -44,6 +44,8 @@ export type Venue = {
   hhStale?: string
   /** One striking fact (under 7 words), never a general description. Leave out if there is none. */
   lore?: string
+  /** Set only by the weekly shell-giving check: the restaurant's own address is on CRCL's shell-recycling list. */
+  shells?: { via: "CRCL"; source: string; checked: string }
 }
 
 /** "(504) 522-0111" → "tel:+15045220111" */

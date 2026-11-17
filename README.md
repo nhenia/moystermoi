@@ -94,6 +94,15 @@ Happy hours change quietly, so nothing is trusted forever:
 
 **Run it now / for one restaurant:** Actions → Daily restaurant check → Run workflow. Optionally type restaurant ids (e.g. `dragos blue-crab`) or tick "Report only".
 
+### Weekly shell-giving check (automatic, Mondays 9am)
+
+`.github/workflows/shell-giving-check.yml` runs **every Monday at 9am New Orleans time**, with **no AI and no API keys**. It:
+
+1. Reads the [Coalition to Restore Coastal Louisiana's list](https://crcl.org/osrp-restaurants) of restaurants that give their oyster shells back to rebuild reefs. A restaurant whose **own address** is on the list gets "Gives its shells back to rebuild Louisiana's reefs" on its card. One that leaves the list loses it. Another branch of the same restaurant doesn't count (Acme's Metairie branch recycles, the French Quarter one isn't listed). If the list can't be read, nothing changes and the run shows red.
+2. Reads each restaurant's own website for any mention of shell recycling or coastal charities, and lists what it found in the report for a person to read. These never change the app by themselves.
+
+**The report:** Actions → Weekly shell-giving check, and `data/shell-check.md`. **Run it now:** Actions → Weekly shell-giving check → Run workflow.
+
 ### The data robot
 
 `.github/workflows/refresh-data.yml` runs every morning (about 6:17 am, before the deal check) and whenever `deals.json` changes. It:

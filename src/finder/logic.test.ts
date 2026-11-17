@@ -193,6 +193,7 @@ test("data file is well formed (no invented fields, valid times and coordinates)
       for (const h of v.hours) assert.ok(h == null || h === "closed" || /^\d{2}:\d{2}-\d{2}:\d{2}(,\d{2}:\d{2}-\d{2}:\d{2})*$/.test(h), `${v.id} bad hours ${h}`)
       assert.ok(!("hoursEstimated" in v), `${v.id}: estimates are worked out in the app, never stored`)
     }
+    if (v.shells != null) assert.ok(v.shells.via === "CRCL" && v.shells.source.startsWith("https://") && /^\d{4}-\d{2}-\d{2}$/.test(v.shells.checked), `${v.id} shells mark`)
     if (v.lore != null) assert.ok(v.lore.split(/\s+/).length < 7, `${v.id} notable fact must be under 7 words`)
     if (v.lat != null) assert.ok(v.lat > 29.8 && v.lat < 30.2 && v.lng! < -89.8 && v.lng! > -90.3, `${v.id} coordinates outside New Orleans`)
   }

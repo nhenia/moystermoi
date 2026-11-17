@@ -38,6 +38,14 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [x] Daily deal-check checklist (`.claude/skills/verify-oyster-deals/SKILL.md`) + Claude scheduled task, ~6:40 am
 - [x] Link/map robot now runs daily (~6:17 am) instead of weekly
 
+## 2026-11-17 — shells and manners
+- [x] "Oyster manners" fold-out above the footer: five one-line tips (tip the shucker, mix your own sauce, loosen with the fork, slurp juice and all, ask about the shells)
+- [x] Weekly shell-giving workflow: CRCL partner list matched by each restaurant's own address + own-site scan for charity mentions (report only); 18 of 46 restaurants marked from the list read 2026-11-17
+- [x] Card line "Gives its shells back to rebuild Louisiana's reefs" with a link to the program
+- [x] New Orleans Creole Cookery: CRCL lists 510 Toulouse; confirmed 508 Toulouse is right (Nhen, 2026-11-17)
+- [ ] Acme: only the Metairie branch is on CRCL's list. Ask if the Iberville St location recycles
+- [ ] Add Seawitch to the restaurant list, with its specialty (notable fact under 7 words)
+
 ## Open
 - [ ] Rescan 2026-11-09 added 9 spots (R'evolution, Antoine's, Arnaud's, Holywater, Gallier's, Deanie's, Le Bon Temps Roulé, Mosquito Supper Club, Saffron). Check their hours by phone; Arnaud's hours come from a 2022 page
 - [ ] Maria's: Big Easy Magazine (Jan 2025) lists a daily 4–6 pm $1.50 oyster happy hour; the data has none. Confirm and add
@@ -47,6 +55,8 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [ ] Five radically distinct visual designs (current build is design #1: night-print risograph)
 
 ## Lessons
+- CRCL's live list puts a restaurant's second address on a new line with no "&"; a summary of the page showed "&". The branch trial run caught it: always trial a scraper on the real page.
+- Match charity lists by the restaurant's own street address, not its name: chains list one branch, and a name search counted Acme's Metairie branch for the French Quarter one.
 - One global "updated" date hid per-spot staleness: a single old happy hour looked as current as the rest. Freshness is now per venue.
 - Check sourcing claims against the farm's own page: R'evolution's Bayou Rosa oysters are farmed by United Houma Nation members.
 - Never run the data robot from a sandbox without internet: it marks every link "broken".

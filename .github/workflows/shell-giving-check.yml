@@ -1,0 +1,116 @@
+name: Weekly shell-giving check
+# Mondays at 9am New Orleans time. No AI, no API keys.
+# 1. Reads the Coalition to Restore Coastal Louisiana's list of restaurants that give their oyster shells
+#    back to rebuild reefs. Restaurants whose own address is on it get the "gives its shells back" mark
+#    in the app; ones that left the list lose it. If the list can't be read, nothing changes.
+# 2. Reads each restaurant's own website for mentions of shell recycling or coastal charities, and lists
+#    them in the report for a person to read (these never change the app on their own).
+# The report is on the run page and in data/shell-check.md. The site redeploys after a change.
+
+on:
+  schedule:
+    # GitHub schedules in UTC only: 14:00 UTC is 9am in summer, 15:00 UTC in winter. The gate keeps the right one.
+    - cron: "0 14 * * 1"
+    - cron: "0 15 * * 1"
+  workflow_dispatch:
+    inputs:
+      venues:
+        description: "Only these restaurant ids, separated by spaces (blank = all)"
+        required: false
+        default: ""
+      dry_run:
+        description: "Report only, change nothing"
+        type: boolean
+        default: false
+  push:
+    # Trial run whenever the robot itself changes (report only unless on main).
+    paths:
+      - "scripts/check-shells.mjs"
+      - "scripts/shell-check/**"
+      - ".github/workflows/shell-giving-check.yml"
+
+permissions:
+  contents: write # save updated data
+  actions: write # redeploy the site
+
+concurrency:
+  # Shares a lane with the daily check so the two never save src/deals.json at the same time.
+  group: daily-restaurant-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Is it 9am in New Orleans?
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          node --input-type=module -e "
+            import { isNineInNewOrleans } from './scripts/restaurant-check/lib.mjs'
+            const ok = isNineInNewOrleans('${{ github.event.schedule }}')
+            console.log(ok ? 'Yes, running.' : 'Not 9am in New Orleans on this schedule today, skipping.')
+            await import('node:fs').then(fs => fs.appendFileSync(process.env.GITHUB_OUTPUT, 'run=' + ok + '\n'))
+          "
+
+      - uses: pnpm/action-setup@v4
+        if: steps.gate.outputs.run == 'true'
+        with:
+          version: "10"
+
+      - name: Install
+        if: steps.gate.outputs.run == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache browser
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install browser
+        if: steps.gate.outputs.run == 'true'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Test the robot's matching rules
+        if: steps.gate.outputs.run == 'true'
+        run: node --test scripts/shell-check/lib.test.mjs
+
+      - name: Read CRCL's list and every restaurant's website
+        if: steps.gate.outputs.run == 'true'
+        id: check
+        env:
+          DRY: ${{ (github.ref != 'refs/heads/main' || inputs.dry_run) && '--dry-run' || '' }}
+          VENUES: ${{ inputs.venues }}
+        run: node scripts/check-shells.mjs $DRY $(echo "$VENUES" | tr -cd 'a-z0-9 -')
+
+      - name: Validate data
+        if: steps.gate.outputs.run == 'true'
+        run: pnpm test
+
+      - name: Save
+        if: steps.gate.outputs.run == 'true' && github.ref == 'refs/heads/main' && !inputs.dry_run
+        id: save
+        run: |
+          if git diff --quiet src/deals.json data/; then echo "Nothing to save."; exit 0; fi
+          git config user.name "clutched-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/deals.json data/
+          git commit -m "${{ steps.check.outputs.summary }}" -m "Report: data/shell-check.md"
+          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 10; done
+          if git diff --quiet HEAD~1 -- src/deals.json; then echo "Only the report changed."; else echo "saved=true" >> "$GITHUB_OUTPUT"; fi
+
+      # Commits made by this bot don't trigger other workflows, so redeploy the live site explicitly.
+      - name: Redeploy site
+        if: steps.save.outputs.saved == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref main
