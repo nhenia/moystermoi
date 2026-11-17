@@ -1,5 +1,6 @@
 // Tests for the weekly shell-giving check. Run: node --test scripts/shell-check/
-// The partner text below is copied from CRCL's restaurant partner page (read 2026-11-17).
+// The partner text below is copied from CRCL's restaurant partner page (read 2026-11-17). On the live
+// page a restaurant's second address follows its first on a new line, with no "&" between them.
 import test from "node:test"
 import assert from "node:assert/strict"
 import { onPartnerList, partnerListReadable, givingMentions, applyShells } from "./lib.mjs"
@@ -12,7 +13,7 @@ Bourbon House
 Clesi's Seafood
 4323 Bienville St, New Orleans, LA 70119
 Deanie's Seafood Restaurant
-1713 Lake Ave, Metairie, LA 70005 & 841 Iberville St, New Orleans, LA 70112
+1713 Lake Ave, Metairie, LA 70005\n841 Iberville St, New Orleans, LA 70112
 Pascal's Manale
 1838 Napoleon Ave, New Orleans, LA 70115
 Acme Oyster House
@@ -20,7 +21,7 @@ Acme Oyster House
 Cooter Brown's Tavern
 509 S. Carrollton Ave, New Orleans, LA 70118
 Felix's Restaurant and Oyster Bar
-739 Iberville St, New Orleans, LA 70130 & 7400 Lakeshore Dr, New Orleans, LA 70124
+739 Iberville St, New Orleans, LA 70130\n7400 Lakeshore Dr, New Orleans, LA 70124
 New Orleans Creole Cookery
 510 Toulouse St, New Orleans, LA 70130
 Pêche Seafood Grill
@@ -43,6 +44,8 @@ test("a restaurant at its listed address is a partner", () => {
 test("a second location under a different name still counts when its own address is listed", () => {
   assert.equal(onPartnerList(v("Felix's Lakefront", "7400 Lakeshore Dr"), CRCL).status, "partner")
   assert.equal(onPartnerList(v("Felix's Restaurant & Oyster Bar", "739 Iberville St"), CRCL).status, "partner")
+  // the older layout joined the two addresses with "&"
+  assert.equal(onPartnerList(v("Felix's Lakefront", "7400 Lakeshore Dr"), CRCL.replace("LA 70130\n7400", "LA 70130 & 7400")).status, "partner")
 })
 
 test("same name on the same street (a door-number difference) counts, and says so", () => {
@@ -78,6 +81,8 @@ test("finds charity and shell-recycling mentions on a restaurant's own pages, wi
   assert.equal(m[0].url, "https://x.com/about")
   assert.match(m[0].words, /Coalition to Restore Coastal Louisiana/)
   assert.deepEqual(givingMentions([{ url: "u", text: "Shell Beach Drive. Royal Dutch Shell. Oyster bar." }]), [])
+  assert.deepEqual(givingMentions([{ url: "u", text: "A father and son team building protected oyster reefs in Casco Bay." }]), []) // a farm, not a charity
+  assert.equal(givingMentions([...pages, pages[0]]).length, 1, "the same page read twice is listed once")
   assert.equal(givingMentions([{ url: "u", text: "Ask us about our oyster shell recycling program!" }]).length, 1)
 })
 

@@ -56,11 +56,11 @@ export function onPartnerList(venue, listText) {
   const text = plain(listText)
   const at = streetOf(venue.address)
   const names = nameWords(venue.name)
-  // The name must sit in the same entry as the address: after the previous entry's last zip code
-  // ("…LA 70130 & 841 Iberville" is still one entry, so a zip followed by "and" doesn't end it).
+  // The name must sit in the same entry as the address: after the previous entry's last zip code.
+  // A zip followed by another address ("…LA 70130 7400 Lakeshore", or "… & 841 Iberville") is still one entry.
   const entryStart = (index) => {
     let start = Math.max(0, index - WINDOW)
-    for (const z of text.slice(0, index).matchAll(/\bla 70\d{3}\b(?! and )/g)) start = Math.max(start, z.index + z[0].length)
+    for (const z of text.matchAll(/\bla 70\d{3}\b(?! and | \d)/g)) if (z.index < index) start = Math.max(start, z.index + z[0].length)
     return start
   }
   const nameNear = (index) => names.some((w) => new RegExp(`\\b${w}\\b`).test(text.slice(entryStart(index), index)))
@@ -83,9 +83,9 @@ export function partnerListReadable(listText) {
 }
 
 // Shell recycling and the coastal charities that run it. Kept narrow: "Shell" the oil company,
-// "Shell Beach" and plain "oyster bar" must not match.
+// "Shell Beach", plain "oyster bar" and an oyster farm's own reefs must not match.
 const GIVING =
-  /coalition to restore coastal louisiana|\bcrcl\b|shell recycl\w*|recycl\w* (?:\w+ ){0,3}shells?\b|oyster reefs?\b|coastal restoration|restore (?:the|our|louisiana'?s) coast/i
+  /coalition to restore coastal louisiana|\bcrcl\b|shell recycl\w*|recycl\w* (?:\w+ ){0,3}shells?\b|coastal restoration|restore (?:the|our|louisiana'?s) coast/i
 
 /**
  * Sentences on the restaurant's own pages that mention giving shells back or coastal charities.
@@ -94,7 +94,10 @@ const GIVING =
  */
 export function givingMentions(pages) {
   const out = []
+  const seen = new Set()
   for (const p of pages) {
+    if (seen.has(p.url)) continue
+    seen.add(p.url)
     const m = GIVING.exec(p.text)
     if (!m) continue
     const from = Math.max(0, m.index - 90)

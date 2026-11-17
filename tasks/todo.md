@@ -55,6 +55,7 @@ Goal: a tourist finds an oyster spot in under 60 seconds.
 - [ ] Five radically distinct visual designs (current build is design #1: night-print risograph)
 
 ## Lessons
+- CRCL's live list puts a restaurant's second address on a new line with no "&"; a summary of the page showed "&". The branch trial run caught it: always trial a scraper on the real page.
 - Match charity lists by the restaurant's own street address, not its name: chains list one branch, and a name search counted Acme's Metairie branch for the French Quarter one.
 - One global "updated" date hid per-spot staleness: a single old happy hour looked as current as the rest. Freshness is now per venue.
 - Check sourcing claims against the farm's own page: R'evolution's Bayou Rosa oysters are farmed by United Houma Nation members.
