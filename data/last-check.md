@@ -1,8 +1,8 @@
-# Daily restaurant check: 2026-11-17
+# Daily restaurant check: 2026-11-18
 
 Read each restaurant's own website (no AI). 49 restaurants: 42 sites read, 7 couldn't be read.
 
-**Prices:** every price and happy-hour time we show is still printed word for word at 17 places. The site now says "Verified 2026-11-17".
+**Prices:** every price and happy-hour time we show is still printed word for word at 18 places. The site now says "Verified 2026-11-18".
 
 **Hours:** opening and closing times all found on the page at 39 places.
 
@@ -14,34 +14,30 @@ Check these and update src/deals.json:
 - **Mr. Ed's Oyster Bar**: raw half dozen, raw dozen, chargrilled half dozen, chargrilled dozen
 - **New Orleans Creole Cookery**: raw half dozen, chargrilled dozen
 - **Red Fish Grill**: raw dozen
-- **Drago's**: raw dozen, chargrilled dozen
-- **Basin Seafood & Spirits**: happy hour price, raw half dozen, raw dozen, chargrilled half dozen, chargrilled dozen
 - **Superior Seafood & Oyster Bar**: happy hour price
+- **Basin Seafood & Spirits**: happy hour price, raw half dozen, raw dozen, chargrilled half dozen, chargrilled dozen
 - **The Salted Pearl (St. Roch Market)**: happy hour price, happy hour times
-- **Monday Restaurant & Bar**: happy hour price
 - **Boil Seafood House**: happy hour price, raw dozen, chargrilled half dozen, chargrilled dozen
+- **Monday Restaurant & Bar**: happy hour price
 
 ## Pages that changed since the last check
 
-- **Bourbon House**: [page](https://www.bourbonhouse.com/)
-- **Felix's Lakefront**: [page](https://felixs.com/lakefront-menu/)
-- **Felix's Restaurant & Oyster Bar**: [page](https://felixs.com/)
-- **Fives**: [page](https://www.fives.bar/)
+- **Seaworthy**: [page](https://seaworthynola.com/)
+- **Felix's Lakefront**: [page](https://felixs.com/)
 - **Desire Oyster Bar**: [page](https://www.sonesta.com/hotels/la3949-royal-sonesta-new-orleans/dining/desire-oyster-bar)
 - **Red Fish Grill**: [page](https://www.redfishgrill.com/)
-- **Oceana Grill**: [page](https://www.oceanagrill.com/)
-- **Drago's**: [page](https://www.dragosrestaurant.com/)
-- **Royal House**: [page](https://royalhouserestaurant.com/)
+- **Drago's**: [page](https://www.dragosrestaurant.com/hilton-riverside-new-orleans-menu)
 - **Pêche**: [page](https://www.pecherestaurant.com/)
 - **Sidecar Patio & Oyster Bar**: [page](https://sidecarnola.com/)
-- **Basin Seafood & Spirits**: [page](https://www.basinneworleans.com/)
 - **Pascal's Manale**: [page](https://www.pascalsmanale.com/)
+- **Basin Seafood & Spirits**: [page](https://www.basinneworleans.com/)
 - **Neyow's Creole Cafe**: [page](https://www.neworleans.neyows.com/)
+- **The Blue Crab**: [page](https://www.thebluecrabnola.com/)
 - **Antoine's**: [page](https://antoines.com/)
 - **Holywater**: [page](https://crew.fun/holywater-nola)
 - **Mosquito Supper Club**: [page](https://mosquitosupperclub.squarespace.com/)
 - **Saffron NOLA**: [page](https://www.saffronnola.com/)
-- **Clancy's**: [page](https://www.clancysneworleans.com/)
+- **Seawitch Restaurant & Oyster Bar**: [page](https://seawitch-nola.com/)
 
 ## Couldn't read (data left as it was)
 
