@@ -1,8 +1,8 @@
-# Daily restaurant check: 2026-11-18
+# Daily restaurant check: 2026-11-19
 
 Read each restaurant's own website (no AI). 49 restaurants: 42 sites read, 7 couldn't be read.
 
-**Prices:** every price and happy-hour time we show is still printed word for word at 18 places. The site now says "Verified 2026-11-18".
+**Prices:** every price and happy-hour time we show is still printed word for word at 18 places. The site now says "Verified 2026-11-19".
 
 **Hours:** opening and closing times all found on the page at 39 places.
 
@@ -16,24 +16,23 @@ Check these and update src/deals.json:
 - **Red Fish Grill**: raw dozen
 - **Superior Seafood & Oyster Bar**: happy hour price
 - **Basin Seafood & Spirits**: happy hour price, raw half dozen, raw dozen, chargrilled half dozen, chargrilled dozen
-- **The Salted Pearl (St. Roch Market)**: happy hour price, happy hour times
 - **Boil Seafood House**: happy hour price, raw dozen, chargrilled half dozen, chargrilled dozen
+- **The Salted Pearl (St. Roch Market)**: happy hour price, happy hour times
 - **Monday Restaurant & Bar**: happy hour price
 
 ## Pages that changed since the last check
 
 - **Seaworthy**: [page](https://seaworthynola.com/)
-- **Felix's Lakefront**: [page](https://felixs.com/)
 - **Desire Oyster Bar**: [page](https://www.sonesta.com/hotels/la3949-royal-sonesta-new-orleans/dining/desire-oyster-bar)
+- **New Orleans Creole Cookery**: [page](https://neworleanscreolecookery.com/)
+- **Vampire Apothecary**: [page](https://vampireapothecary.com/)
 - **Red Fish Grill**: [page](https://www.redfishgrill.com/)
-- **Drago's**: [page](https://www.dragosrestaurant.com/hilton-riverside-new-orleans-menu)
+- **Drago's**: [page](https://www.dragosrestaurant.com/)
 - **Pêche**: [page](https://www.pecherestaurant.com/)
+- **Trenasse**: [page](https://trenasse.com/)
 - **Sidecar Patio & Oyster Bar**: [page](https://sidecarnola.com/)
-- **Pascal's Manale**: [page](https://www.pascalsmanale.com/)
-- **Basin Seafood & Spirits**: [page](https://www.basinneworleans.com/)
 - **Neyow's Creole Cafe**: [page](https://www.neworleans.neyows.com/)
-- **The Blue Crab**: [page](https://www.thebluecrabnola.com/)
-- **Antoine's**: [page](https://antoines.com/)
+- **Restaurant R'evolution**: [page](https://revolutionnola.com/)
 - **Holywater**: [page](https://crew.fun/holywater-nola)
 - **Mosquito Supper Club**: [page](https://mosquitosupperclub.squarespace.com/)
 - **Saffron NOLA**: [page](https://www.saffronnola.com/)
