@@ -2755,15 +2755,13 @@
     }
   ],
   "checks": {
-    "ranAt": "2026-11-22",
+    "ranAt": "2026-11-23",
     "brokenLinks": [
       "seaworthy",
       "fives",
       "dragos",
       "peche",
-      "blue-crab",
       "antoines",
-      "arnauds",
       "deanies",
       "coterie",
       "poseidon",
