@@ -1,0 +1,83 @@
+{
+  "checked": "2026-11-23",
+  "listRead": true,
+  "status": {
+    "bourbon-house": "partner",
+    "luke": "no",
+    "seaworthy": "partner",
+    "desire": "no",
+    "otis": "no",
+    "acme": "other-location",
+    "felix": "partner",
+    "felix-lakefront": "partner",
+    "mr-eds": "no",
+    "mrb": "no",
+    "fives": "no",
+    "red-fish": "partner",
+    "creole-cookery": "partner",
+    "apothecary": "no",
+    "royal-house": "no",
+    "oceana": "no",
+    "dragos": "partner",
+    "chemin": "no",
+    "trenasse": "no",
+    "peche": "partner",
+    "sidecar": "partner",
+    "marias": "no",
+    "basin": "no",
+    "boil": "no",
+    "casamento": "partner",
+    "superior": "partner",
+    "pascal": "partner",
+    "pigeon-whale": "partner",
+    "cooter": "partner",
+    "salted-pearl": "partner",
+    "porgys": "partner",
+    "monday": "no",
+    "neyows": "partner",
+    "blue-crab": "no",
+    "revolution": "no",
+    "antoines": "no",
+    "arnauds": "no",
+    "holywater": "no",
+    "galliers": "no",
+    "deanies": "partner",
+    "bon-temps": "no",
+    "mosquito": "no",
+    "saffron": "no",
+    "clancys": "no",
+    "galatoires": "no",
+    "coterie": "no",
+    "seawitch": "no",
+    "poseidon": "no",
+    "marriott-canal": "no"
+  },
+  "mentions": {
+    "bourbon-house": [
+      {
+        "url": "https://www.bourbonhouse.com/",
+        "words": "…s dishes at New Orleans' premier oyster bar and seafood restaurant. VIEW MENU OYSTER SHELL RECYCLING Bourbon House, located in New Orleans on world famous Bourbon St. serves hundreds of tho…"
+      },
+      {
+        "url": "https://www.bourbonhouse.com/oyster-shell-recycling/",
+        "words": "…LOCATION RESERVATIONS GIFT CARDS Main content starts here, tab to start navigating OYSTER SHELL RECYCLING In partnership with the Coalition to Restore Coastal Louisiana (CRCL), Bourbon House re…"
+      }
+    ],
+    "seaworthy": [
+      {
+        "url": "https://seaworthynola.com/contact/",
+        "words": "…You know? At Seaworthy, our oyster shells don’t end up in the trash. We partner with the Coalition to Restore Coastal Louisiana (CRCL) through its Oyster Shell Recycling Program, which collects shells from participati…"
+      }
+    ],
+    "red-fish": [
+      {
+        "url": "https://www.redfishgrill.com/the-oyster-bar/",
+        "words": "…nsecutive years at the Po-Boy Festival. We Recycle Red Fish Grill supports the Oyster Shell Recycling Program of the Coalition to Restore Coastal Louisiana. CRCL collects, cures, and bags oys…"
+      },
+      {
+        "url": "https://www.redfishgrill.com/menus/",
+        "words": "…inspired, locally-sourced cuisine. FARMERS & FRIENDS Red Fish Grill contributes to the Coalition to Restore Coastal Louisiana through their Oyster Shell Recycling Program. Read more about what they're doing to help…"
+      }
+    ]
+  }
+}
