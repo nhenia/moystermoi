@@ -1,18 +1,18 @@
-# Daily restaurant check: 2026-11-26
+# Daily restaurant check: 2026-11-27
 
-Read each restaurant's own website (no AI). 49 restaurants: 43 sites read, 6 couldn't be read.
+Read each restaurant's own website (no AI). 49 restaurants: 42 sites read, 7 couldn't be read.
 
-**Prices:** every price and happy-hour time we show is still printed word for word at 19 places. The site now says "Verified 2026-11-26".
+**Prices:** every price and happy-hour time we show is still printed word for word at 18 places. The site now says "Verified 2026-11-27".
 
-**Hours:** opening and closing times all found on the page at 38 places.
+**Hours:** opening and closing times all found on the page at 37 places.
 
 ## Prices or happy-hour times no longer on the restaurant's page
 
 Check these and update src/deals.json:
 
+- **Desire Oyster Bar**: happy hour price
 - **Mr. Ed's Oyster Bar**: raw half dozen, raw dozen, chargrilled half dozen, chargrilled dozen
 - **New Orleans Creole Cookery**: raw half dozen, chargrilled dozen
-- **Desire Oyster Bar**: happy hour price
 - **Red Fish Grill**: raw dozen
 - **Boil Seafood House**: happy hour price, happy hour times, raw half dozen, chargrilled half dozen, chargrilled dozen
 - **Superior Seafood & Oyster Bar**: happy hour price
@@ -22,18 +22,22 @@ Check these and update src/deals.json:
 
 ## Pages that changed since the last check
 
+- **Bourbon House**: [page](https://www.bourbonhouse.com/)
 - **Felix's Restaurant & Oyster Bar**: [page](https://felixs.com/)
+- **Felix's Lakefront**: [page](https://felixs.com/)
 - **Desire Oyster Bar**: [page](https://www.sonesta.com/hotels/la3949-royal-sonesta-new-orleans/dining/desire-oyster-bar)
+- **Vampire Apothecary**: [page](https://vampireapothecary.com/)
 - **Red Fish Grill**: [page](https://www.redfishgrill.com/)
-- **Drago's**: [page](https://www.dragosrestaurant.com/)
-- **Pêche**: [page](https://www.pecherestaurant.com/)
-- **Boil Seafood House**: [page](https://www.boilseafoodhouse.com/)
+- **Oceana Grill**: [page](https://www.oceanagrill.com/)
+- **Drago's**: [page](https://www.dragosrestaurant.com/hilton-riverside-new-orleans-menu)
+- **Royal House**: [page](https://royalhouserestaurant.com/)
+- **Trenasse**: [page](https://trenasse.com/)
+- **Sidecar Patio & Oyster Bar**: [page](https://sidecarnola.com/)
 - **Basin Seafood & Spirits**: [page](https://www.basinneworleans.com/)
-- **Porgy's Seafood Market**: [page](https://porgysseafood.com/)
 - **Neyow's Creole Cafe**: [page](https://www.neworleans.neyows.com/)
 - **Holywater**: [page](https://crew.fun/holywater-nola)
 - **Mosquito Supper Club**: [page](https://mosquitosupperclub.squarespace.com/)
-- **Galatoire's**: [page](https://www.galatoires.com/)
+- **Le Bon Temps Roulé**: [page](https://lbtrnola.com/)
 - **Seawitch Restaurant & Oyster Bar**: [page](https://seawitch-nola.com/)
 
 ## Couldn't read (data left as it was)
@@ -41,6 +45,7 @@ Check these and update src/deals.json:
 - **Otis**: https://otisseafood.com/: page.goto: net::ERR_EMPTY_RESPONSE at https://otisseafood.com/
 - **Acme Oyster House**: https://www.acmeoyster.com/: page.goto: net::ERR_EMPTY_RESPONSE at https://www.acmeoyster.com/
 - **Casamento's**: https://casamentosrestaurant.com/: page.goto: net::ERR_EMPTY_RESPONSE at https://casamentosrestaurant.com/; https://casamentosrestaurant.com/menu/: page.goto: net::ERR_EMPTY_RESPONSE at https://casamentosrestaurant.com/menu/
+- **Porgy's Seafood Market**: https://porgysseafood.com/: the site showed a bot check (not bypassed)
 - **Coterie Restaurant & Oyster Bar**: https://coterienola.com/: page.goto: net::ERR_CERT_COMMON_NAME_INVALID at https://coterienola.com/
 - **Poseidon Oyster & Sushi Bar**: no own website on file
 - **New Orleans Marriott lobby bar**: https://www.marriott.com/en-us/hotels/msyla-new-orleans-marriott/overview/: the site showed a bot check (not bypassed)
